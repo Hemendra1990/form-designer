@@ -17,7 +17,7 @@ const App = () => {
     elements: [],
     sqlVariables: {},
   };
-  const [meta, setMeta] = useState(sharedMeta);
+  const [meta, setMeta] = useState(sharedMeta); //This line is very important, As we are sharing the data among components
 
   const handleClick = () => {
     setCount(count + 1);
@@ -27,17 +27,20 @@ const App = () => {
   return (
     <>
       <h1 style={h1Style}>{currData.toLocaleTimeString()}</h1>
+      {/* Control Panel */}
       <ControlPanel meta={meta} setMeta={setMeta} />
       <hr />
       <div className="grid">
         <div className="col-3">
           <Fieldset legend="Attribute">
+            {/* Attribute Panel */}
             <AttributePanel meta={meta} setMeta={setMeta} />
           </Fieldset>
         </div>
         <div className="col-9">
           <Fieldset legend="Playground">
             <div className="grid">
+              {/* Playground Panel */}
               <Playground meta={meta} setMeta={setMeta} />
             </div>
           </Fieldset>

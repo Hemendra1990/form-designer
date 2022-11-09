@@ -29,7 +29,7 @@ const ControlPanel = (props) => {
   };
 
   /**
-   * Clear the Palyground
+   * Clear the Playground
    */
   const clearAll = () => {
     props.setMeta((prevValue) => {
