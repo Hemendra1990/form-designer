@@ -15,6 +15,7 @@ const HemendraInput = (props) => {
         <>
             <InputText value={value}
                 maxLength={props.element?.attributes?.maxLength}
+                placeholder={props.element?.attributes?.placeholder}
                 name={props.name}
                 id={props.name}
                 onChange={(e) => setValue(e.target.value)} 

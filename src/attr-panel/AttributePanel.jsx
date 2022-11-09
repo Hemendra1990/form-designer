@@ -26,13 +26,19 @@ const AttributePanel = (props) => {
     const renderAttributes = () => {
         if(props.meta && props.meta.currentElement) {
             const currAttribute = props.meta.currentElement?.attributes;
+            
             /* Render Button Attributes */
             if(props.meta.currentElement.type === CONTROL.BUTTON) {
                 return (
                     <>
-                        {props.meta?.currentElement?.name}
-                        <br />
-                        <InputText name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
+                        <div className="field col-12">
+                            <label htmlFor="controlId">Control ID</label>
+                            <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
+                        </div>
+                        <div className="field col-12">
+                            <label htmlFor="controlId">Label</label>
+                            <InputText name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
+                        </div>
                     </>
                 )
             }
@@ -42,6 +48,10 @@ const AttributePanel = (props) => {
                 return (
                   <>
                     <div className="field col-12">
+                        <label htmlFor="controlId">Control ID</label>
+                        <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
+                    </div>
+                    <div className="field col-12">
                       <label htmlFor="maxLen">Max Length</label>
                         <InputNumber
                         name="maxLength"
@@ -49,6 +59,10 @@ const AttributePanel = (props) => {
                         onChange={updateMeta}
                         value={currAttribute?.maxLength}
                         />
+                    </div>
+                    <div className="field col-12">
+                      <label htmlFor="maxLen">Placeholder</label>
+                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder}/>
                     </div>
                   </>
                 );

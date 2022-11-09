@@ -31,18 +31,18 @@ const App = () => {
       <ControlPanel meta={meta} setMeta={setMeta} />
       <hr />
       <div className="grid">
-        <div className="col-3">
-          <Fieldset legend="Attribute">
-            {/* Attribute Panel */}
-            <AttributePanel meta={meta} setMeta={setMeta} />
-          </Fieldset>
-        </div>
         <div className="col-9">
           <Fieldset legend="Playground">
             <div className="grid">
               {/* Playground Panel */}
               <Playground meta={meta} setMeta={setMeta} />
             </div>
+          </Fieldset>
+        </div>
+        <div className="col-3">
+          <Fieldset legend="Attribute">
+            {/* Attribute Panel */}
+            <AttributePanel meta={meta} setMeta={setMeta} />
           </Fieldset>
         </div>
       </div>

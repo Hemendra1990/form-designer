@@ -17,7 +17,7 @@ const ControlPanel = (props) => {
     const element = {
       type: event.target.name.toLowerCase(),
       name: `${event.target.name}-${id}`,
-      id: id,
+      id: `${event.target.name}-${id}`,
       component,
     };
     props.setMeta((prevValue) => {
