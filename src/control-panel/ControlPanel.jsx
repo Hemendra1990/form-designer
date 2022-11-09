@@ -36,6 +36,7 @@ const ControlPanel = (props) => {
       prevValue.elements.length = 0;
       return {
         ...prevValue,
+        currentElement: null
       };
     });
   };

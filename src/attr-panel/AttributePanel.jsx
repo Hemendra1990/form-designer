@@ -68,13 +68,55 @@ const AttributePanel = (props) => {
                 );
             }
 
+            /* Render Textarea Attributes */
+            if(props.meta.currentElement.type === CONTROL.TEXTAREA) {
+                return (
+                  <>
+                    <div className="field col-12">
+                        <label htmlFor="controlId">Control ID</label>
+                        <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
+                    </div>
+                    <div className="field col-12">
+                      <label htmlFor="rows">Rows Length</label>
+                        <InputNumber
+                        name="rows"
+                        inputId="rows"
+                        onChange={updateMeta}
+                        value={currAttribute?.rows}
+                        />
+                    </div>
+                    <div className="field col-12">
+                      <label htmlFor="cols">Cols Length</label>
+                        <InputNumber
+                        name="cols"
+                        inputId="cols"
+                        onChange={updateMeta}
+                        value={currAttribute?.cols}
+                        />
+                    </div>
+                    <div className="field col-12">
+                      <label htmlFor="maxLen">Max Length</label>
+                        <InputNumber
+                        name="maxLength"
+                        inputId="maxLen"
+                        onChange={updateMeta}
+                        value={currAttribute?.maxLength}
+                        />
+                    </div>
+                    <div className="field col-12">
+                      <label htmlFor="placeholder">Placeholder</label>
+                      <InputText inputId="cols" name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder}/>
+                    </div>
+                  </>
+                );
+            }
+
         }
         return <></>
     }
 
     return (
         <>
-            <h1>This is Attribute Panel</h1>
             <div className="p-fluid grid formgrid">
                 {
 

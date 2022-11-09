@@ -26,12 +26,12 @@ const App = () => {
 
   return (
     <>
-      <h1 style={h1Style}>{currData.toLocaleTimeString()}</h1>
+      <h1 style={h1Style}>Hemendra's Form Designer {currData.toLocaleTimeString()}</h1>
       {/* Control Panel */}
       <ControlPanel meta={meta} setMeta={setMeta} />
       <hr />
       <div className="grid">
-        <div className="col-9">
+        <div className="col-10">
           <Fieldset legend="Playground">
             <div className="grid">
               {/* Playground Panel */}
@@ -39,7 +39,7 @@ const App = () => {
             </div>
           </Fieldset>
         </div>
-        <div className="col-3">
+        <div className="col-2">
           <Fieldset legend="Attribute">
             {/* Attribute Panel */}
             <AttributePanel meta={meta} setMeta={setMeta} />
