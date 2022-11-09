@@ -13,13 +13,35 @@ const h1Style = {
 const defaultScriptTextForTesting = `
 debugger;
 
-let nameInput = document.querySelector('#input-lr0rxcFt');
+let nameInput = document.querySelector('#input-B3hxCD6T');
 console.log(nameInput.value);
+meta.elements[0].value  = 'Testing Value Set'
+
+//target element index in meta
+meta.elements[2].value  = 'Hello Indians'; 
 `
 
 const App = () => {
+  
+  //Test Codes
   const [count, setCount] = useState(0);
   const [currData, setDate] = useState(new Date());
+  const [script, setScript] = useState(defaultScriptTextForTesting);
+  const handleScriptChange = (e) => {
+    setScript(()=> {
+      return e.target.value;
+    });
+
+    setMeta((prevVal) => {
+      return {
+        ...prevVal,
+        scriptText: e.target.value
+      }
+    })
+  }
+  //Test Code Ends
+
+
 
   const sharedMeta = {
     elements: [],
@@ -58,7 +80,8 @@ const App = () => {
       <div className="grid">
         <div className="col">
         <Fieldset legend="Script Area">
-          <InputTextarea rows={10} cols={100} defaultValue={defaultScriptTextForTesting} autoResize />
+          <h1>This is for testing Script event</h1>
+          <InputTextarea rows={10} cols={100} value={script} onChange={handleScriptChange} autoResize />
         </Fieldset>
         </div>
       </div>
@@ -67,3 +90,4 @@ const App = () => {
 };
 
 export default App;
+export {defaultScriptTextForTesting};//For testing, It must be removed

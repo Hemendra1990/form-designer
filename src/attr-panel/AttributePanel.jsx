@@ -36,15 +36,15 @@ const AttributePanel = (props) => {
                     <>
                         <div className="field col-12">
                             <label htmlFor="controlId">Control ID</label>
-                            <InputText name="placeholder" inputId="controlId"  value={props.meta.currentElement.id} disabled />
+                            <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
                         </div>
                         <div className="field col-12">
                             <label htmlFor="eventId">Event ID</label>
-                            <Dropdown name="eventId" inputId="eventId" value={props.meta.currentElement?.attributes?.eventId} options={testEvents} onChange={updateMeta} placeholder="Select a Event"/>
+                            <Dropdown name="eventId" value={props.meta.currentElement?.attributes?.eventId} options={testEvents} onChange={updateMeta} placeholder="Select a Event"/>
                         </div>
                         <div className="field col-12">
                             <label htmlFor="label">Label</label>
-                            <InputText inputId="label" name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
+                            <InputText name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
                         </div>
                     </>
                 )

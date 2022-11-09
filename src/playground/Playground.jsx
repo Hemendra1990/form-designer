@@ -17,6 +17,19 @@ const Playground = (props) => {
     })
   };
 
+  const createElement = (element, i) => {
+    const reactComponent = React.createElement(element.component, {
+      key: i,
+      name: `${element.name}`,
+      setMeta: props.setMeta,
+      meta: props.meta,
+      element: element,
+      enteredValue: ''
+    });
+    return reactComponent;
+  }
+
+
   return (
     <>
     {/* step-1: iterating elements */}
@@ -26,13 +39,9 @@ const Playground = (props) => {
             <div className="col-2 gap-1" onClick={() => handleElementClick(element)}>{/* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array   */}
               
               {/* step-2: dynamic components are being created */}
-              {React.createElement(element.component, {
-                key: i,
-                name: `${element.name}-${element.id}`,
-                setMeta: props.setMeta,
-                meta: props.meta,
-                element: element
-              })}
+              {
+                createElement(element, i)
+              }
             </div>
           </>
         );
