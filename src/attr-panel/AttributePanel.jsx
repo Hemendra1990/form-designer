@@ -1,6 +1,9 @@
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from 'primereact/inputnumber';
+import { Dropdown } from 'primereact/dropdown';
 import { CONTROL } from "../constants/Elements";
+
+
 
 
 const AttributePanel = (props) => {
@@ -33,11 +36,15 @@ const AttributePanel = (props) => {
                     <>
                         <div className="field col-12">
                             <label htmlFor="controlId">Control ID</label>
-                            <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
+                            <InputText name="placeholder" inputId="controlId"  value={props.meta.currentElement.id} disabled />
                         </div>
                         <div className="field col-12">
-                            <label htmlFor="controlId">Label</label>
-                            <InputText name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
+                            <label htmlFor="eventId">Event ID</label>
+                            <Dropdown name="eventId" inputId="eventId" value={props.meta.currentElement?.attributes?.eventId} options={testEvents} onChange={updateMeta} placeholder="Select a Event"/>
+                        </div>
+                        <div className="field col-12">
+                            <label htmlFor="label">Label</label>
+                            <InputText inputId="label" name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
                         </div>
                     </>
                 )
@@ -126,5 +133,9 @@ const AttributePanel = (props) => {
         </>
     )
 }
+
+const testEvents = [
+    {label: 'Execute Script', value: 'script-Sc23ab3W'},
+];
 
 export default AttributePanel;

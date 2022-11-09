@@ -3,11 +3,19 @@ import AttributePanel from "./attr-panel/AttributePanel";
 import ControlPanel from "./control-panel/ControlPanel";
 import Playground from "./playground/Playground";
 import { Fieldset } from "primereact/fieldset";
+import { InputTextarea } from "primereact/inputtextarea";
 
 const h1Style = {
   color: "red",
   textAlign: "center",
 };
+
+const defaultScriptTextForTesting = `
+debugger;
+
+let nameInput = document.querySelector('#input-lr0rxcFt');
+console.log(nameInput.value);
+`
 
 const App = () => {
   const [count, setCount] = useState(0);
@@ -19,10 +27,10 @@ const App = () => {
   };
   const [meta, setMeta] = useState(sharedMeta); //This line is very important, As we are sharing the data among components
 
-  const handleClick = () => {
+  /* const handleClick = () => {
     setCount(count + 1);
     setDate(new Date());
-  };
+  }; */
 
   return (
     <>
@@ -47,7 +55,13 @@ const App = () => {
         </div>
       </div>
 
-      <div></div>
+      <div className="grid">
+        <div className="col">
+        <Fieldset legend="Script Area">
+          <InputTextarea rows={10} cols={100} defaultValue={defaultScriptTextForTesting} autoResize />
+        </Fieldset>
+        </div>
+      </div>
     </>
   );
 };
