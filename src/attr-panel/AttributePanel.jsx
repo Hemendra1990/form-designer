@@ -87,7 +87,6 @@ const AttributePanel = (props) => {
                       <label htmlFor="rows">Rows Length</label>
                         <InputNumber
                         name="rows"
-                        inputId="rows"
                         onChange={updateMeta}
                         value={currAttribute?.rows}
                         />
@@ -96,7 +95,6 @@ const AttributePanel = (props) => {
                       <label htmlFor="cols">Cols Length</label>
                         <InputNumber
                         name="cols"
-                        inputId="cols"
                         onChange={updateMeta}
                         value={currAttribute?.cols}
                         />
@@ -105,14 +103,13 @@ const AttributePanel = (props) => {
                       <label htmlFor="maxLen">Max Length</label>
                         <InputNumber
                         name="maxLength"
-                        inputId="maxLen"
                         onChange={updateMeta}
                         value={currAttribute?.maxLength}
                         />
                     </div>
                     <div className="field col-12">
                       <label htmlFor="placeholder">Placeholder</label>
-                      <InputText inputId="cols" name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder}/>
+                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder}/>
                     </div>
                   </>
                 );

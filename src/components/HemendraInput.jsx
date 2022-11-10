@@ -1,11 +1,12 @@
 import { InputText } from 'primereact/inputtext';
-import React from 'react';
+import React, { useState } from 'react';
 
-const HemendraInput = (props) => {
+const HemendraInput = React.forwardRef((props, ref) => {
+//const HemendraInput = (props) => {
     console.log('HemendraInput', props);
     const element = props.element;
 
-    //const [value, setValue] = useState('');
+    const [value, setValue] = useState('');
 
     const handleBlur = (e) => {
         console.log(e);
@@ -13,15 +14,17 @@ const HemendraInput = (props) => {
 
     return (
         <>
-            <InputText value={element.value}
-                maxLength={props.element?.attributes?.maxLength}
-                placeholder={props.element?.attributes?.placeholder}
+            <InputText 
+                ref={ref}
+                maxLength={element?.attributes?.maxLength}
+                placeholder={element?.attributes?.placeholder}
                 name={props.name}
                 id={props.name}
-                onChange={(e) => element.value = e.target.value} 
-                onClick={handleBlur} onBlur={handleBlur}/>
+                defaultValue={value}
+                onChange={(e) => setValue(e.target.value)}
+                onBlur={handleBlur}/>
         </>
     )
-}
+})
 
 export default HemendraInput;

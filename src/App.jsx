@@ -13,12 +13,7 @@ const h1Style = {
 const defaultScriptTextForTesting = `
 debugger;
 
-let nameInput = document.querySelector('#input-B3hxCD6T');
-console.log(nameInput.value);
-meta.elements[0].value  = 'Testing Value Set'
-
-//target element index in meta
-meta.elements[2].value  = 'Hello Indians'; 
+meta.elements[0].ref.current.value=123;  
 `
 
 const App = () => {

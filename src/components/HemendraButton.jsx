@@ -1,13 +1,18 @@
 
 import { Button } from 'primereact/button';
-import { useState } from 'react';
+import React from 'react';
 import EventExecutor from '../service/EventExecutor';
 
-const HemendraButton = (props) => {
+//const HemendraButton = (props) => {
+const HemendraButton = React.forwardRef( (props, ref) => {
     const element = props.element;
     console.log(props);
-    const [buttonAttribute, setButtonAttribute] = useState({})
-    buttonAttribute.label = 'Button'
+    
+    if(!(element.attributes && element.attributes.label)) {
+        if(!element.attributes) element.attributes = {};
+        element.attributes.label = 'Click Here'
+    }
+
 
     const executeEvent = () => {
         //check if the button is configured with the event or not
@@ -19,8 +24,8 @@ const HemendraButton = (props) => {
 
     return (
         <>
-            <Button label={props.element?.attributes?.label} onClick={executeEvent}/>
+            <Button ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
         </>
     );
-}
+});
 export default HemendraButton;
