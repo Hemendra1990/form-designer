@@ -40,8 +40,8 @@ const Playground = (props) => {
         return (
           <div
             key={element.id}
-            className="col-2 gap-1"
-            onClick={() => handleElementClick(element)} /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
+            className="col"
+            onFocus={() => handleElementClick(element)} /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
           >
             {/* step-2: dynamic components are being created */}
             {createElement(element, i)}
