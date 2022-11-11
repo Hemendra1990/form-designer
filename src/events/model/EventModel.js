@@ -27,3 +27,9 @@ export const NODE_TYPES = () => {
   });
   return ans;
 };
+
+export const EVENT_TYPE  = {
+  SCRIPT: "script",
+  ALERT: "alert",
+  CONFIRMATION: "confirmation"
+};

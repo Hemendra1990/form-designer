@@ -7,7 +7,7 @@ import { CONTROL } from "../constants/Elements";
 
 
 const AttributePanel = (props) => {
-
+    
     const updateMeta = (e) => {
         props.setMeta((prevVal) => {
             if(!prevVal.currentElement.attributes) {
@@ -19,6 +19,10 @@ const AttributePanel = (props) => {
             }
         });
     };
+
+    const availableEvents = props.meta?.events?.map(ev=> {
+        return {label: ev.name, value: ev.id}
+    });
 
     /**
      * RULES FOR RENDERING ATTRIBUTES
@@ -40,7 +44,7 @@ const AttributePanel = (props) => {
                         </div>
                         <div className="field col-12">
                             <label htmlFor="eventId">Event ID</label>
-                            <Dropdown name="eventId" value={props.meta.currentElement?.attributes?.eventId} options={testEvents} onChange={updateMeta} placeholder="Select a Event"/>
+                            <Dropdown name="eventId" value={props.meta.currentElement?.attributes?.eventId} options={availableEvents} onChange={updateMeta} placeholder="Select a Event"/>
                         </div>
                         <div className="field col-12">
                             <label htmlFor="label">Label</label>

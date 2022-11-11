@@ -3,6 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import {createElementId} from '../../utils/Utils'
 import React, { useCallback, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
@@ -102,6 +103,7 @@ const EventModeler = (props) => {
   const saveEvent = (eventData) => {
     console.log(nodes);
     const event = {
+      id: eventId,
       name: eventName,
       bucket: {nodes, edges} 
     };
@@ -114,6 +116,8 @@ const EventModeler = (props) => {
 
     console.log('Saving events into meta', meta);
   }
+
+  const eventId = `event-${createElementId()}`;
 
   return (
     <div>
@@ -135,6 +139,13 @@ const EventModeler = (props) => {
             placeholder="Event Name"
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
+          ></InputText>
+        </div>
+        <div className="col">
+          <InputText
+            placeholder="Event Id"
+            value={eventId}
+            disabled
           ></InputText>
         </div>
         <div className="col gap-2">
