@@ -4,7 +4,7 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {createElementId} from '../../utils/Utils'
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
   Background,
@@ -36,7 +36,7 @@ const nodeTypes = NODE_TYPES();
 const EventModeler = (props) => {
   const { meta, setMeta } = props;
   const op = useRef(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [eventId, setEventId] = useState('');
   if (!meta.events) {
     meta["events"] = [];
   }
@@ -117,7 +117,9 @@ const EventModeler = (props) => {
     console.log('Saving events into meta', meta);
   }
 
-  const eventId = `event-${createElementId()}`;
+  useEffect(()=> {
+    setEventId(`event-${createElementId()}`);
+  }, []);
 
   return (
     <div>
@@ -127,34 +129,34 @@ const EventModeler = (props) => {
           selectionMode="single"
           paginator
           rows={5}
-          selection={selectedProduct}
           onSelectionChange={onActionSelection}
         >
           <Column field="name" header="Action Name" sortable />
         </DataTable>
       </OverlayPanel>
-      <div className="grid">
-        <div className="col">
-          <InputText
+
+      <div class="flex">
+            <div class="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
+              <InputText
+                placeholder="Event Id"
+                value={eventId}
+                disabled
+              ></InputText>
+            <InputText
+            className="ml-2"
             placeholder="Event Name"
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
           ></InputText>
+            </div>
+            <div class="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
+              <Button label="Add Action" onClick={addNewActionNode}/>
+              <Button style={{marginLeft: '5px'}} className="p-button-danger" label="Save Event" onClick={saveEvent}/>
+            </div>
         </div>
-        <div className="col">
-          <InputText
-            placeholder="Event Id"
-            value={eventId}
-            disabled
-          ></InputText>
-        </div>
-        <div className="col gap-2">
-          <Button label="Add Action" onClick={addNewActionNode}/>
-          <Button style={{marginLeft: '5px'}} className="p-button-danger" label="Save Event" onClick={saveEvent}/>
-        </div>
-      </div>
+
       <div className="grid">
-        <div className="col" style={{ height: 600 }}>
+        <div className="col" style={{ height: '60vh' }}>
           <ReactFlow
             nodes={nodes}
             edges={edges}

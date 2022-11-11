@@ -49,13 +49,9 @@ const App = () => {
   };
   const [meta, setMeta] = useState(sharedMeta); //This line is very important, As we are sharing the data among components
 
-  /* const handleClick = () => {
-    setCount(count + 1);
-    setDate(new Date());
-  }; */
   const items = [
     {
-        label: 'Options',
+        label: 'Home',
         items: [{label: 'New', icon: 'pi pi-fw pi-plus',command:()=>{ window.location.hash="/fileupload"; }},
                 {label: 'Delete', icon: 'pi pi-fw pi-trash', url: 'http://primetek.com.tr'}]
     },
@@ -66,7 +62,7 @@ const App = () => {
     }
 ];
 
-const end = <label>Hemendra's Designer</label>
+const end = <label style={{fontWeight: 600}}>Hemendra's Designer</label>
 const [displayBasic, setDisplayBasic] = useState(false);
 const onHide = () => {
   setDisplayBasic(false);
@@ -75,8 +71,8 @@ const onHide = () => {
 const renderFooter = (name) => {
   return (
       <div>
-          <Button label="No" icon="pi pi-times" onClick={() => onHide()} className="p-button-text" />
-          <Button label="Yes" icon="pi pi-check" onClick={() => onHide()} autoFocus />
+          {/* <Button label="No" icon="pi pi-times" onClick={() => onHide()} className="p-button-text" />
+          <Button label="Yes" icon="pi pi-check" onClick={() => onHide()} autoFocus /> */}
       </div>
   );
 }
