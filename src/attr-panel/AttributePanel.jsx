@@ -125,7 +125,7 @@ const AttributePanel = (props) => {
 
     return (
         <>
-            <div className="p-fluid grid formgrid">
+            <div className="p-fluid grid">
                 {
 
                     renderAttributes()

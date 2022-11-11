@@ -5,6 +5,10 @@ import Playground from "./playground/Playground";
 import { Fieldset } from "primereact/fieldset";
 import { InputTextarea } from "primereact/inputtextarea";
 import EventModeler from "./events/builder/EventModeler";
+import { Menubar } from 'primereact/menubar';
+import { Dialog } from 'primereact/dialog';
+import './App.css';
+import { Button } from "primereact/button";
 
 const h1Style = {
   color: "red",
@@ -49,40 +53,57 @@ const App = () => {
     setCount(count + 1);
     setDate(new Date());
   }; */
+  const items = [
+    {
+        label: 'Options',
+        items: [{label: 'New', icon: 'pi pi-fw pi-plus',command:()=>{ window.location.hash="/fileupload"; }},
+                {label: 'Delete', icon: 'pi pi-fw pi-trash', url: 'http://primetek.com.tr'}]
+    },
+    {
+        label: 'Configure',
+        items: [{label: 'Events', icon: 'pi pi-fw pi-cog',command:()=>{ setDisplayBasic(true); }},
+                {label: 'SQL', icon: 'pi pi-database'} ]
+    }
+];
+
+const end = <label>Hemendra's Designer</label>
+const [displayBasic, setDisplayBasic] = useState(false);
+const onHide = () => {
+  setDisplayBasic(false);
+}
+
+const renderFooter = (name) => {
+  return (
+      <div>
+          <Button label="No" icon="pi pi-times" onClick={() => onHide()} className="p-button-text" />
+          <Button label="Yes" icon="pi pi-check" onClick={() => onHide()} autoFocus />
+      </div>
+  );
+}
+
 
   return (
     <>
-      {/* Control Panel */}
-      <ControlPanel meta={meta} setMeta={setMeta} />
-      <div className="grid">
-        <div className="col-10">
-          <Fieldset legend="Playground">
-            <div className="grid">
-              {/* Playground Panel */}
-              <Playground meta={meta} setMeta={setMeta} />
-            </div>
-          </Fieldset>
+    <div className="p-fluid grid menubar" style={{background: '#ffffff'}}>
+        <div className="col">
+          <Menubar className="z-5" model={items} end={end} />
         </div>
+    </div>
+            
+      <div className="p-fluid grid" style={{margin: '10px'}}>
         <div className="col-2">
-          <Fieldset legend="Attribute">
-            {/* Attribute Panel */}
-            <AttributePanel meta={meta} setMeta={setMeta} />
-          </Fieldset>
+          <ControlPanel meta={meta} setMeta={setMeta} />
+        </div>
+        <div className="col-8 playground">
+          <Playground meta={meta} setMeta={setMeta} />
+        </div>
+        <div className="col-2 attribute-panel">
+          <AttributePanel meta={meta} setMeta={setMeta} />
         </div>
       </div>
-
-      <div className="grid">
-        <div className="col-9">
-        <Fieldset legend="Event Builder">
-          <EventModeler meta={meta} setMeta={setMeta} />
-        </Fieldset>
-        </div>
-        <div className="col-3">
-        <Fieldset legend="Script Area">
-          <InputTextarea rows={10} cols={30} value={script} onChange={handleScriptChange} autoResize />
-        </Fieldset>
-        </div>
-      </div>
+      <Dialog header="Event Modeler" visible={displayBasic} style={{ width: '80vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+        <EventModeler meta={meta} setMeta={setMeta} />
+      </Dialog>
     </>
   );
 };

@@ -1,0 +1,20 @@
+*{
+    margin: 0;
+}
+.playground {
+    background: url('./assets/tiny-checkers.png');
+    background-color: rgba(10, 10, 10, 0.29);
+    border: 1px dashed
+}
+
+.attribute-panel {
+    border: 1px dashed
+}
+
+.menubar {
+    box-shadow: rgb(0 0 0 / 3%) 0px 4px 10px, rgb(0 0 0 / 6%) 0px 0px 2px, rgb(0 0 0 / 12%) 0px 2px 6px;
+}
+
+.p-menubar {
+    border: unset !important;
+}

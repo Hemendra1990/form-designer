@@ -1,6 +1,7 @@
 import { Button } from "primereact/button";
-import { Fieldset } from "primereact/fieldset";
+import { ListBox } from "primereact/listbox";
 import getComponent from "../constants/HemendraConstants";
+import { createElementId } from "../utils/Utils";
 
 const ControlPanel = (props) => {
   /**
@@ -9,23 +10,27 @@ const ControlPanel = (props) => {
    * @param  event
    */
   const addElement = (event) => {
-    const id = createElementId();
-    if (!props.meta.elements) {
-      props.meta.elements = [];
-    }
-    const component = getComponent(event.target.name);
-    const element = {
-      type: event.target.name.toLowerCase(),
-      name: `${event.target.name}-${id}`,
-      id: `${event.target.name}-${id}`,
-      component,
-    };
-    props.setMeta((prevValue) => {
-      prevValue.elements.push(element);
-      return {
-        ...prevValue,
+    if (event.value === "clear") {
+      clearAll();
+    } else {
+      const id = createElementId();
+      if (!props.meta.elements) {
+        props.meta.elements = [];
+      }
+      const component = getComponent(event.value);
+      const element = {
+        type: event.value.toLowerCase(),
+        name: `${event.value}-${id}`,
+        id: `${event.value}-${id}`,
+        component,
       };
-    });
+      props.setMeta((prevValue) => {
+        prevValue.elements.push(element);
+        return {
+          ...prevValue,
+        };
+      });
+    }
   };
 
   /**
@@ -36,52 +41,35 @@ const ControlPanel = (props) => {
       prevValue.elements.length = 0;
       return {
         ...prevValue,
-        currentElement: null
+        currentElement: null,
       };
     });
   };
 
+  const CONTROL_LIST = [
+    {
+      label: "Input",
+      value: "input",
+    },
+    {
+      label: "Textarea",
+      value: "textarea",
+    },
+    {
+      label: "Button",
+      value: "button",
+    },
+    {
+      label: "Clear All",
+      value: "clear",
+    },
+  ];
+
   return (
     <>
-      <Fieldset legend="Controls">
-      <div className="grid">
-        <div className="col-1">
-          <Button name="textarea" onClick={addElement}>
-            TextArea
-          </Button>
-        </div>
-        <div className="col-1">
-          <Button name="input" onClick={addElement}>
-            Input
-          </Button>
-        </div>
-        <div className="col-1">
-          <Button name="button" onClick={addElement}>
-            Button
-          </Button>
-        </div>
-        <div className="col-1">
-          <Button name="clear" className="p-button-danger" onClick={clearAll}>
-            Clear Fields
-          </Button>
-        </div>
-      </div>
-      </Fieldset>
-      
+      <ListBox options={CONTROL_LIST} onChange={addElement} />
     </>
   );
 };
-
-function createElementId() {
-  let length = 8;
-  var result = "";
-  var characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
 
 export default ControlPanel;

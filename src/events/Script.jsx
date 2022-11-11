@@ -10,7 +10,7 @@ const Script = (props) => {
     return(
         <Card>
 
-            <InputTextarea rows={10} cols={40} value={data.eventInfo.scriptText} onChange={e=> data.eventInfo.scriptText=e.target.value}/>
+            <InputTextarea rows={10} value={data.eventInfo.scriptText} onChange={e=> data.eventInfo.scriptText=e.target.value}/>
 
             <TargetHandle data={data} isConnectable={isConnectable} />
             <Handle
