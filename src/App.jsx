@@ -4,6 +4,7 @@ import ControlPanel from "./control-panel/ControlPanel";
 import Playground from "./playground/Playground";
 import { Fieldset } from "primereact/fieldset";
 import { InputTextarea } from "primereact/inputtextarea";
+import EventModeler from "./events/builder/EventModeler";
 
 const h1Style = {
   color: "red",
@@ -51,10 +52,8 @@ const App = () => {
 
   return (
     <>
-      <h1 style={h1Style}>Hemendra's Form Designer {currData.toLocaleTimeString()}</h1>
       {/* Control Panel */}
       <ControlPanel meta={meta} setMeta={setMeta} />
-      <hr />
       <div className="grid">
         <div className="col-10">
           <Fieldset legend="Playground">
@@ -73,10 +72,14 @@ const App = () => {
       </div>
 
       <div className="grid">
-        <div className="col">
+        <div className="col-9">
+        <Fieldset legend="Event Builder">
+          <EventModeler meta={meta} setMeta={setMeta} />
+        </Fieldset>
+        </div>
+        <div className="col-3">
         <Fieldset legend="Script Area">
-          <h1>This is for testing Script event</h1>
-          <InputTextarea rows={10} cols={100} value={script} onChange={handleScriptChange} autoResize />
+          <InputTextarea rows={10} cols={30} value={script} onChange={handleScriptChange} autoResize />
         </Fieldset>
         </div>
       </div>
