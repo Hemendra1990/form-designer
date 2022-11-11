@@ -30,9 +30,6 @@ const initialEdges = [];
 const initBgColor = "#1A192B";
 const connectionLineStyle = { stroke: "#fff" };
 const snapGrid = [20, 20];
-/* const nodeTypes = {
-  confirmationNode: ConfirmationAlert,
-}; */
 const nodeTypes = NODE_TYPES();
 
 const EventModeler = (props) => {
@@ -47,6 +44,7 @@ const EventModeler = (props) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const [bgColor, setBgColor] = useState(initBgColor);
+  
   const onChange = (event) => {
     setNodes((nds) =>
       nds.map((node) => {
@@ -56,8 +54,7 @@ const EventModeler = (props) => {
           ...node,
           data: {
             ...node.data,
-            color,
-            meta,
+            color
           },
         };
       })
@@ -68,8 +65,7 @@ const EventModeler = (props) => {
     (params) =>
       setEdges((eds) =>
         addEdge({ ...params, animated: true, style: { stroke: "#fff" } }, eds)
-      ),
-    [setEdges]
+      ), [setEdges]
   );
 
   const addNewActionNode = (e) => {
@@ -77,7 +73,6 @@ const EventModeler = (props) => {
   };
 
   const onActionSelection = (action) => {
-    console.log('Actino Selectino', action);
     setNodes((prevNodes) => {
         return prevNodes.concat({
           type: action.value.eventNodeType,
@@ -89,12 +84,36 @@ const EventModeler = (props) => {
           data: {
             label: `Action_${prevNodes.length + 1}`,
             onChange: onChange,
+            updateEvent: updateEvent,
             color: initBgColor,
+            eventInfo: {
+              type: action.value.eventNodeType
+            },
             meta,
           },
         });
       });
   };
+
+  const updateEvent = (eventInfo, nodeId) => {
+    console.log(eventInfo);
+  }
+
+  const saveEvent = (eventData) => {
+    console.log(nodes);
+    const event = {
+      name: eventName,
+      bucket: {nodes, edges} 
+    };
+    setMeta((prevMeta)=> {
+      return {
+        ...prevMeta,
+        events: [...prevMeta.events, event]
+      }
+    })
+
+    console.log('Saving events into meta', meta);
+  }
 
   return (
     <div>
@@ -118,8 +137,9 @@ const EventModeler = (props) => {
             onChange={(e) => setEventName(e.target.value)}
           ></InputText>
         </div>
-        <div className="col">
-          <Button label="Add Action" onClick={addNewActionNode}></Button>
+        <div className="col gap-2">
+          <Button label="Add Action" onClick={addNewActionNode}/>
+          <Button style={{marginLeft: '5px'}} className="p-button-danger" label="Save Event" onClick={saveEvent}/>
         </div>
       </div>
       <div className="grid">

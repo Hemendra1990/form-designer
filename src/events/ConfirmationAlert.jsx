@@ -5,22 +5,6 @@ import TargetHandle from "./model/TargetHandle";
 
 const ConfirmationAlert = (props) => {
   const { data, isConnectable, meta, setMeta } = props;
-
-  /* const addLeftHandler = ()=>{
-    if(data.meta.events.length > 0) {
-      return (
-        <Handle
-        type="target"
-        position="left"
-        style={{ background: "#555" }}
-        onConnect={(params) => console.log("handle onConnect", params)}
-        isConnectable={isConnectable}
-      />
-      )
-    }
-
-    return <></>
-  } */
   
   return (
     <>
