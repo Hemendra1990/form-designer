@@ -1,4 +1,5 @@
 import React from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Playground = (props) => {
   console.log("Playground", props);
@@ -33,21 +34,50 @@ const Playground = (props) => {
     return reactComponent;
   };
 
+  const onDragEnd = (e) => {
+    console.log('Drag end', e);
+  }
+
   return (
     <>
-      {/* step-1: iterating elements */}
-      {props.meta.elements.map((element, i) => {
-        return (
-          <div
-            key={element.id}
-            className="col"
-            onFocus={() => handleElementClick(element)} /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
-          >
-            {/* step-2: dynamic components are being created */}
-            {createElement(element, i)}
-          </div>
-        );
-      })}
+      <DragDropContext onDragEnd={onDragEnd}>
+        {/* step-1: iterating elements */}
+        {props.meta.elements.map((element, index) => {
+          return (
+            <Droppable key = {element.id} droppableId={`${element.id}`}>
+              {
+                (provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}
+                  key={element.id}
+                  className="col"
+                  onFocus={() =>
+                    handleElementClick(element)
+                  } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
+                >
+                  <Draggable
+                      key={element.id}
+                      draggableId={element.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                          <div ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}>
+                            {createElement(element, index)}
+                          </div>
+                        )
+                      }
+                      
+                    </Draggable>
+                  
+                </div>
+                )
+              }
+              
+            </Droppable>
+          );
+        })}
+      </DragDropContext>
     </>
   );
 };
