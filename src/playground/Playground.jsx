@@ -34,8 +34,21 @@ const Playground = (props) => {
     return reactComponent;
   };
 
-  const onDragEnd = (e) => {
-    console.log('Drag end', e);
+  const onDragEnd = (dragResult) => {
+    console.log('Drag end', dragResult);
+    if(!dragResult.destination) return;
+    const items = props.meta.elements;
+    const [reorderItem] = items.splice(dragResult.source.index, 1);
+    items.splice(dragResult.destination.index, 0, reorderItem);
+
+    props.setMeta((prevValue) => {
+      return {
+        ...prevValue,
+        elements: items
+      }
+    })
+
+
   }
 
   return (
@@ -47,9 +60,8 @@ const Playground = (props) => {
             <Droppable key = {element.id} droppableId={`${element.id}`}>
               {
                 (provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}
+                  <div className="col-4" ref={provided.innerRef} {...provided.droppableProps}
                   key={element.id}
-                  className="col"
                   onFocus={() =>
                     handleElementClick(element)
                   } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
@@ -69,7 +81,7 @@ const Playground = (props) => {
                       }
                       
                     </Draggable>
-                  
+                  {provided.placeholder}
                 </div>
                 )
               }
