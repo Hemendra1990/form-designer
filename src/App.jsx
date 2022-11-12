@@ -41,7 +41,18 @@ const App = () => {
   }
   //Test Code Ends
 
-
+  /**
+   * Clear the Playground
+   */
+   const clearAll = () => {
+    setMeta((prevValue) => {
+      prevValue.elements.length = 0;
+      return {
+        ...prevValue,
+        currentElement: null,
+      };
+    });
+  };
 
   const sharedMeta = {
     elements: [],
@@ -52,7 +63,7 @@ const App = () => {
   const items = [
     {
         label: 'Home',
-        items: [{label: 'New', icon: 'pi pi-fw pi-plus',command:()=>{ window.location.hash="/fileupload"; }},
+        items: [{label: 'New', icon: 'pi pi-fw pi-plus',command:()=>{ clearAll() }},
                 {label: 'Delete', icon: 'pi pi-fw pi-trash', url: 'http://primetek.com.tr'}]
     },
     {
@@ -86,13 +97,13 @@ const renderFooter = (name) => {
         </div>
     </div>
             
-      <div className="p-fluid grid" style={{margin: '10px'}}>
-        <div className="col-2">
+      <div className="p-fluid grid" style={{height: '90vh', width: '100vw', marginTop: '10px'}}>
+        <div className="col-2 control-panel">
           <ControlPanel meta={meta} setMeta={setMeta} />
         </div>
         <div className="col-8 playground">
           <div className="grid">
-          <Playground meta={meta} setMeta={setMeta} />
+            <Playground meta={meta} setMeta={setMeta} />
           </div>
         </div>
         <div className="col-2 attribute-panel">

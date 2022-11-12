@@ -3,12 +3,15 @@
 }
 .playground {
     background: url('./assets/tiny-checkers.png');
-    background-color: rgba(10, 10, 10, 0.29);
-    border: 1px dashed
+    /* border: 1px dashed */
 }
 
 .attribute-panel {
-    border: 1px dashed
+    /* border: 1px dashed */
+}
+
+.control-panel {
+    /* border: 1px dashed */
 }
 
 .comp-container {
