@@ -9,7 +9,7 @@ const Playground = (props) => {
    * Observable will be create which will emit element click change
    * @param {*} element
    */
-  const handleElementClick = (element) => {
+  const handleElementClick = (event, element) => {
     props.setMeta((prevValue) => {
       return {
         ...prevValue,
@@ -27,56 +27,60 @@ const Playground = (props) => {
       setMeta: props.setMeta,
       meta: props.meta,
       element: element,
-      enteredValue: "",
+      enteredValue: ""
     });
 
     element.ref = ref;
     return reactComponent;
   };
 
-  const onDragEnd = (e) => {
-    console.log('Drag end', e);
-  }
+  const onDragEnd = (dragResult) => {
+    console.log("Drag end", dragResult);
+    if(!dragResult.destination) return;
+
+    const items = props.meta.elements;
+    const [reorderItem] = items.splice(dragResult.source.index, 1);
+    items.splice(dragResult.destination.index, 0, reorderItem)
+
+    props.setMeta((prevValue)=> {
+      
+      return {
+        ...prevValue,
+        elements: items
+      }
+    })
+    
+  };
 
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* step-1: iterating elements */}
-        {props.meta.elements.map((element, index) => {
-          return (
-            <Droppable key = {element.id} droppableId={`${element.id}`}>
-              {
-                (provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}
-                  key={element.id}
-                  className="col"
-                  onFocus={() =>
-                    handleElementClick(element)
-                  } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
-                >
-                  <Draggable
-                      key={element.id}
-                      draggableId={element.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                          <div ref={provided.innerRef}
+        <Droppable
+          key={`element_id_${Math.random() * 100}`}
+          droppableId={`element_id_${Math.random() * 100}`}
+        >
+          {(provided)=> (
+            <div className="grid" ref={provided.innerRef} {...provided.droppableProps}>
+              {props.meta.elements.map((element, index) => {
+                return (
+                  <Draggable key={element.id} draggableId={element.id} index={index}>
+                    {(provided) => (
+                          <div className="col-4"
+                          ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}>
                             {createElement(element, index)}
                           </div>
                         )
                       }
-                      
-                    </Draggable>
-                  
-                </div>
+                  </Draggable>
                 )
-              }
-              
-            </Droppable>
-          );
-        })}
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+          
+        </Droppable>
       </DragDropContext>
     </>
   );

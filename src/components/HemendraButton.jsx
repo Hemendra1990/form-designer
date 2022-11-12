@@ -1,6 +1,6 @@
 
 import { Button } from 'primereact/button';
-import React from 'react';
+import React, { memo } from 'react';
 import EventExecutor from '../service/EventExecutor';
 
 //const HemendraButton = (props) => {
@@ -23,9 +23,7 @@ const HemendraButton = React.forwardRef( (props, ref) => {
     
 
     return (
-        <>
-            <Button ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
-        </>
+        <Button ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
     );
 });
-export default HemendraButton;
+export default memo(HemendraButton);

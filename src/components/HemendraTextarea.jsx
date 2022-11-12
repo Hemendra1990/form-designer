@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
 
@@ -22,4 +22,4 @@ const HemendraTextarea = React.forwardRef((props, ref) => {
     )
 })
 
-export default HemendraTextarea;
+export default memo(HemendraTextarea);
