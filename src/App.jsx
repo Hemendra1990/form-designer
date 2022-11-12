@@ -1,14 +1,11 @@
+import { Dialog } from 'primereact/dialog';
+import { Menubar } from 'primereact/menubar';
 import React, { useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import ControlPanel from "./control-panel/ControlPanel";
-import Playground from "./playground/Playground";
-import { Fieldset } from "primereact/fieldset";
-import { InputTextarea } from "primereact/inputtextarea";
 import EventModeler from "./events/builder/EventModeler";
-import { Menubar } from 'primereact/menubar';
-import { Dialog } from 'primereact/dialog';
+import Playground from "./playground/Playground";
 import './App.css';
-import { Button } from "primereact/button";
 
 const h1Style = {
   color: "red",
@@ -22,25 +19,6 @@ meta.elements[0].ref.current.value=123;
 `
 
 const App = () => {
-  
-  //Test Codes
-  const [count, setCount] = useState(0);
-  const [currData, setDate] = useState(new Date());
-  const [script, setScript] = useState(defaultScriptTextForTesting);
-  const handleScriptChange = (e) => {
-    setScript(()=> {
-      return e.target.value;
-    });
-
-    setMeta((prevVal) => {
-      return {
-        ...prevVal,
-        scriptText: e.target.value
-      }
-    })
-  }
-  //Test Code Ends
-
   /**
    * Clear the Playground
    */
@@ -64,6 +42,7 @@ const App = () => {
     {
         label: 'Home',
         items: [{label: 'New', icon: 'pi pi-fw pi-plus',command:()=>{ clearAll() }},
+                {label: 'Preview', icon: 'pi pi-eye',command:()=>{ clearAll() }},
                 {label: 'Delete', icon: 'pi pi-fw pi-trash', url: 'http://primetek.com.tr'}]
     },
     {
@@ -118,4 +97,5 @@ const renderFooter = (name) => {
 };
 
 export default App;
-export {defaultScriptTextForTesting};//For testing, It must be removed
+export { defaultScriptTextForTesting }; //For testing, It must be removed
+

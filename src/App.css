@@ -15,7 +15,9 @@
 }
 
 .comp-container {
-    border: 1px dashed
+    border: 1px dashed;
+    height: 5vh;
+    
 }
 
 .menubar {

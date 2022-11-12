@@ -2,14 +2,19 @@ import { InputText } from "primereact/inputtext";
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
 import { CONTROL } from "../constants/Elements";
+import { useState } from "react";
 
 
 
 
 const AttributePanel = (props) => {
+
+    const {meta, setMeta} = props;
+
+    const [classNameValue, setClassNameValue] = useState(meta.currentElement?.attributes?.className|| "");
     
     const updateMeta = (e) => {
-        props.setMeta((prevVal) => {
+        setMeta((prevVal) => {
             if(!prevVal.currentElement.attributes) {
                 prevVal.currentElement.attributes = {};
             }
@@ -20,7 +25,12 @@ const AttributePanel = (props) => {
         });
     };
 
-    const availableEvents = props.meta?.events?.map(ev=> {
+    const updateClass = (e) => {
+        setClassNameValue(e.target.value);
+        updateMeta(e);
+    }
+
+    const availableEvents = meta?.events?.map(ev=> {
         return {label: ev.name, value: ev.id}
     });
 
@@ -31,11 +41,23 @@ const AttributePanel = (props) => {
      * @returns 
      */
     const renderAttributes = () => {
-        if(props.meta && props.meta.currentElement) {
-            const currAttribute = props.meta.currentElement?.attributes;
+        if(meta && meta.currentElement) {
+            const currAttribute = meta.currentElement?.attributes;
+
+            const classDiv = (
+              <div className="field col-12">
+                <label htmlFor="class">Class</label>
+                <InputText
+                    name="className"
+                    placeholder="col-12 md:col-6 lg:col-3"
+                    value={currAttribute?.className || ""}
+                    onChange={updateClass}
+                />
+              </div>
+            );
             
             /* Render Button Attributes */
-            if(props.meta.currentElement.type === CONTROL.BUTTON) {
+            if(meta.currentElement.type === CONTROL.BUTTON) {
                 return (
                     <>
                         <div className="field col-12">
@@ -50,12 +72,13 @@ const AttributePanel = (props) => {
                             <label htmlFor="label">Label</label>
                             <InputText name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
                         </div>
+                        {classDiv}
                     </>
                 )
             }
 
             /* Render Input Attributes */
-            if(props.meta.currentElement.type === CONTROL.INPUT) {
+            if(meta.currentElement.type === CONTROL.INPUT) {
                 return (
                   <>
                     <div className="field col-12">
@@ -72,15 +95,16 @@ const AttributePanel = (props) => {
                         />
                     </div>
                     <div className="field col-12">
-                      <label htmlFor="maxLen">Placeholder</label>
-                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder}/>
+                      <label htmlFor="maxLen">Placeholder {currAttribute?.placeholder} </label>
+                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder || ""}/>
                     </div>
+                    {classDiv}
                   </>
                 );
             }
 
             /* Render Textarea Attributes */
-            if(props.meta.currentElement.type === CONTROL.TEXTAREA) {
+            if(meta.currentElement.type === CONTROL.TEXTAREA) {
                 return (
                   <>
                     <div className="field col-12">
@@ -113,10 +137,21 @@ const AttributePanel = (props) => {
                     </div>
                     <div className="field col-12">
                       <label htmlFor="placeholder">Placeholder</label>
-                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder}/>
+                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder || ""}/>
                     </div>
+                    {classDiv}
+                    
                   </>
                 );
+            }
+
+            /* Render Container Attributes */
+            if(meta.currentElement.type === CONTROL.CONTAINER) {
+                return(
+                    <>
+                        {classDiv}
+                    </>
+                )
             }
 
         }
@@ -127,13 +162,14 @@ const AttributePanel = (props) => {
         <>
             <div className="p-fluid grid">
                 {
-
                     renderAttributes()
                 }
             </div>
         </>
     )
 }
+
+/* value={props.meta.currentElement?.attributes?.className} */
 
 const testEvents = [
     {label: 'Execute Script', value: 'script-Sc23ab3W'},

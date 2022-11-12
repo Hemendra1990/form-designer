@@ -60,7 +60,7 @@ const Playground = (props) => {
             <Droppable key = {element.id} droppableId={`${element.id}`}>
               {
                 (provided) => (
-                  <div className="col-4" ref={provided.innerRef} {...provided.droppableProps}
+                  <div className={element.attributes?.className} ref={provided.innerRef} {...provided.droppableProps}
                   key={element.id}
                   onFocus={() =>
                     handleElementClick(element)
@@ -75,7 +75,10 @@ const Playground = (props) => {
                           <div ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}>
-                            {createElement(element, index)}
+                            <div style={{padding: '10px', border: '1px solid rgb(212 212 212)'}}>
+                              {createElement(element, index)}
+
+                            </div>
                           </div>
                         )
                       }

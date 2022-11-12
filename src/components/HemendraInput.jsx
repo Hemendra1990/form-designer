@@ -1,9 +1,8 @@
 import { InputText } from 'primereact/inputtext';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 const HemendraInput = React.forwardRef((props, ref) => {
 //const HemendraInput = (props) => {
-    console.log('HemendraInput', props);
     const {element, meta, setMeta} = props;
 
     const [value, setValue] = useState(element.value || "");
@@ -20,11 +19,11 @@ const HemendraInput = React.forwardRef((props, ref) => {
                 placeholder={element?.attributes?.placeholder}
                 name={props.name}
                 id={props.name}
-                defaultValue={value}
+                value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onBlur={handleBlur}/>
         </>
     )
 })
 
-export default HemendraInput;
+export default memo(HemendraInput);

@@ -3,8 +3,14 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
 
 const HemendraTextarea = React.forwardRef((props, ref) => {
-    const element = props.element;
-    const [value, setValue] = useState('')
+    //const element = props.element;
+    const {element, meta, setMeta} = props;
+    const [value, setValue] = useState(element.value || "");
+
+    const handleChange = (e) => {
+        setValue(e.target.value);
+        element.value = e.target.value;
+    }
 
     return(
         <>
@@ -16,8 +22,8 @@ const HemendraTextarea = React.forwardRef((props, ref) => {
                 placeholder={element?.attributes?.placeholder}
                 name={props.name} 
                 id={props.name}
-                defaultValue={value} 
-                onChange={(e) => setValue(e.target.value)}/>
+                value={value} 
+                onChange={handleChange}/>
         </>
     )
 })
