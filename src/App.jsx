@@ -91,7 +91,9 @@ const renderFooter = (name) => {
           <ControlPanel meta={meta} setMeta={setMeta} />
         </div>
         <div className="col-8 playground">
+          <div className="grid">
           <Playground meta={meta} setMeta={setMeta} />
+          </div>
         </div>
         <div className="col-2 attribute-panel">
           <AttributePanel meta={meta} setMeta={setMeta} />

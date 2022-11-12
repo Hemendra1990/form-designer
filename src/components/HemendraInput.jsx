@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 const HemendraInput = React.forwardRef((props, ref) => {
 //const HemendraInput = (props) => {
     console.log('HemendraInput', props);
-    const element = props.element;
+    const {element, meta, setMeta} = props;
 
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(element.value || "");
 
     const handleBlur = (e) => {
-        console.log(e);
+        element.value = value;
     }
 
     return (

@@ -1,5 +1,6 @@
 import { Button } from "primereact/button";
 import { ListBox } from "primereact/listbox";
+import { CONTROL_ITEMS } from "../constants/Elements";
 import getComponent from "../constants/HemendraConstants";
 import { createElementId } from "../utils/Utils";
 
@@ -46,28 +47,9 @@ const ControlPanel = (props) => {
     });
   };
 
-  const CONTROL_LIST = [
-    {
-      label: "Input",
-      value: "input",
-    },
-    {
-      label: "Textarea",
-      value: "textarea",
-    },
-    {
-      label: "Button",
-      value: "button",
-    },
-    {
-      label: "Clear All",
-      value: "clear",
-    },
-  ];
-
   return (
     <>
-      <ListBox options={CONTROL_LIST} onChange={addElement} />
+      <ListBox options={CONTROL_ITEMS()} onChange={addElement} />
     </>
   );
 };
