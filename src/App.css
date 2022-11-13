@@ -1,9 +1,19 @@
 *{
     margin: 0;
 }
+.edit-mode {
+    padding: 10px;
+    border: 1px solid rgb(212 212 212)
+}
+.preview-mode {
+    padding: 10px;
+}
 .playground {
     background: url('./assets/tiny-checkers.png');
-    /* border: 1px dashed */
+}
+.playground-preview {
+    background: unset;
+    margin: 0.5rem !important;
 }
 
 .attribute-panel {
@@ -11,7 +21,11 @@
 }
 
 .control-panel {
-    /* border: 1px dashed */
+    display: block;
+}
+
+.control-panel-preview {
+    display: none;
 }
 
 .comp-container {

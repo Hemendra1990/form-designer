@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Playground = (props) => {
@@ -35,7 +35,6 @@ const Playground = (props) => {
   };
 
   const onDragEnd = (dragResult) => {
-    console.log('Drag end', dragResult);
     if(!dragResult.destination) return;
     const items = props.meta.elements;
     const [reorderItem] = items.splice(dragResult.source.index, 1);
@@ -67,17 +66,19 @@ const Playground = (props) => {
                   } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
                 >
                   <Draggable
+                      isDragDisabled={!props.meta.editMode}
                       key={element.id}
                       draggableId={element.id}
                       index={index}
                     >
                       {(provided) => (
-                          <div ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}>
-                            <div style={{padding: '10px', border: '1px solid rgb(212 212 212)'}}>
+                          <div
+                            draggable={props.meta.editMode}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}>
+                            <div className={props.meta.editMode ? "edit-mode": "preview-mode"}>
                               {createElement(element, index)}
-
                             </div>
                           </div>
                         )
