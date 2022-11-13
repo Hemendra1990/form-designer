@@ -135,8 +135,8 @@ const EventModeler = (props) => {
         </DataTable>
       </OverlayPanel>
 
-      <div class="flex">
-            <div class="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
+      <div className="flex">
+            <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
               <InputText
                 placeholder="Event Id"
                 value={eventId}
@@ -149,7 +149,7 @@ const EventModeler = (props) => {
             onChange={(e) => setEventName(e.target.value)}
           ></InputText>
             </div>
-            <div class="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
+            <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
               <Button label="Add Action" onClick={addNewActionNode}/>
               <Button style={{marginLeft: '5px'}} className="p-button-danger" label="Save Event" onClick={saveEvent}/>
             </div>

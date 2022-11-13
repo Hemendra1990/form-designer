@@ -24,6 +24,9 @@ const EventExecutor = {
                 const eventNode = nodes.find(node => node.id === nodeId);
                 execute(meta, eventNode);
             })
+        } else if(eventToExecute && eventToExecute.bucket && eventToExecute.bucket.nodes?.length === 1) {
+            const nodes = eventToExecute.bucket.nodes;
+            execute(meta, nodes[0]);
         }
 
         //scriptExecutor(meta, eventId); //We must check what event type is coming, but for testing leaving it for script only

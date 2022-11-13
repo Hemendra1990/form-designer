@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Handle } from "reactflow";
 import TargetHandle from "./model/TargetHandle";
 import { Card } from "primereact/card";
@@ -7,10 +7,18 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 const Script = (props) => {
     const { data, isConnectable, meta, setMeta } = props;
+    const [scriptText, setScriptText] = useState(data?.eventInfo?.scriptText || "");
+
+    const handleScriptTextChange = (e) => {
+        setScriptText(e.target.value);
+        data.eventInfo.scriptText  = scriptText;
+    }
     return(
         <Card>
 
-            <InputTextarea rows={10} value={data.eventInfo.scriptText} onChange={e=> data.eventInfo.scriptText=e.target.value}/>
+            <InputTextarea rows={10} 
+                    value={scriptText} 
+                    onChange={handleScriptTextChange}/>
 
             <TargetHandle data={data} isConnectable={isConnectable} />
             <Handle
