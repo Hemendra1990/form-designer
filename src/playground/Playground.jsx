@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import { Toast } from "primereact/toast";
+import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Playground = (props) => {
   console.log("Playground", props);
+  const toastRef = useRef(null);
+  useEffect(()=> {
+    props.meta.toastRef = toastRef;
+  }, []);
 
   /**
    * handle click event on element
@@ -94,6 +99,7 @@ const Playground = (props) => {
           );
         })}
       </DragDropContext>
+      <Toast ref={toastRef}></Toast>
     </>
   );
 };

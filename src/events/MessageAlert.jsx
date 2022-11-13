@@ -17,19 +17,19 @@ const positions = [
 const types = [
   {
     label: "Success",
-    value: "p-button-success",
+    value: "success",
   },
   {
     label: "Info",
-    value: "p-button-info",
+    value: "info",
   },
   {
     label: "Warn",
-    value: "p-button-warning",
+    value: "warn",
   },
   {
     label: "Error",
-    value: "p-button-danger",
+    value: "error",
   },
 ];
 

@@ -3,6 +3,8 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
 import { CONTROL } from "../constants/Elements";
 import { useState } from "react";
+import AttrButtonComp from "./attr-button/AttrButtonComp";
+import { Card } from "primereact/card";
 
 
 
@@ -60,18 +62,7 @@ const AttributePanel = (props) => {
             if(meta.currentElement.type === CONTROL.BUTTON) {
                 return (
                     <>
-                        <div className="field col-12">
-                            <label htmlFor="controlId">Control ID</label>
-                            <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
-                        </div>
-                        <div className="field col-12">
-                            <label htmlFor="eventId">Event ID</label>
-                            <Dropdown name="eventId" value={props.meta.currentElement?.attributes?.eventId} options={availableEvents} onChange={updateMeta} placeholder="Select a Event"/>
-                        </div>
-                        <div className="field col-12">
-                            <label htmlFor="label">Label</label>
-                            <InputText name="label" placeholder="Enter Button Label" onChange={updateMeta} value={props.meta.currentElement?.attributes?.label}/>
-                        </div>
+                        <AttrButtonComp {...props} updateMeta={updateMeta} eventOptions={availableEvents} />
                         {classDiv}
                     </>
                 )

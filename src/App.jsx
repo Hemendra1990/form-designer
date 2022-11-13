@@ -1,6 +1,7 @@
 import { Dialog } from "primereact/dialog";
 import { Menubar } from "primereact/menubar";
-import React, { useEffect, useState } from "react";
+import { Toast } from "primereact/toast"
+import React, { useEffect, useRef, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
@@ -44,7 +45,7 @@ const App = () => {
     });
   };
 
-  const items = [
+  const menuItems = [
     {
       label: "Home",
       items: [
@@ -103,7 +104,7 @@ const App = () => {
     <>
       <div className="p-fluid grid menubar" style={{ background: "#ffffff" }}>
         <div className="col">
-          <Menubar className="z-5" model={items} end={end} />
+          <Menubar className="z-5" model={menuItems} end={end} />
         </div>
       </div>
 
