@@ -35,7 +35,7 @@ const CONTROL = {
     CONTAINER: 'container'
 }
 
-const CONTROL_ITEMS = () =>{
+const CONTROL_ITEMS = () => {
     return ComponentConfig.map(comp => {
         let item = {};
         item.label = comp.label;
