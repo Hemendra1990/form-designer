@@ -1,7 +1,7 @@
 import { InputText } from "primereact/inputtext";
 import React, { memo, useState } from "react";
 
-const HemendraInput = React.forwardRef((props, ref) => {
+const HDInput = React.forwardRef((props, ref) => {
     console.log(props);
   const { element, meta, setMeta } = props;
 
@@ -27,4 +27,4 @@ const HemendraInput = React.forwardRef((props, ref) => {
   );
 });
 
-export default memo(HemendraInput);
+export default memo(HDInput);

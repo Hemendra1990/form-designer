@@ -1,28 +1,28 @@
-import HemendraButton from "../components/HemendraButton";
-import HemendraTextarea from "../components/HemendraTextarea";
-import HemendraInput from "../components/HemendraInput";
-import HemendraContainer from "../components/HemendraContainer";
+import HDButton from "../components/HDButton";
+import HDTextarea from "../components/HDTextarea";
+import HDInput from "../components/HDInput";
+import HDContainer from "../components/HDContainer";
 
 const ComponentConfig = [
     {
         label: "Textarea",
         name: "textarea",
-        component: HemendraTextarea
+        component: HDTextarea
     },
     {
         label: "Input",
         name: "input",
-        component: HemendraInput
+        component: HDInput
     },
     {
         label: "Button",
         name: "button",
-        component: HemendraButton
+        component: HDButton
     },
     {
         label: "Container",
         name: "container",
-        component: HemendraContainer
+        component: HDContainer
     },
 ]
 export default ComponentConfig;

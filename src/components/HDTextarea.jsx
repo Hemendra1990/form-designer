@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
 
-const HemendraTextarea = React.forwardRef((props, ref) => {
-    //const element = props.element;
+const HDTextarea = React.forwardRef((props, ref) => {
     const {element, meta, setMeta} = props;
     const [value, setValue] = useState(element.value || "");
 
@@ -28,4 +27,4 @@ const HemendraTextarea = React.forwardRef((props, ref) => {
     )
 })
 
-export default HemendraTextarea;
+export default memo(HDTextarea);
