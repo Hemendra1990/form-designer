@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 const Playground = (props) => {
   console.log("Playground", props);
   const toastRef = useRef(null);
-  useEffect(()=> {
+  useEffect(() => {
     props.meta.toastRef = toastRef;
   }, []);
 
@@ -40,7 +40,7 @@ const Playground = (props) => {
   };
 
   const onDragEnd = (dragResult) => {
-    if(!dragResult.destination) return;
+    if (!dragResult.destination) return;
     const items = props.meta.elements;
     const [reorderItem] = items.splice(dragResult.source.index, 1);
     items.splice(dragResult.destination.index, 0, reorderItem);
@@ -48,12 +48,20 @@ const Playground = (props) => {
     props.setMeta((prevValue) => {
       return {
         ...prevValue,
-        elements: items
-      }
-    })
+        elements: items,
+      };
+    });
+  };
 
-
-  }
+  const deleteElement = (event, element, index) => {
+    props.meta.elements.splice(index, 1);
+    props.setMeta((prevValue) => {
+      return {
+        ...prevValue,
+        elements: props.meta.elements,
+      };
+    });
+  };
 
   return (
     <>
@@ -61,40 +69,50 @@ const Playground = (props) => {
         {/* step-1: iterating elements */}
         {props.meta.elements.map((element, index) => {
           return (
-            <Droppable key = {element.id} droppableId={`${element.id}`}>
-              {
-                (provided) => (
-                  <div className={element.attributes?.className} ref={provided.innerRef} {...provided.droppableProps}
+            <Droppable key={element.id} droppableId={`${element.id}`}>
+              {(provided) => (
+                <div
+                  className={element.attributes?.className}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
                   key={element.id}
                   onFocus={() =>
                     handleElementClick(element)
                   } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
                 >
                   <Draggable
-                      isDragDisabled={!props.meta.editMode}
-                      key={element.id}
-                      draggableId={element.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                          <div
-                            draggable={props.meta.editMode}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}>
-                            <div className={props.meta.editMode ? "edit-mode": "preview-mode"}>
-                              {createElement(element, index)}
-                            </div>
-                          </div>
-                        )
-                      }
-                      
-                    </Draggable>
+                    isDragDisabled={!props.meta.editMode}
+                    key={element.id}
+                    draggableId={element.id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        draggable={props.meta.editMode}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <span>
+                          <i
+                            className={props.meta.editMode ? "pi pi-trash" : ""}
+                            style={{ fontSize: "1rem" }}
+                            onClick={(e) => deleteElement(e, element, index)}
+                          ></i>
+                        </span>
+                        <div
+                          className={
+                            props.meta.editMode ? "edit-mode" : "preview-mode"
+                          }
+                        >
+                          {createElement(element, index)}
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
                   {provided.placeholder}
                 </div>
-                )
-              }
-              
+              )}
             </Droppable>
           );
         })}

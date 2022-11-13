@@ -85,7 +85,7 @@ const App = () => {
     },
   ];
 
-  const end = <label style={{ fontWeight: 600 }}>Hemendra's Designer</label>;
+  const end = <label style={{ fontWeight: 800 }}>Hemendra's Low Code Designer</label>;
   const [displayBasic, setDisplayBasic] = useState(false);
   const onHide = () => {
     setDisplayBasic(false);
