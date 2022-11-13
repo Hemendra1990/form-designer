@@ -143,7 +143,7 @@ const App = () => {
         footer={renderFooter("displayBasic")}
         onHide={() => onHide("displayBasic")}
       >
-        <EventModeler meta={meta} setMeta={setMeta} />
+        <EventModeler meta={meta} setMeta={setMeta} hide={onHide} />
       </Dialog>
     </>
   );

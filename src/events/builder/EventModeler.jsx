@@ -115,6 +115,7 @@ const EventModeler = (props) => {
     })
 
     console.log('Saving events into meta', meta);
+    props.hide();
   }
 
   useEffect(()=> {
