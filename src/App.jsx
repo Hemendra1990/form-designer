@@ -1,12 +1,14 @@
 import { Dialog } from "primereact/dialog";
 import { Menubar } from "primereact/menubar";
-import { Toast } from "primereact/toast"
+import { Toast } from "primereact/toast";
 import React, { useEffect, useRef, useState } from "react";
+import "./App.css";
 import AttributePanel from "./attr-panel/AttributePanel";
+import getComponent from "./constants/HemendraConstants";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
 import Playground from "./playground/Playground";
-import "./App.css";
+import { existingReport } from "./tests/report";
 
 const defaultScriptTextForTesting = `
 debugger;
@@ -24,6 +26,7 @@ const App = () => {
       return {
         ...prevValue,
         currentElement: null,
+        events:[]
       };
     });
   };
@@ -57,6 +60,13 @@ const App = () => {
           },
         },
         {
+          label: "Open Report",
+          icon: "pi pi-fw pi-folder-open",
+          command: () => {
+            openReport();
+          },
+        },
+        {
           label: "Preview/Edit",
           icon: "pi pi-eye",
           command: () => {
@@ -64,9 +74,11 @@ const App = () => {
           },
         },
         {
-          label: "Delete",
-          icon: "pi pi-fw pi-trash",
-          url: "http://primetek.com.tr",
+          label: "Save Report",
+          icon: "pi pi-fw pi-save",
+          command: () => {
+            saveReport();
+          }
         },
       ],
     },
@@ -99,6 +111,32 @@ const App = () => {
       </div>
     );
   };
+
+  const jsonStringifyIgnoredList = ["meta", "component", "stateNode", "Provider", "ref", "toastRef"];
+  const saveReport = () => {
+    const metaJson = JSON.stringify(meta, (key, value)=> {
+      return (jsonStringifyIgnoredList.includes(key)) ? undefined: value;
+    });
+    console.log('Report Saved', metaJson);
+  }
+
+  /**
+   * Load existing report
+   */
+  const openReport = () => {
+    const report = JSON.parse(existingReport);
+    setMeta((prevValue)=> {
+      report.elements = report.elements.map(el => {
+        el.component = getComponent(el.type);
+        return el;
+      });
+
+      return {
+        ...report,
+        toastRef: prevValue.toastRef
+      }
+    })
+  }
 
   return (
     <>
@@ -151,3 +189,4 @@ const App = () => {
 
 export default App;
 export { defaultScriptTextForTesting }; //For testing, It must be removed
+

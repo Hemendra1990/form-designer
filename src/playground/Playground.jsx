@@ -72,7 +72,7 @@ const Playground = (props) => {
             <Droppable key={element.id} droppableId={`${element.id}`}>
               {(provided) => (
                 <div
-                  className={element.attributes?.className}
+                  className={element?.attributes?.className}
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   key={element.id}
@@ -81,7 +81,7 @@ const Playground = (props) => {
                   } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
                 >
                   <Draggable
-                    isDragDisabled={!props.meta.editMode}
+                    isDragDisabled={!props.meta?.editMode}
                     key={element.id}
                     draggableId={element.id}
                     index={index}
@@ -95,14 +95,14 @@ const Playground = (props) => {
                       >
                         <span>
                           <i
-                            className={props.meta.editMode ? "pi pi-trash" : ""}
+                            className={props.meta?.editMode ? "pi pi-trash" : ""}
                             style={{ fontSize: "1rem" }}
                             onClick={(e) => deleteElement(e, element, index)}
                           ></i>
                         </span>
                         <div
                           className={
-                            props.meta.editMode ? "edit-mode" : "preview-mode"
+                            props.meta?.editMode ? "edit-mode" : "preview-mode"
                           }
                         >
                           {createElement(element, index)}
