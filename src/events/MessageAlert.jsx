@@ -3,6 +3,7 @@ import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import React, { memo } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { Handle } from "reactflow";
 import TargetHandle from "./model/TargetHandle";
@@ -34,15 +35,16 @@ const types = [
 ];
 
 const MessageAlert = (props) => {
-  const { data, isConnectable, meta, setMeta } = props;
-  const [header, setHeader] = useState('');
-  const [message, setMessage] = useState('');
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedPosition, setselectedPosition] = useState(null);
-
+  console.log("🚀 ~ file: MessageAlert.jsx ~ line 37 ~ MessageAlert ~ props", props);
   
+  const { data, isConnectable, meta, setMeta } = props;
+  const [header, setHeader] = useState(data?.eventInfo?.data?.header || '');
+  const [message, setMessage] = useState(data?.eventInfo?.data?.message || '');
+  const [selectedType, setSelectedType] = useState(data?.eventInfo?.data?.type || '');
+  const [selectedPosition, setselectedPosition] = useState(data?.eventInfo?.data?.position || '');
   
   const onTypeChange = (e) => {
+    console.log("🚀 ~ file: MessageAlert.jsx ~ line 63 ~ onTypeChange ~ e", e)
     console.log(e);
     setSelectedType(e.value);
   }
@@ -76,23 +78,21 @@ const MessageAlert = (props) => {
     >
       
       <div className="grid">
-          <div className="col-12">
-            <label>
-              Header <span style={{ color: "red" }}>*</span>
-            </label>
-            <InputText value={header} onChange={(e)=> setHeader(e.target.value)} />
+          <div className="col">
+            <label>Header</label>
+            <InputText value={header} onChange={(e)=> {console.log('Header Change'); setHeader(e.target.value)}} />
           </div>
-          <div className="col-12">
+          <div className="col">
             <label>
-              Message<span style={{ color: "red" }}>*</span>
+              Message
             </label>
             <InputText value={message} onChange={(e)=> setMessage(e.target.value)} />
           </div>
-          <div className="col-12">
+          <div className="col">
             <label>Type</label>
             <Dropdown name="type" options={types} value={selectedType} onChange={onTypeChange} />
           </div>
-          <div className="col-12">
+          <div className="col">
             <label>Position</label>
             <Dropdown
               name="position"

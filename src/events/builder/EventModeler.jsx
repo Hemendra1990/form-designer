@@ -17,6 +17,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { EVENTS, NODE_TYPES } from "../model/EventModel";
 import "./EventModeler.css";
+import { Dropdown } from "primereact/dropdown";
 
 const initialNodes = [
   /* {
@@ -45,6 +46,7 @@ const EventModeler = (props) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const [bgColor, setBgColor] = useState(initBgColor);
+  const [selectedEvent, setSelectedEvent] = useState("");
   
   const onChange = (event) => {
     setNodes((nds) =>
@@ -108,9 +110,19 @@ const EventModeler = (props) => {
       bucket: {nodes, edges} 
     };
     setMeta((prevMeta)=> {
+      const existingEventId = prevMeta.events.find(ev => ev.id === eventId);
+      let eventBuckets = [];
+      if(existingEventId) {
+        eventBuckets = prevMeta.events.map(pEvent => {
+          pEvent.bucket = {nodes, edges};
+          return pEvent;
+        });
+      }else {
+        eventBuckets = [...prevMeta.events, event];
+      }
       return {
         ...prevMeta,
-        events: [...prevMeta.events, event]
+        events: [...eventBuckets]
       }
     })
 
@@ -118,8 +130,18 @@ const EventModeler = (props) => {
     props.hide();
   }
 
+  const onEventSelection = (e) => {
+    setSelectedEvent(e.value);
+    setEventId(e.value);
+    const metaEvent = meta.events.find(me=> me.id === e.value);
+    setEventName(metaEvent.name);
+    setEdges(metaEvent.bucket.edges);
+    setNodes(metaEvent.bucket.nodes);
+  }
+
   useEffect(()=> {
     setEventId(`event-${createElementId()}`);
+    console.log(meta.events);
   }, []);
 
   return (
@@ -138,6 +160,11 @@ const EventModeler = (props) => {
 
       <div className="flex">
             <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
+              <Dropdown 
+                options={meta.events} 
+                optionLabel="name" 
+                optionValue="id"
+                value={selectedEvent} onChange={onEventSelection} />
               <InputText
                 placeholder="Event Id"
                 value={eventId}

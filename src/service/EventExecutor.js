@@ -1,7 +1,7 @@
 import {EventExecutorService} from "./EventExecutorService";
 
 const EventExecutor = {
-    executeEvent : (meta, eventId) => {
+    executeEvent : async (meta, eventId) => {
         //get the event detail from the eventId, we will do it later
         //Initially I am trying with Script Event
         console.log(`Executing ${eventId}`);
@@ -21,13 +21,13 @@ const EventExecutor = {
                 eventNodeIds.add(target);
             })
             
-            eventNodeIds.forEach(nodeId => {
+            eventNodeIds.forEach(async (nodeId) => {
                 const eventNode = nodes.find(node => node.id === nodeId);
-                EventExecutorService.execute(meta, eventNode);
+                await EventExecutorService.execute(meta, eventNode);
             })
         } else if(eventToExecute && eventToExecute.bucket && eventToExecute.bucket.nodes?.length === 1) {
             const nodes = eventToExecute.bucket.nodes;
-            EventExecutorService.execute(meta, nodes[0]);
+            await EventExecutorService.execute(meta, nodes[0]);
         }
     }
 }
