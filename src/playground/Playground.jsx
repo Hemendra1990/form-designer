@@ -1,8 +1,8 @@
 import { Toast } from "primereact/toast";
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 
 const Playground = (props) => {
   console.log("Playground", props);
@@ -26,6 +26,9 @@ const Playground = (props) => {
   };
 
   const createElement = (element, i) => {
+    element.attributes = element.attributes || {};
+    //element.attributes.className = element.attributes.className || 'col-12';
+    element.attributes.children = element.attributes.children || [];
     const ref = React.createRef();
     const reactComponent = React.createElement(element.component, {
       ref: ref,
@@ -44,22 +47,28 @@ const Playground = (props) => {
   const onDragEnd = (dragResult) => {
     if (!dragResult.destination) return;
     const items = props.meta.elements;
-    let destContainer = items.find(itm => itm.id === dragResult.destination.droppableId)
+    let destContainer = items.find(
+      (itm) => itm.id === dragResult.destination.droppableId
+    );
     const [reorderItem] = items.splice(dragResult.source.index, 1);
-    if(dragResult.destination.droppableId.includes("container")) {
-      destContainer = items.find(itm => itm.id === dragResult.destination.droppableId)
-      if(destContainer && destContainer.attributes) {
-        if(!destContainer.attributes.children) {
+    if (dragResult.destination.droppableId.includes("container")) {
+      destContainer = items.find(
+        (itm) => itm.id === dragResult.destination.droppableId
+      );
+      if (destContainer && destContainer.attributes) {
+        if (!destContainer.attributes.children) {
           destContainer.attributes.children = [];
         }
-        destContainer.attributes.children = [...destContainer.attributes.children, reorderItem]
+        destContainer.attributes.children = [
+          ...destContainer.attributes.children,
+          reorderItem,
+        ];
       } else {
         destContainer.attributes = {};
         destContainer.attributes.children = [];
         destContainer.attributes.children.push(reorderItem);
       }
-    
-    }else {
+    } else {
       items.splice(dragResult.destination.index, 0, reorderItem);
     }
 
@@ -84,35 +93,36 @@ const Playground = (props) => {
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* step-1: iterating elements */}
-        {props.meta.elements.map((element, index) => {
-          return (
-            <Droppable key={element.id} droppableId={`${element.id}`} type="playground-element">
-              {(provided) => (
-                <div
-                  className={element?.attributes?.className}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
+        <Droppable droppableId="playground-drppble" type="pgElement">
+          {(provided, snapshot) => (
+            <div
+            className="grid"
+              ref={provided.innerRef}
+              style={{
+                backgroundColor: snapshot.isDraggingOver
+                  ? "grey"
+                  : "",
+              }}
+              {...provided.droppableProps}
+            >
+              {props.meta.elements.map((element, index) => (
+                <Draggable
+                  isDragDisabled={!props.meta?.editMode}
                   key={element.id}
-                  onFocus={() =>
-                    handleElementClick(element)
-                  } /* step-3: here "element" is passed, which is the refenrence object from meta.elements, so any change in element updates the meta.elements array */
+                  draggableId={element.id}
+                  index={index}
                 >
-                  <Draggable
-                    isDragDisabled={!props.meta?.editMode}
-                    key={element.id}
-                    draggableId={element.id}
-                    index={index}
-                  >
-                    {(provided) => (
+                  {(provided, snapshot) => (
+                    <div className={element?.attributes?.className || "col-4"}>
                       <div
-                        draggable={props.meta.editMode}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                      >
+                        onFocus={() => handleElementClick(element)}>
                         <span>
                           <i
-                            className={props.meta?.editMode ? "pi pi-trash" : ""}
+                            className={
+                              props.meta?.editMode ? "pi pi-trash" : ""
+                            }
                             style={{ fontSize: "1rem" }}
                             onClick={(e) => deleteElement(e, element, index)}
                           ></i>
@@ -130,15 +140,16 @@ const Playground = (props) => {
                         >
                           {createElement(element, index)}
                         </div>
+                        {provided.placeholder}
                       </div>
-                    )}
-                  </Draggable>
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          );
-        })}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </DragDropContext>
       <Toast ref={toastRef}></Toast>
     </>

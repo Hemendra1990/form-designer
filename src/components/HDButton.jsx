@@ -20,9 +20,7 @@ const HDButton = React.forwardRef( (props, ref) => {
     }
 
     return (
-        <>
-            <Button className={props.element?.attributes?.type} ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
-        </>
+        <Button className={props.element?.attributes?.type} ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
     );
 });
 export default memo(HDButton);

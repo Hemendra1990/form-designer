@@ -1,55 +1,84 @@
-import React, { memo, useEffect } from "react";
-import { Droppable } from "react-beautiful-dnd";
+import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { memo, useCallback, useEffect } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 const HDContainer = React.forwardRef((props, ref) => {
   const { element, meta } = props;
-  
-  
-  useEffect(()=> {
-    console.log('Container Component ', element);
 
-  });
-  
-
-  const generateContainerElements = () => {
-
-    return element.attributes?.children.map((child, index) => {
-      console.log('creating elements...');
-      const ref = React.createRef();
-      const reactComponent = React.createElement(element.component, {
-        ref: ref,
-        key: index + 1,
-        name: `${element.name}`,
-        setMeta: props.setMeta,
-        meta: props.meta,
-        element: element,
-        enteredValue: "",
-      });
-      element.ref = ref;
-      return reactComponent;
+  const createChildElement = useCallback((child, index) => {
+    console.log("creating elements...");
+    const ref = React.createRef();
+    const reactComponent = React.createElement(child.component, {
+      ref: ref,
+      key: index + 1,
+      name: `${child.name}`,
+      setMeta: props.setMeta,
+      meta: props.meta,
+      element: child,
+      enteredValue: "",
     });
-  }
+    child.ref = ref;
+    return reactComponent;
+  }, []);
+
+  /**
+   * handle click event on element
+   * Observable will be create which will emit element click change
+   * @param {*} element
+   */
+   const handleElementClick = (element) => {
+    console.log('Element click');
+    props.setMeta((prevValue) => {
+      return {
+        ...prevValue,
+        currentElement: element,
+      };
+    });
+  };
 
   return (
-    <div className={meta.editMode ? "col-12" : "col-12"} style={{width:'100%', height: '5em'}}>
-      <Droppable droppableId={`${element.id}`} type="playground-element">
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            style={{
-              backgroundColor: snapshot.isDraggingOver ? "red" : "grey",
-            }}
-            {...provided.droppableProps}
-          >
-            <h2>I am a droppable!</h2>
-
-            {generateContainerElements()}
-
-            {provided.placeholder}
+    <Droppable droppableId={`${element.id}`} type="pgElement">
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          style={{
+            backgroundColor: snapshot.isDraggingOver ? "cyan" : "",
+            width: "100%",
+            height: 'fit-content',
+            border: '1px dashed red'
+          }}>
+          <div className="col-12" style={{ height: "10rem" }}>
+            {element?.attributes?.children.map((child, index) => {
+              return (
+                <Draggable
+                  key={`${child.id}${index}`}
+                  draggableId={`${child.id}${index}`}
+                  index={index}
+                >
+                  {(provided, snapshot) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps}>
+                      <span {...provided.dragHandleProps}>
+                        {meta.editMode && <FontAwesomeIcon
+                          icon={faGripVertical}
+                          style={{ float: "right" }}
+                        />}
+                      </span>
+                      <div onFocus={() => handleElementClick(element)}>
+                        {createChildElement(child, index)}
+                      </div>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Draggable>
+              );
+            })}
           </div>
-        )}
-      </Droppable>
-    </div>
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
   );
 });
 

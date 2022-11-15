@@ -162,7 +162,7 @@ const App = () => {
             meta.editMode ? "col-8 playground" : "col-12 playground-preview"
           }`}
         >
-          <div className="grid">
+          <div>
             <Playground meta={meta} setMeta={setMeta} />
           </div>
         </div>
