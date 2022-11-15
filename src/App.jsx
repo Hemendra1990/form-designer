@@ -112,12 +112,12 @@ const App = () => {
     );
   };
 
-  const jsonStringifyIgnoredList = ["meta", "component", "stateNode", "Provider", "ref", "toastRef"];
+  const jsonStringifyIgnoredList = ["meta", "component", "stateNode", "Provider", "ref", "toastRef", "currentElement"];
   const saveReport = () => {
     const metaJson = JSON.stringify(meta, (key, value)=> {
       return (jsonStringifyIgnoredList.includes(key)) ? undefined: value;
     });
-    console.log('Report Saved', metaJson);
+    console.info('Report Saved', metaJson);
   }
 
   /**

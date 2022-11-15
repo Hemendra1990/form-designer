@@ -2,7 +2,6 @@ import { InputText } from "primereact/inputtext";
 import React, { memo, useState } from "react";
 
 const HDInput = React.forwardRef((props, ref) => {
-    console.log(props);
   const { element, meta, setMeta } = props;
 
   const [value, setValue] = useState(element.value || "");

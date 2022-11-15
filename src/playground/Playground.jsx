@@ -1,6 +1,8 @@
 import { Toast } from "primereact/toast";
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 
 const Playground = (props) => {
   console.log("Playground", props);
@@ -42,13 +44,29 @@ const Playground = (props) => {
   const onDragEnd = (dragResult) => {
     if (!dragResult.destination) return;
     const items = props.meta.elements;
+    let destContainer = items.find(itm => itm.id === dragResult.destination.droppableId)
     const [reorderItem] = items.splice(dragResult.source.index, 1);
-    items.splice(dragResult.destination.index, 0, reorderItem);
+    if(dragResult.destination.droppableId.includes("container")) {
+      destContainer = items.find(itm => itm.id === dragResult.destination.droppableId)
+      if(destContainer && destContainer.attributes) {
+        if(!destContainer.attributes.children) {
+          destContainer.attributes.children = [];
+        }
+        destContainer.attributes.children = [...destContainer.attributes.children, reorderItem]
+      } else {
+        destContainer.attributes = {};
+        destContainer.attributes.children = [];
+        destContainer.attributes.children.push(reorderItem);
+      }
+    
+    }else {
+      items.splice(dragResult.destination.index, 0, reorderItem);
+    }
 
     props.setMeta((prevValue) => {
       return {
         ...prevValue,
-        elements: items,
+        elements: [...items],
       };
     });
   };
@@ -69,7 +87,7 @@ const Playground = (props) => {
         {/* step-1: iterating elements */}
         {props.meta.elements.map((element, index) => {
           return (
-            <Droppable key={element.id} droppableId={`${element.id}`}>
+            <Droppable key={element.id} droppableId={`${element.id}`} type="playground-element">
               {(provided) => (
                 <div
                   className={element?.attributes?.className}
@@ -91,7 +109,6 @@ const Playground = (props) => {
                         draggable={props.meta.editMode}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
                       >
                         <span>
                           <i
@@ -99,6 +116,12 @@ const Playground = (props) => {
                             style={{ fontSize: "1rem" }}
                             onClick={(e) => deleteElement(e, element, index)}
                           ></i>
+                        </span>
+                        <span {...provided.dragHandleProps}>
+                          <FontAwesomeIcon
+                            icon={faGripVertical}
+                            style={{ float: "right" }}
+                          />
                         </span>
                         <div
                           className={
