@@ -29,7 +29,7 @@ async function executeMessageAlert(meta, eventNode) {
           detail: message
         });
       meta.toastRef.current.props.position = position;
-    },1000)
+    },10)
   } else {
     alert("toast service failed!");
   }

@@ -16,7 +16,10 @@ const Playground = (props) => {
    * Observable will be create which will emit element click change
    * @param {*} element
    */
-  const handleElementClick = (element) => {
+  const handleElementClick = (event, element) => {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('Playground', element);
     props.setMeta((prevValue) => {
       return {
         ...prevValue,
@@ -113,11 +116,12 @@ const Playground = (props) => {
                   index={index}
                 >
                   {(provided, snapshot) => (
-                    <div className={element?.attributes?.className || "col-4"}>
+                    <div className={element?.attributes?.className || "col-4"} 
+                    onClick={(event) => handleElementClick(event, element)}>
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        onFocus={() => handleElementClick(element)}>
+                        >
                         <span>
                           <i
                             className={
@@ -127,12 +131,14 @@ const Playground = (props) => {
                             onClick={(e) => deleteElement(e, element, index)}
                           ></i>
                         </span>
-                        <span {...provided.dragHandleProps}>
+                        {
+                          props.meta.editMode && <span {...provided.dragHandleProps}>
                           <FontAwesomeIcon
                             icon={faGripVertical}
                             style={{ float: "right" }}
                           />
                         </span>
+                        }
                         <div
                           className={
                             props.meta?.editMode ? "edit-mode" : "preview-mode"

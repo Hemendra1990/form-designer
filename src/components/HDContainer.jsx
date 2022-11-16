@@ -4,35 +4,37 @@ import React, { memo, useCallback, useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
 const HDContainer = React.forwardRef((props, ref) => {
-  const { element, meta } = props;
+  const { element, meta, setMeta } = props;
 
   const createChildElement = useCallback((child, index) => {
-    console.log("creating elements...");
     const ref = React.createRef();
     const reactComponent = React.createElement(child.component, {
       ref: ref,
       key: index + 1,
       name: `${child.name}`,
-      setMeta: props.setMeta,
-      meta: props.meta,
+      setMeta: setMeta,
+      meta: meta,
       element: child,
       enteredValue: "",
     });
     child.ref = ref;
     return reactComponent;
-  }, []);
+  }, [ meta, setMeta]);
 
   /**
    * handle click event on element
    * Observable will be create which will emit element click change
    * @param {*} element
    */
-   const handleElementClick = (element) => {
-    console.log('Element click');
+   const handleChildElementClick = (event, element, child) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    console.log('Element click', event);
     props.setMeta((prevValue) => {
+      prevValue.currentElement = child;
       return {
-        ...prevValue,
-        currentElement: element,
+        ...prevValue
       };
     });
   };
@@ -47,9 +49,9 @@ const HDContainer = React.forwardRef((props, ref) => {
             backgroundColor: snapshot.isDraggingOver ? "cyan" : "",
             width: "100%",
             height: 'fit-content',
-            border: '1px dashed red'
+            border: meta.editMode ? '1px dashed grey' : ''
           }}>
-          <div className="col-12" style={{ height: "10rem" }}>
+          <div className="grid" style={{ height: "10rem" }}>
             {element?.attributes?.children.map((child, index) => {
               return (
                 <Draggable
@@ -58,14 +60,14 @@ const HDContainer = React.forwardRef((props, ref) => {
                   index={index}
                 >
                   {(provided, snapshot) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps}>
+                    <div ref={provided.innerRef} {...provided.draggableProps} className={child?.attributes?.className}>
                       <span {...provided.dragHandleProps}>
                         {meta.editMode && <FontAwesomeIcon
                           icon={faGripVertical}
                           style={{ float: "right" }}
                         />}
                       </span>
-                      <div onFocus={() => handleElementClick(element)}>
+                      <div onClick={(e) => {handleChildElementClick(e, element, child)}}>
                         {createChildElement(child, index)}
                       </div>
                       {provided.placeholder}
@@ -82,5 +84,5 @@ const HDContainer = React.forwardRef((props, ref) => {
   );
 });
 
-export default HDContainer;
+export default memo(HDContainer);
 //"comp-container col-12"
