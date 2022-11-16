@@ -3,6 +3,7 @@ import React, { memo, useState } from "react";
 
 const HDInput = React.forwardRef((props, ref) => {
   const { element, meta, setMeta } = props;
+  console.log("🚀 ~ file: HDInput.jsx ~ line 6 ~ HDInput ~ element", element)
 
   const [value, setValue] = useState(element.value || "");
 

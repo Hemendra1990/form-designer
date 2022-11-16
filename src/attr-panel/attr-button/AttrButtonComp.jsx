@@ -1,6 +1,7 @@
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import React, { memo } from "react";
+import { useMetaContext } from "../../context/MetaContext";
 
 const BUTTON_TYPES = [
   "p-button-link",
@@ -13,14 +14,15 @@ const BUTTON_TYPES = [
 ];
 
 const AttrButton = (props) => {
-  const { eventOptions, updateMeta } = props;
+  const meta = props.meta;
+  const { eventOptions, handleAttributeChange } = props;
   return (
     <>
       <div className="field col-12">
         <label htmlFor="controlId">Control ID</label>
         <InputText
           name="placeholder"
-          value={props.meta.currentElement.id}
+          value={meta.currentElement.id}
           disabled
         />
       </div>
@@ -28,9 +30,9 @@ const AttrButton = (props) => {
         <label htmlFor="eventId">Event ID</label>
         <Dropdown
           name="eventId"
-          value={props.meta.currentElement?.attributes?.eventId}
-          options={eventOptions}
-          onChange={updateMeta}
+          value={meta.currentElement?.attributes?.eventId}
+          options={eventOptions || []}
+          onChange={handleAttributeChange}
           placeholder="Select a Event"
         />
       </div>
@@ -39,17 +41,17 @@ const AttrButton = (props) => {
         <InputText
           name="label"
           placeholder="Enter Button Label"
-          onChange={updateMeta}
-          value={props.meta.currentElement?.attributes?.label}
+          onChange={handleAttributeChange}
+          value={meta.currentElement?.attributes?.label}
         />
       </div>
       <div className="field col-12">
         <label htmlFor="label">Type</label>
         <Dropdown
           name="type"
-          value={props.meta.currentElement?.attributes?.type}
+          value={meta.currentElement?.attributes?.type}
           options={BUTTON_TYPES}
-          onChange={updateMeta}
+          onChange={handleAttributeChange}
           placeholder="Select type"
         />
       </div>

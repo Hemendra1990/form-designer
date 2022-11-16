@@ -3,12 +3,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 
 const Playground = (props) => {
-  console.log("Playground", props);
+  const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext();
+  const [changePlaygroundState, setChangePlaygroundState] = useState(true); //This is required to reload the controls 
+
+  console.log("Playground Main Component", props);
   const toastRef = useRef(null);
   useEffect(() => {
-    props.meta.toastRef = toastRef;
+    meta.toastRef = toastRef;
+    updateMeta(meta);
   }, []);
 
   /**
@@ -16,29 +22,31 @@ const Playground = (props) => {
    * Observable will be create which will emit element click change
    * @param {*} element
    */
-  const handleElementClick = (event, element) => {
+  const updateCurrentElement = (event, element) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log('Playground', element);
-    props.setMeta((prevValue) => {
-      return {
-        ...prevValue,
-        currentElement: element,
-      };
-    });
+    meta.currentElement = element;
+    console.log("🚀 ~ file: Playground.jsx ~ line 29 ~ updateCurrentElement ~ currentElement", meta.currentElement);
+    updateMeta(meta);
   };
 
+  /**
+   * creates the element in the playground
+   * 
+   * @param {*} element 
+   * @param {*} i 
+   * @returns 
+   */
   const createElement = (element, i) => {
     element.attributes = element.attributes || {};
-    //element.attributes.className = element.attributes.className || 'col-12';
     element.attributes.children = element.attributes.children || [];
     const ref = React.createRef();
     const reactComponent = React.createElement(element.component, {
       ref: ref,
       key: i + 1,
       name: `${element.name}`,
-      setMeta: props.setMeta,
-      meta: props.meta,
+      setMeta: updateMeta,
+      meta: meta,
       element: element,
       enteredValue: "",
     });
@@ -47,9 +55,15 @@ const Playground = (props) => {
     return reactComponent;
   };
 
+  /**
+   * Updates the meta.elements to rerender the elements in the playground
+   * 
+   * @param {*} dragResult 
+   * @returns 
+   */
   const onDragEnd = (dragResult) => {
     if (!dragResult.destination) return;
-    const items = props.meta.elements;
+    const items = meta.elements;
     let destContainer = items.find(
       (itm) => itm.id === dragResult.destination.droppableId
     );
@@ -75,22 +89,21 @@ const Playground = (props) => {
       items.splice(dragResult.destination.index, 0, reorderItem);
     }
 
-    props.setMeta((prevValue) => {
-      return {
-        ...prevValue,
-        elements: [...items],
-      };
-    });
+    meta.elements = [...items]
+    updateMeta(meta);
   };
 
+  /**
+   * deletes the element from the playground
+   * 
+   * @param {*} event 
+   * @param {*} element 
+   * @param {*} index 
+   */
   const deleteElement = (event, element, index) => {
-    props.meta.elements.splice(index, 1);
-    props.setMeta((prevValue) => {
-      return {
-        ...prevValue,
-        elements: props.meta.elements,
-      };
-    });
+    meta.elements.splice(index, 1);
+    updateMeta(meta);
+    setChangePlaygroundState(!changePlaygroundState);
   };
 
   return (
@@ -99,49 +112,44 @@ const Playground = (props) => {
         <Droppable droppableId="playground-drppble" type="pgElement">
           {(provided, snapshot) => (
             <div
-            className="grid"
+              className="grid"
               ref={provided.innerRef}
               style={{
-                backgroundColor: snapshot.isDraggingOver
-                  ? "grey"
-                  : "",
+                backgroundColor: snapshot.isDraggingOver ? "grey" : "",
               }}
               {...provided.droppableProps}
             >
-              {props.meta.elements.map((element, index) => (
+              {meta.elements.map((element, index) => (
                 <Draggable
-                  isDragDisabled={!props.meta?.editMode}
+                  isDragDisabled={!meta?.editMode}
                   key={element.id}
                   draggableId={element.id}
                   index={index}
                 >
                   {(provided, snapshot) => (
-                    <div className={element?.attributes?.className || "col-4"} 
-                    onClick={(event) => handleElementClick(event, element)}>
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        >
+                    <div
+                      className={element?.attributes?.className || "col-4"}
+                      onClick={(event) => updateCurrentElement(event, element)}
+                    >
+                      <div ref={provided.innerRef} {...provided.draggableProps}>
                         <span>
                           <i
-                            className={
-                              props.meta?.editMode ? "pi pi-trash" : ""
-                            }
+                            className={meta?.editMode ? "pi pi-trash" : ""}
                             style={{ fontSize: "1rem" }}
                             onClick={(e) => deleteElement(e, element, index)}
                           ></i>
                         </span>
-                        {
-                          props.meta.editMode && <span {...provided.dragHandleProps}>
-                          <FontAwesomeIcon
-                            icon={faGripVertical}
-                            style={{ float: "right" }}
-                          />
-                        </span>
-                        }
+                        {meta.editMode && (
+                          <span {...provided.dragHandleProps}>
+                            <FontAwesomeIcon
+                              icon={faGripVertical}
+                              style={{ float: "right" }}
+                            />
+                          </span>
+                        )}
                         <div
                           className={
-                            props.meta?.editMode ? "edit-mode" : "preview-mode"
+                            meta?.editMode ? "edit-mode" : "preview-mode"
                           }
                         >
                           {createElement(element, index)}
@@ -172,7 +180,7 @@ export default Playground;
  * Let's Understand (IT IS ALL ABOUT PASS BY REFERENCE)
  *  STEP-1: We are generating new elements on clicking of the control panel,
  *          all the elements are addded into "meta.elements" array
- *  STEP-2: We are generating the dynamic components by iterating the "props.meta.elements (an Array)",
+ *  STEP-2: We are generating the dynamic components by iterating the "meta.elements (an Array)",
  *          that means each dynamic component are sharing the "element object" from the elements array
  *  STEP-3: We have created the "handleElementClick" function which takes the element object as the argument
  *              which belongs to "elements" Array

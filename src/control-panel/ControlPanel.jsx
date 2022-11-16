@@ -1,18 +1,22 @@
 import { ListBox } from "primereact/listbox";
 import { CONTROL_ITEMS } from "../constants/Elements";
 import getComponent from "../constants/HemendraConstants";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { createElementId } from "../utils/Utils";
 
-const ControlPanel = (props) => {
+const ControlPanel = () => {
+  const meta = useMetaContext();
+  const {addElement} = useUpdateMetaContext();
+
   /**
    * Add Element to the Playground
    *
    * @param  event
    */
-  const addElement = (event) => {
+  const handleElementClick = (event) => {
     const id = createElementId();
-    if (!props.meta.elements) {
-      props.meta.elements = [];
+    if (!meta.elements) {
+      meta.elements = [];
     }
     const component = getComponent(event.value);
     const element = {
@@ -21,17 +25,13 @@ const ControlPanel = (props) => {
       id: `${event.value}-${id}`,
       component,
     };
-    props.setMeta((prevValue) => {
-      prevValue.elements.push(element);
-      return {
-        ...prevValue,
-      };
-    });
+
+    addElement(element);
   };
 
   return (
     <>
-      <ListBox options={CONTROL_ITEMS()} onChange={addElement} />
+      <ListBox options={CONTROL_ITEMS()} onChange={handleElementClick} />
     </>
   );
 };

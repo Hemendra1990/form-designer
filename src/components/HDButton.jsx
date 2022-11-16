@@ -4,8 +4,9 @@ import React, { memo } from 'react';
 import EventExecutor from '../service/EventExecutor';
 
 const HDButton = React.forwardRef( (props, ref) => {
+    console.log("🚀  ~ file: HDButton.jsx ~ line 7 ~ HDButton ~ props ", props)
     const element = props.element;
-    console.log(props);
+    
     
     if(!(element.attributes && element.attributes.label)) {
         if(!element.attributes) element.attributes = {};
@@ -20,7 +21,9 @@ const HDButton = React.forwardRef( (props, ref) => {
     }
 
     return (
-        <Button className={props.element?.attributes?.type} ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
+        <>
+            <Button className={props.element?.attributes?.type} ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
+        </>
     );
 });
 export default memo(HDButton);
