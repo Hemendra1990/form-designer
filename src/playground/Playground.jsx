@@ -72,9 +72,10 @@ const Playground = (props) => {
     );
     const [reorderItem] = items.splice(dragResult.source.index, 1);
     if (dragResult.destination.droppableId.includes("container")) {
-      destContainer = items.find(
+      destContainer =findContainer(items, dragResult.destination.droppableId);
+      /* destContainer = items.find(
         (itm) => itm.id === dragResult.destination.droppableId
-      );
+      ); */
       if (destContainer && destContainer.attributes) {
         if (!destContainer.attributes.children) {
           destContainer.attributes.children = [];
@@ -95,6 +96,25 @@ const Playground = (props) => {
     meta.elements = [...items]
     updateMeta(meta);
   };
+
+  /**
+   * Depth search for the element
+   * 
+   * @param {*} items 
+   * @param {*} droppableId 
+   * @returns 
+   */
+  const findContainer = (items, droppableId) => {
+    for(let item of items) {
+      if(item.id === droppableId) {
+        return item;
+      }
+
+      if(item.attributes.children.length > 0) {
+        return findContainer(item.attributes.children, droppableId);
+      }
+    }
+  }
 
   /**
    * deletes the element from the playground

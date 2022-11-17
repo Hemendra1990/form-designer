@@ -49,12 +49,13 @@ const HDContainer = React.forwardRef((props, ref) => {
           ref={provided.innerRef}
           {...provided.droppableProps}
           style={{
+            display: "flex",
             backgroundColor: snapshot.isDraggingOver ? "cyan" : "",
             width: "100%",
-            height: 'fit-content',
+            margin: "10px 0",
             border: meta.editMode ? '1px dashed grey' : ''
           }}>
-          <div className="grid" style={{ height: "10rem" }}>
+          <div className="grid" style={{display: 'block'}}>
             {element?.attributes?.children.map((child, index) => {
               return (
                 <Draggable
