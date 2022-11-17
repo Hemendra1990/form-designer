@@ -5,8 +5,9 @@ import Homepage from "./Homepage";
 
 const defaultScriptTextForTesting = `
 debugger;
-
-meta.elements[0].ref.current.value=123;  
+//Use this lines to get the reference of the element and update the value
+const ref = Reference.of('input-hiJRrQgk');
+ref.updateValue("Hello World"); 
 `;
 
 const App = () => {

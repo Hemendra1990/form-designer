@@ -37,9 +37,15 @@ async function executeMessageAlert(meta, eventNode) {
 
 function executeScript(meta, eventNode) {
   const scriptEventDetail = eventNode.data.eventInfo;
+  const Reference = {
+    of: (elementId) => {
+      return meta.elementMap[elementId].ref.current;
+    }
+  };
   const scriptFun = new Function(`
         const meta = arguments[0];
+        const Reference = arguments[1];
         ${scriptEventDetail.scriptText}
     `);
-  scriptFun(meta);
+  scriptFun(meta, Reference);
 }
