@@ -40,7 +40,10 @@ const Playground = (props) => {
   const createElement = (element, i) => {
     element.attributes = element.attributes || {};
     element.attributes.children = element.attributes.children || [];
-    const ref = React.createRef();
+    let ref = element.ref;
+    if(!ref) {
+      ref = React.createRef();
+    }
     const reactComponent = React.createElement(element.component, {
       ref: ref,
       key: i + 1,
