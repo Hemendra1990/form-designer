@@ -69,14 +69,16 @@ export const MetaContextProvider = ({ children }) => {
    * Clears all the element from the playground
    */
   const clearAll = () => {
-    setMeta((prevValue) => {
-      prevValue.elements.length = 0;
+    meta.elements.length = 0;
+    meta.currentElement = null;
+    updateMeta(meta);
+    /* setMeta((prevValue) => {
       return {
         ...prevValue,
         currentElement: null,
         events: [],
       };
-    });
+    }); */
   };
 
   /**
@@ -130,7 +132,7 @@ export const MetaContextProvider = ({ children }) => {
     elements.forEach(elm => {
       elementMap[elm.name] = elm;
       if(elm.attributes && elm.attributes.children.length > 0) {
-        createElementMap(elm.attributes.children);
+        createElementMap(elm.attributes.children, elementMap);
       }
     })
   }
