@@ -40,8 +40,12 @@ export const MetaContextProvider = ({ children }) => {
    * @param {*} value 
    */
   const updateMeta = (prevMeta) => {
+    const elementMap = generateElementMap(prevMeta);
     setMeta(()=> {
-      return {...prevMeta}
+      return {
+        ...prevMeta,
+        elementMap
+      }
     });
   };
 
@@ -51,12 +55,14 @@ export const MetaContextProvider = ({ children }) => {
    * @param {*} element 
    */
   const addElement = (element) => {
-    setMeta((prevValue) => {
+    meta.elements.push(element);
+    updateMeta(meta);
+    /* setMeta((prevValue) => {
       prevValue.elements.push(element);
       return {
         ...prevValue,
       };
-    });
+    }); */
   };
 
   /**
@@ -113,6 +119,22 @@ export const MetaContextProvider = ({ children }) => {
     });
     console.info("Report Saved", metaJson);
   };
+
+  const generateElementMap = (prevMeta) => {
+    const elementMap = {};
+    createElementMap(prevMeta.elements, elementMap);
+    return elementMap;
+  }
+
+  function createElementMap(elements, elementMap) {
+    elements.forEach(elm => {
+      elementMap[elm.name] = elm;
+      if(elm.attributes && elm.attributes.children.length > 0) {
+        createElementMap(elm.attributes.children);
+      }
+    })
+  }
+  
 
   return (
     <MetaContext.Provider value={meta}>

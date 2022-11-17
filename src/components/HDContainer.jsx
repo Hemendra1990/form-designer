@@ -2,24 +2,31 @@ import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { memo, useCallback, useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext"
 
 const HDContainer = React.forwardRef((props, ref) => {
-  const { element, meta, setMeta } = props;
+  const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext();
+  const { element} = props;
+  console.log("🚀 ~ file: HDContainer.jsx ~ line 8 ~ HDContainer ~ element", element)
 
   const createChildElement = useCallback((child, index) => {
-    const ref = React.createRef();
+    let ref = child.ref;
+    if(!ref) {
+      ref = React.createRef();
+    }
     const reactComponent = React.createElement(child.component, {
       ref: ref,
       key: index + 1,
       name: `${child.name}`,
-      setMeta: setMeta,
+      setMeta: updateMeta,
       meta: meta,
       element: child,
       enteredValue: "",
     });
     child.ref = ref;
     return reactComponent;
-  }, [ meta, setMeta]);
+  });
 
   /**
    * handle click event on element
@@ -31,12 +38,8 @@ const HDContainer = React.forwardRef((props, ref) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     console.log('Element click', event);
-    props.setMeta((prevValue) => {
-      prevValue.currentElement = child;
-      return {
-        ...prevValue
-      };
-    });
+    meta.currentElement = child;
+    updateMeta(meta);
   };
 
   return (
