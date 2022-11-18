@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { MetaContextProvider } from "./context/MetaContext";
+import ErrorBoundary from "./error-handler/ErrorBoundary";
 import Homepage from "./Homepage";
 
 const defaultScriptTextForTesting = `
@@ -14,7 +15,9 @@ const App = () => {
   return (
     <>
       <MetaContextProvider>
+      <ErrorBoundary>
         <Homepage/>
+      </ErrorBoundary>
       </MetaContextProvider>
     </>
   );
