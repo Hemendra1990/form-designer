@@ -140,6 +140,26 @@ const AttributePanel = (props) => {
                 )
             }
 
+            /* Render Panel Attributes */
+            if(meta.currentElement.type === CONTROL.PANEL) {
+                return (
+                    <>
+                        <label>Panel Attributes</label>
+                    {classDiv}
+                    </>
+                )
+            }
+
+            /* Render Fieldset Attributes */
+            if(meta.currentElement.type === CONTROL.FIELDSET) {
+                return (
+                    <>
+                        <label>Fieldset Attributes</label>
+                        {classDiv}
+                    </>
+                )
+            }
+
         }
         return <></>
     }

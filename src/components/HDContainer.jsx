@@ -46,6 +46,7 @@ const HDContainer = React.forwardRef((props, ref) => {
     <Droppable droppableId={`${element.id}`} type="pgElement">
       {(provided, snapshot) => (
         <div
+        className="grid"
           ref={provided.innerRef}
           {...provided.droppableProps}
           style={{
@@ -55,7 +56,7 @@ const HDContainer = React.forwardRef((props, ref) => {
             margin: "10px 0",
             border: meta.editMode ? '1px dashed grey' : ''
           }}>
-          <div className="grid" style={{display: 'block'}}>
+          <div className="grid">
             {element?.attributes?.children.map((child, index) => {
               return (
                 <Draggable
