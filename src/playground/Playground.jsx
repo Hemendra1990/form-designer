@@ -72,10 +72,11 @@ const Playground = (props) => {
     );
     const [reorderItem] = items.splice(dragResult.source.index, 1);
     if (dragResult.destination.droppableId.includes("container")) {
-      destContainer =findContainer(items, dragResult.destination.droppableId);
+      //TODO recursively find the value findContainer(items, dragResult.destination.droppableId, destContainer); 
       /* destContainer = items.find(
         (itm) => itm.id === dragResult.destination.droppableId
       ); */
+      destContainer = meta.elementMap[dragResult.destination.droppableId];
       if (destContainer && destContainer.attributes) {
         if (!destContainer.attributes.children) {
           destContainer.attributes.children = [];
@@ -104,14 +105,15 @@ const Playground = (props) => {
    * @param {*} droppableId 
    * @returns 
    */
-  const findContainer = (items, droppableId) => {
+  function findContainer(items, droppableId, result) {
     for(let item of items) {
       if(item.id === droppableId) {
-        return item;
+        result =  item;
+        break;
       }
 
-      if(item.attributes.children.length > 0) {
-        return findContainer(item.attributes.children, droppableId);
+      if(item?.attributes?.children.length > 0) {
+        findContainer(item.attributes.children, droppableId);
       }
     }
   }
