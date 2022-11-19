@@ -1,22 +1,25 @@
 import { Toast } from "primereact/toast";
 import React from "react";
-import  ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import { EVENT_TYPE } from "../events/model/EventModel";
 
 export const EventExecutorService = {
-  execute: async (meta, eventNode) => {
+  execute: (meta, eventNode, modalContext) => {
     const eventDetail = eventNode.data.eventInfo;
     if (eventNode.type === EVENT_TYPE.ALERT) {
-      await executeMessageAlert(meta, eventNode);
+      executeMessageAlert(meta, eventNode);
     } else if (eventNode.type === EVENT_TYPE.SCRIPT) {
-      await executeScript(meta, eventNode);
+      executeScript(meta, eventNode);
     } else if (eventNode.type === EVENT_TYPE.CONFIRMATION) {
       console.log("Event type Confirmation", eventDetail);
+    } else if (eventNode.type === EVENT_TYPE.POP_UP) {
+      console.log("Event type Confirmation", eventDetail);
+      executePopupModal(meta, eventNode, modalContext)
     }
   },
 };
 
-async function executeMessageAlert(meta, eventNode) {
+function executeMessageAlert(meta, eventNode) {
     const { eventInfo } = eventNode.data;
     const { header, message, position, type} = eventInfo.data
     console.log("🚀 ~ file: EventExecutorService.js ~ line 19 ~ executeMessageAlert ~ header, message, position, type", header, message, position, type)
@@ -36,6 +39,10 @@ async function executeMessageAlert(meta, eventNode) {
   }
 }
 
+/* function executeModal(meta, eventNode) {
+  const [actions, modals] = React.useContext(ModalContext)
+} */
+
 function executeScript(meta, eventNode) {
   const scriptEventDetail = eventNode.data.eventInfo;
   const Reference = {
@@ -51,4 +58,11 @@ function executeScript(meta, eventNode) {
         ${scriptEventDetail.scriptText}
     `);
   scriptFun(meta, Reference, ReactDOM, React);
+}
+
+function executePopupModal(meta, eventNode, modalContext) {
+  const { actions } = modalContext;
+  const popupEvDetail = eventNode.data.eventInfo;
+  actions.push(popupEvDetail);
+  console.log(JSON.stringify(popupEvDetail) + 'Popup Modal executed at ', new Date().toLocaleTimeString())
 }

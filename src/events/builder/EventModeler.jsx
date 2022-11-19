@@ -82,7 +82,7 @@ const EventModeler = (props) => {
   const onActionSelection = (action) => {
     setNodes((prevNodes) => {
         return prevNodes.concat({
-          type: action.value.eventNodeType,
+          type: action.value.eventNodeType, //'type' is very important as we are using custom nodes... By providing the type value react-flow renders that components 
           id: `${prevNodes.length + 1}`,
           position: {
             x: 0,

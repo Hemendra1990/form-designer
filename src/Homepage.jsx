@@ -1,14 +1,24 @@
+import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import { useMetaContext } from "./context/MetaContext";
+import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
 import HDMenubar from "./menu-panel/HDMenubar";
 import Playground from "./playground/Playground";
+import EventExecutor from "./service/EventExecutor";
 
 const Homepage = (props) => {
   const meta = useMetaContext();
+  const modalContext = useModalContext();
+  const { actions, modals } = modalContext;
+
+  //Initialize the EvenExecutor and pass the modalContext
+  setTimeout(() => {
+    new EventExecutor(modalContext);
+  },0)
   
   const [displayBasic, setDisplayBasic] = useState(false);
   const onHide = () => {
@@ -24,8 +34,18 @@ const Homepage = (props) => {
     );
   };
 
+  const openModal = () => {
+    console.log({actions, modals});
+    actions.push(`Hello Modal Calling from Homepage Button ${new Date().toLocaleTimeString()}`, (poppedModal) => {
+        console.log(poppedModal);
+    });
+      //push('Hello Modal Calling from Homepage Button');
+  }
+
   return (
     <>
+      <Button onClick={openModal}>Open Modal</Button>
+      {modals}
       <HDMenubar toggleEventModal={onHide} />
       <div
         className="p-fluid grid"

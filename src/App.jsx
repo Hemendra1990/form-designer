@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { MetaContextProvider } from "./context/MetaContext";
+import ModalContextProvider from "./context/ModalContext";
 import ErrorBoundary from "./error-handler/ErrorBoundary";
 import Homepage from "./Homepage";
 
@@ -15,9 +16,11 @@ const App = () => {
   return (
     <>
       <MetaContextProvider>
-      <ErrorBoundary>
-        <Homepage/>
-      </ErrorBoundary>
+        <ModalContextProvider>
+          <ErrorBoundary>
+            <Homepage />
+          </ErrorBoundary>
+        </ModalContextProvider>
       </MetaContextProvider>
     </>
   );
@@ -25,4 +28,3 @@ const App = () => {
 
 export default App;
 export { defaultScriptTextForTesting }; //For testing, It must be removed
-
