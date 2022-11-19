@@ -1,5 +1,6 @@
 import { Toast } from "primereact/toast";
 import React from "react";
+import  ReactDOM from 'react-dom';
 import { EVENT_TYPE } from "../events/model/EventModel";
 
 export const EventExecutorService = {
@@ -45,7 +46,9 @@ function executeScript(meta, eventNode) {
   const scriptFun = new Function(`
         const meta = arguments[0];
         const Reference = arguments[1];
+        const ReactDOM = arguments[2];
+        const React = arguments[3];
         ${scriptEventDetail.scriptText}
     `);
-  scriptFun(meta, Reference);
+  scriptFun(meta, Reference, ReactDOM, React);
 }

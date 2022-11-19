@@ -80,7 +80,6 @@ const HDListBox = React.forwardRef((props, ref) => {
 
     return (
         <div className="card">
-            <h5>Single</h5>
             <ListBox value={selectedCity} options={cities} onChange={(e) => setSelectedCity(e.value)} optionLabel="name" style={{ width: '15rem' }} />
 
             {/* <h5>Grouped</h5>

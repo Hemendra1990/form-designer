@@ -6,6 +6,7 @@ import HDPanel from "../components/HDPanel";
 import HDFieldset from "../components/HDFieldset";
 import HDRadioButton from "../components/HDRadioButton";
 import HDListBox from "../components/HDListBox";
+import HDHtmlEditor from "../components/HDHtmlEditor";
 
 const ComponentConfig = [
     {
@@ -48,6 +49,11 @@ const ComponentConfig = [
         name: "listbox",
         component: HDListBox
     },
+    {
+        label: "Dynamic HTML Container",
+        name: "dynamicHtmlContainer",
+        component: HDHtmlEditor
+    },
 ]
 export default ComponentConfig;
 
@@ -60,7 +66,8 @@ const CONTROL = {
     PANEL: 'panel',
     FIELDSET: 'fieldset',
     RADIO: 'radio',
-    LISTBOX: 'listbox'
+    LISTBOX: 'listbox',
+    DYNAMIC_HTMLEDITOR: 'dynamicHtmlContainer'
 }
 
 const CONTROL_ITEMS = () => {

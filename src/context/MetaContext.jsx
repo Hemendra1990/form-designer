@@ -30,6 +30,7 @@ export const MetaContextProvider = ({ children }) => {
   const sharedMeta = {
     elements: [],
     sqlVariables: {},
+    events: [],
     editMode: true,
   };
   const [meta, setMeta] = useState(sharedMeta);
@@ -57,12 +58,6 @@ export const MetaContextProvider = ({ children }) => {
   const addElement = (element) => {
     meta.elements.push(element);
     updateMeta(meta);
-    /* setMeta((prevValue) => {
-      prevValue.elements.push(element);
-      return {
-        ...prevValue,
-      };
-    }); */
   };
 
   /**
@@ -72,13 +67,6 @@ export const MetaContextProvider = ({ children }) => {
     meta.elements.length = 0;
     meta.currentElement = null;
     updateMeta(meta);
-    /* setMeta((prevValue) => {
-      return {
-        ...prevValue,
-        currentElement: null,
-        events: [],
-      };
-    }); */
   };
 
   /**
@@ -99,12 +87,8 @@ export const MetaContextProvider = ({ children }) => {
    */
   const openReport = () => {
     const report = JSON.parse(existingReport);
+    initializeComponent(report.elements);
     setMeta((prevValue) => {
-      report.elements = report.elements.map((el) => {
-        el.component = getComponent(el.type);
-        return el;
-      });
-
       return {
         ...report,
         toastRef: prevValue.toastRef,
@@ -133,6 +117,18 @@ export const MetaContextProvider = ({ children }) => {
       elementMap[elm.name] = elm;
       if(elm.attributes && elm.attributes.children.length > 0) {
         createElementMap(elm.attributes.children, elementMap);
+      }
+    })
+  }
+
+  function initializeComponent(reportElements) {
+    if(!reportElements) {
+      return;
+    }
+    reportElements.forEach(el => {
+      el.component = getComponent(el.type);
+      if(el.attributes && el.attributes.children && el.attributes.children.length > 0) {
+        initializeComponent(el.attributes.children);
       }
     })
   }
