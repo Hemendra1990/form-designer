@@ -1,11 +1,27 @@
 import { InputText } from "primereact/inputtext";
 import React, { memo, useState } from "react";
+import { useImperativeHandle } from "react";
 
 const HDInput = React.forwardRef((props, ref) => {
-    console.log(props);
+  
   const { element, meta, setMeta } = props;
+  console.log("🚀 ~ file: HDInput.jsx ~ line 6 ~ HDInput ~ element", element)
 
   const [value, setValue] = useState(element.value || "");
+  
+  /**
+   * We can play with the component dynamically
+   */
+  useImperativeHandle(ref, ()=> ({
+    sayHello() {
+      alert('Hello Imperative handle')
+    },
+    updateValue(value) {
+      setValue(value);
+    }
+  }))
+  
+
 
   const handleBlur = (e) => {
     element.value = value;
@@ -27,4 +43,4 @@ const HDInput = React.forwardRef((props, ref) => {
   );
 });
 
-export default memo(HDInput);
+export default HDInput;

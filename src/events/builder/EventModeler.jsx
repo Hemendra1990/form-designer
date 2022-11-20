@@ -18,6 +18,7 @@ import "reactflow/dist/style.css";
 import { EVENTS, NODE_TYPES } from "../model/EventModel";
 import "./EventModeler.css";
 import { Dropdown } from "primereact/dropdown";
+import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
 
 const initialNodes = [
   /* {
@@ -35,7 +36,10 @@ const snapGrid = [20, 20];
 const nodeTypes = NODE_TYPES();
 
 const EventModeler = (props) => {
-  const { meta, setMeta } = props;
+  
+  const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext();
+
   const op = useRef(null);
   const [eventId, setEventId] = useState('');
   if (!meta.events) {
@@ -78,7 +82,7 @@ const EventModeler = (props) => {
   const onActionSelection = (action) => {
     setNodes((prevNodes) => {
         return prevNodes.concat({
-          type: action.value.eventNodeType,
+          type: action.value.eventNodeType, //'type' is very important as we are using custom nodes... By providing the type value react-flow renders that components 
           id: `${prevNodes.length + 1}`,
           position: {
             x: 0,
@@ -109,23 +113,20 @@ const EventModeler = (props) => {
       name: eventName,
       bucket: {nodes, edges} 
     };
-    setMeta((prevMeta)=> {
-      const existingEventId = prevMeta.events.find(ev => ev.id === eventId);
-      let eventBuckets = [];
-      if(existingEventId) {
-        eventBuckets = prevMeta.events.map(pEvent => {
-          pEvent.bucket = {nodes, edges};
-          return pEvent;
-        });
-      }else {
-        eventBuckets = [...prevMeta.events, event];
-      }
-      return {
-        ...prevMeta,
-        events: [...eventBuckets]
-      }
-    })
 
+    const existingEventId = meta.events.find((ev) => ev.id === eventId);
+    let eventBuckets = [];
+    if (existingEventId) {
+      eventBuckets = meta.events.map((pEvent) => {
+        pEvent.bucket = { nodes, edges };
+        return pEvent;
+      });
+    } else {
+      eventBuckets = [...meta.events, event];
+    }
+
+    meta.events = [...eventBuckets];
+    updateMeta(meta);
     console.log('Saving events into meta', meta);
     props.hide();
   }

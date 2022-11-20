@@ -1,11 +1,14 @@
 
 import { Button } from 'primereact/button';
 import React, { memo } from 'react';
+import { useModalContext } from '../context/ModalContext';
 import EventExecutor from '../service/EventExecutor';
 
 const HDButton = React.forwardRef( (props, ref) => {
+    console.log("🚀  ~ file: HDButton.jsx ~ line 7 ~ HDButton ~ props ", props)
     const element = props.element;
-    console.log(props);
+    const {actions, modals} = useModalContext();
+    
     
     if(!(element.attributes && element.attributes.label)) {
         if(!element.attributes) element.attributes = {};
@@ -15,7 +18,7 @@ const HDButton = React.forwardRef( (props, ref) => {
     const executeEvent = () => {
         //check if the button is configured with the event or not
         if(element.attributes && element.attributes.eventId) {
-            EventExecutor.executeEvent(props.meta, element.attributes.eventId);
+            EventExecutor.executeEvent(props.meta, element.attributes.eventId, actions, modals);
         }
     }
 

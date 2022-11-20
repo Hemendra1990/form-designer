@@ -1,35 +1,30 @@
-import { InputText } from "primereact/inputtext";
 import { InputNumber } from 'primereact/inputnumber';
-import { Dropdown } from 'primereact/dropdown';
-import { CONTROL } from "../constants/Elements";
+import { InputText } from "primereact/inputtext";
 import { useState } from "react";
+import { CONTROL } from "../constants/Elements";
+import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
 import AttrButtonComp from "./attr-button/AttrButtonComp";
-import { Card } from "primereact/card";
 
 
 
 
 const AttributePanel = (props) => {
-
-    const {meta, setMeta} = props;
+    const meta = useMetaContext();
+    const { updateMeta } = useUpdateMetaContext();
 
     const [classNameValue, setClassNameValue] = useState(meta.currentElement?.attributes?.className|| "");
     
-    const updateMeta = (e) => {
-        setMeta((prevVal) => {
-            if(!prevVal.currentElement.attributes) {
-                prevVal.currentElement.attributes = {};
-            }
-            prevVal.currentElement.attributes[(e.target || e.originalEvent.target).name] = (e.target || e.originalEvent.target).value;
-            return {
-                ...prevVal
-            }
-        });
+    const handleAttributeChange = (e) => {
+        if(!meta.currentElement.attributes) {
+            meta.currentElement.attributes = {};
+        }
+        meta.currentElement.attributes[(e.target || e.originalEvent.target).name] = (e.target || e.originalEvent.target).value;
+        updateMeta(meta);
     };
 
     const updateClass = (e) => {
         setClassNameValue(e.target.value);
-        updateMeta(e);
+        handleAttributeChange(e);
     }
 
     const availableEvents = meta?.events?.map(ev=> {
@@ -62,7 +57,7 @@ const AttributePanel = (props) => {
             if(meta.currentElement.type === CONTROL.BUTTON) {
                 return (
                     <>
-                        <AttrButtonComp {...props} updateMeta={updateMeta} eventOptions={availableEvents} />
+                        <AttrButtonComp meta={meta} handleAttributeChange={handleAttributeChange} eventOptions={availableEvents} />
                         {classDiv}
                     </>
                 )
@@ -74,20 +69,20 @@ const AttributePanel = (props) => {
                   <>
                     <div className="field col-12">
                         <label htmlFor="controlId">Control ID</label>
-                        <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
+                        <InputText name="placeholder"  value={meta.currentElement.id} disabled />
                     </div>
                     <div className="field col-12">
                       <label htmlFor="maxLen">Max Length</label>
                         <InputNumber
                         name="maxLength"
                         inputId="maxLen"
-                        onChange={updateMeta}
+                        onChange={handleAttributeChange}
                         value={currAttribute?.maxLength}
                         />
                     </div>
                     <div className="field col-12">
                       <label htmlFor="maxLen">Placeholder {currAttribute?.placeholder} </label>
-                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder || ""}/>
+                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={handleAttributeChange} value={currAttribute?.placeholder || ""}/>
                     </div>
                     {classDiv}
                   </>
@@ -100,13 +95,13 @@ const AttributePanel = (props) => {
                   <>
                     <div className="field col-12">
                         <label htmlFor="controlId">Control ID</label>
-                        <InputText name="placeholder"  value={props.meta.currentElement.id} disabled />
+                        <InputText name="placeholder"  value={meta.currentElement.id} disabled />
                     </div>
                     <div className="field col-12">
                       <label htmlFor="rows">Rows Length</label>
                         <InputNumber
                         name="rows"
-                        onChange={updateMeta}
+                        onChange={handleAttributeChange}
                         value={currAttribute?.rows}
                         />
                     </div>
@@ -114,7 +109,7 @@ const AttributePanel = (props) => {
                       <label htmlFor="cols">Cols Length</label>
                         <InputNumber
                         name="cols"
-                        onChange={updateMeta}
+                        onChange={handleAttributeChange}
                         value={currAttribute?.cols}
                         />
                     </div>
@@ -122,13 +117,13 @@ const AttributePanel = (props) => {
                       <label htmlFor="maxLen">Max Length</label>
                         <InputNumber
                         name="maxLength"
-                        onChange={updateMeta}
+                        onChange={handleAttributeChange}
                         value={currAttribute?.maxLength}
                         />
                     </div>
                     <div className="field col-12">
                       <label htmlFor="placeholder">Placeholder</label>
-                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={updateMeta} value={currAttribute?.placeholder || ""}/>
+                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={handleAttributeChange} value={currAttribute?.placeholder || ""}/>
                     </div>
                     {classDiv}
                     
@@ -140,6 +135,26 @@ const AttributePanel = (props) => {
             if(meta.currentElement.type === CONTROL.CONTAINER) {
                 return(
                     <>
+                        {classDiv}
+                    </>
+                )
+            }
+
+            /* Render Panel Attributes */
+            if(meta.currentElement.type === CONTROL.PANEL) {
+                return (
+                    <>
+                        <label>Panel Attributes</label>
+                    {classDiv}
+                    </>
+                )
+            }
+
+            /* Render Fieldset Attributes */
+            if(meta.currentElement.type === CONTROL.FIELDSET) {
+                return (
+                    <>
+                        <label>Fieldset Attributes</label>
                         {classDiv}
                     </>
                 )
@@ -160,7 +175,7 @@ const AttributePanel = (props) => {
     )
 }
 
-/* value={props.meta.currentElement?.attributes?.className} */
+/* value={meta.currentElement?.attributes?.className} */
 
 const testEvents = [
     {label: 'Execute Script', value: 'script-Sc23ab3W'},

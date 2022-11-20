@@ -1,10 +1,16 @@
 import React, { memo } from 'react'
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
+import { useImperativeHandle } from 'react';
 
 const HDTextarea = React.forwardRef((props, ref) => {
     const {element, meta, setMeta} = props;
     const [value, setValue] = useState(element.value || "");
+
+    useImperativeHandle(ref, ()=> ({
+        updateValue: (value) => {setValue(value)},
+        getActualRef: () => {return {...ref};}
+    }))
 
     const handleChange = (e) => {
         setValue(e.target.value);

@@ -5,4 +5,14 @@ const getComponent = (componentName) => {
     return comp.component;
 }
 
+export const jsonStringifyIgnoredList = [
+    "meta",
+    "component",
+    "stateNode",
+    "Provider",
+    "ref",
+    "toastRef",
+    "currentElement",
+  ];
+
 export default getComponent;
