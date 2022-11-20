@@ -14,7 +14,7 @@ export const EventExecutorService = {
       console.log("Event type Confirmation", eventDetail);
       executeConfirmation(meta, eventNode, confirmDialogContext);
     } else if (eventNode.type === EVENT_TYPE.POP_UP) {
-      console.log("Event type Confirmation", eventDetail);
+      console.log("Event type Popup", eventDetail);
       executePopupModal(meta, eventNode, modalContext)
     }
   },
@@ -26,10 +26,12 @@ const onHideCallback = () => {
 
 const onAcceptCallback = () => {
   console.log('%c on Accept Confirmatin Callback', 'background: #222; color: green');
+  //event.success
 }
 
 const onRejectCallback = () => {
   console.log('%c on Reject Confirmatin Callback', 'background: #222; color: red');
+  //event.failure
 } 
 
 function executeConfirmation(meta, eventNode, confirmDialogContext) {
