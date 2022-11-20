@@ -3,8 +3,10 @@ import {EventExecutorService} from "./EventExecutorService";
 
 class EventExecutor {
     static modalContext;
-    constructor(modalContext) {
+    static confirmContext;
+    constructor(modalContext, confirmContext) {
         EventExecutor.modalContext = modalContext;
+        EventExecutor.confirmContext = confirmContext;
     }
 
     static async executeEvent(meta, eventId) {
@@ -15,7 +17,7 @@ class EventExecutor {
             console.log(`Event cannot be executed on Edit mode.`);
             return;
         }
-        const eventToExecute = meta.events.find(ev => ev.id ==eventId);
+        const eventToExecute = meta.events.find(ev => ev.id === eventId);
         if(eventToExecute && eventToExecute.bucket && eventToExecute.bucket.edges && eventToExecute.bucket.edges.length>0) {
             const edges = eventToExecute.bucket.edges;
             const nodes = eventToExecute.bucket.nodes;
@@ -26,14 +28,16 @@ class EventExecutor {
                 eventNodeIds.add(source);
                 eventNodeIds.add(target);
             })
+
+            
             
             eventNodeIds.forEach((nodeId) => {
                 const eventNode = nodes.find(node => node.id === nodeId);
-                EventExecutorService.execute(meta, eventNode, this.modalContext);
+                EventExecutorService.execute(meta, eventNode, this.modalContext, this.confirmContext);
             })
         } else if(eventToExecute && eventToExecute.bucket && eventToExecute.bucket.nodes?.length === 1) {
             const nodes = eventToExecute.bucket.nodes;
-            EventExecutorService.execute(meta, nodes[0], this.modalContext);
+            EventExecutorService.execute(meta, nodes[0], this.modalContext, this.confirmContext);
         }
     }
 

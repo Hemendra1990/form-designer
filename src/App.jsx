@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import ConfirmationContextProvider from "./context/ConfirmationDialogContext";
 import { MetaContextProvider } from "./context/MetaContext";
 import ModalContextProvider from "./context/ModalContext";
 import ErrorBoundary from "./error-handler/ErrorBoundary";
@@ -17,9 +18,11 @@ const App = () => {
     <>
       <MetaContextProvider>
         <ModalContextProvider>
+          <ConfirmationContextProvider>
           <ErrorBoundary>
             <Homepage />
           </ErrorBoundary>
+          </ConfirmationContextProvider>
         </ModalContextProvider>
       </MetaContextProvider>
     </>

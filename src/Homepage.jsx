@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
+import { useConfirmationContext } from "./context/ConfirmationDialogContext";
 import { useMetaContext } from "./context/MetaContext";
 import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
@@ -15,9 +16,12 @@ const Homepage = (props) => {
   const modalContext = useModalContext();
   const { actions, modals } = modalContext;
 
+  const confirmDialogContext = useConfirmationContext();
+  const { confirmDialogs } = confirmDialogContext;
+
   //Initialize the EvenExecutor and pass the modalContext
   setTimeout(() => {
-    new EventExecutor(modalContext);
+    new EventExecutor(modalContext, confirmDialogContext);
   },0)
   
   const [displayBasic, setDisplayBasic] = useState(false);
@@ -44,8 +48,8 @@ const Homepage = (props) => {
 
   return (
     <>
-      <Button onClick={openModal}>Open Modal</Button>
       {modals}
+      {confirmDialogs}
       <HDMenubar toggleEventModal={onHide} />
       <div
         className="p-fluid grid"

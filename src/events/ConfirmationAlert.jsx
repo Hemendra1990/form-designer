@@ -11,7 +11,7 @@ const ConfirmationAlert = (props) => {
       <Card>
         <TargetHandle data={data} isConnectable={isConnectable} />
         <div>
-         Confirmation Alert: <strong>{data.color}</strong>
+          Confirmation Alert: <strong>{data.color}</strong>
         </div>
         <input
           className="nodrag"
@@ -22,14 +22,14 @@ const ConfirmationAlert = (props) => {
         <Handle
           type="source"
           position="right"
-          id="a"
+          id="Yes"
           style={{ top: 10, background: "#555" }}
           isConnectable={isConnectable}
         />
         <Handle
           type="source"
           position="right"
-          id="b"
+          id="No"
           style={{ bottom: 10, top: "auto", background: "#555" }}
           isConnectable={isConnectable}
         />

@@ -13,6 +13,9 @@ const Script = (props) => {
         setScriptText(e.target.value);
         data.eventInfo.scriptText  = scriptText;
     }
+    function handleConnect(params) {
+        console.log({params, data, meta});
+    }
     return(
         <Card>
 
@@ -25,7 +28,7 @@ const Script = (props) => {
                 type="source"
                 position="right"
                 style={{ background: "#555", height:'10px', width: '10px' }}
-                onConnect={(params) => console.log("handle onConnect", params)}
+                onConnect={(params) => handleConnect(params)}
                 isConnectable={true}
             />
         </Card>
