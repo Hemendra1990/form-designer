@@ -6,37 +6,59 @@ import { EVENT_TYPE } from "../events/model/EventModel";
 export const EventExecutorService = {
   execute: (meta, eventNode, modalContext, confirmDialogContext) => {
     const eventDetail = eventNode.data.eventInfo;
-    if (eventNode.type === EVENT_TYPE.ALERT) {
-      executeMessageAlert(meta, eventNode);
-    } else if (eventNode.type === EVENT_TYPE.SCRIPT) {
-      executeScript(meta, eventNode);
-    } else if (eventNode.type === EVENT_TYPE.CONFIRMATION) {
-      console.log("Event type Confirmation", eventDetail);
-      executeConfirmation(meta, eventNode, confirmDialogContext);
-    } else if (eventNode.type === EVENT_TYPE.POP_UP) {
-      console.log("Event type Popup", eventDetail);
-      executePopupModal(meta, eventNode, modalContext)
-    }
+    return new Promise((resolve, reject) => {
+      if (eventNode.type === EVENT_TYPE.ALERT) {
+        executeMessageAlert(meta, eventNode);
+        setTimeout(() => {
+          resolve();
+        }, 400);
+      } else if (eventNode.type === EVENT_TYPE.SCRIPT) {
+        executeScript(meta, eventNode);
+        resolve();
+      } else if (eventNode.type === EVENT_TYPE.CONFIRMATION) {
+        executeConfirmation(meta, eventNode, confirmDialogContext).then(()=> {
+          resolve();
+        }, error => {
+          reject();
+        })
+      } else if (eventNode.type === EVENT_TYPE.POP_UP) {
+        executePopupModal(meta, eventNode, modalContext)
+      }
+
+    });
   },
 };
 
-const onHideCallback = () => {
-  console.log('On Hide Confirmatino Callback');
-}
+/**
+ * For Confirmatino Dialog Event
+ */
 
-const onAcceptCallback = () => {
-  console.log('%c on Accept Confirmatin Callback', 'background: #222; color: green');
-  //event.success
-}
-
-const onRejectCallback = () => {
-  console.log('%c on Reject Confirmatin Callback', 'background: #222; color: red');
-  //event.failure
-} 
 
 function executeConfirmation(meta, eventNode, confirmDialogContext) {
   const {confirmActions} = confirmDialogContext;
-  confirmActions.push('This is test', onHideCallback, onAcceptCallback, onRejectCallback)
+  return new Promise((resolve, reject) => {
+
+    const ConfirmationDialogHideCallback = () => {
+      console.log('On Hide Confirmatino Callback');
+    }
+    
+    const ConfirmationDialogAcceptCallback = () => {
+      console.log('%c on Accept Confirmatin Callback', 'background: #222; color: green');
+      //event.success
+      //executeNext(eventNode.success)
+      resolve();
+    }
+    
+    const ConfirmationDialogRejectCallback = () => {
+      console.log('%c on Reject Confirmatin Callback', 'background: #222; color: red');
+      //event.failure
+      //executeNext(eventNode.failure)
+      reject();
+    }
+    confirmActions.push('This is test', ConfirmationDialogHideCallback, ConfirmationDialogAcceptCallback, ConfirmationDialogRejectCallback)
+
+  })
+
 }
 
 
@@ -87,3 +109,4 @@ function executePopupModal(meta, eventNode, modalContext) {
   actions.push(popupEvDetail);
   console.log(JSON.stringify(popupEvDetail) + 'Popup Modal executed at ', new Date().toLocaleTimeString())
 }
+
