@@ -40,7 +40,7 @@ const startExecution = function (
           break;
         }
       }
-      console.log("%c NextNode", "color: white, background: #000", nextNode);
+      //console.log("%c NextNode", "color: white, background: #000", nextNode);
 
       let nextNodeId = undefined;
       if (nextNode && nextNode.target) {
@@ -62,7 +62,7 @@ const startExecution = function (
     },
     (error) => {
       //'No'
-      console.log("%c Inside No failure", "background: #222, color: red");
+      //console.log("%c Inside No failure", "background: #222, color: red");
       const adjNodes = adjList[nodeId];
       if (!adjNodes) {
         return;
@@ -77,7 +77,7 @@ const startExecution = function (
           break;
         }
       }
-      console.log("%c NextNode", "color: white, background: #000", nextNode);
+      //console.log("%c NextNode", "color: white, background: #000", nextNode);
 
       let nextNodeId = undefined;
       if (nextNode && nextNode.target) {

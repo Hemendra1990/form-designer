@@ -69,7 +69,6 @@ function executeMessageAlert(meta, eventNode) {
   if (meta.toastRef) {
     setTimeout(()=> {
       const toastElem = React.createElement(Toast, {ref: React.createRef()});
-      console.log(toastElem);
       meta.toastRef.current.show({
           severity: type,
           summary: header,

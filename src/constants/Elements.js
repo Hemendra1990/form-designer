@@ -7,6 +7,7 @@ import HDFieldset from "../components/HDFieldset";
 import HDRadioButton from "../components/HDRadioButton";
 import HDListBox from "../components/HDListBox";
 import HDHtmlEditor from "../components/HDHtmlEditor";
+import HDGrid from "../components/grid/HDGrid";
 
 const ComponentConfig = [
     {
@@ -54,6 +55,11 @@ const ComponentConfig = [
         name: "dynamicHtmlContainer",
         component: HDHtmlEditor
     },
+    {
+        label: "Grid",
+        name: "grid",
+        component: HDGrid
+    },
 ]
 export default ComponentConfig;
 
@@ -67,7 +73,8 @@ const CONTROL = {
     FIELDSET: 'fieldset',
     RADIO: 'radio',
     LISTBOX: 'listbox',
-    DYNAMIC_HTMLEDITOR: 'dynamicHtmlContainer'
+    DYNAMIC_HTMLEDITOR: 'dynamicHtmlContainer',
+    GRID: 'grid'
 }
 
 const CONTROL_ITEMS = () => {

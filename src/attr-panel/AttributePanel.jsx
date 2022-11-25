@@ -1,14 +1,19 @@
+import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
+import { ProductService } from '../components/grid/ProductService';
 import { CONTROL } from "../constants/Elements";
 import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
 import AttrButtonComp from "./attr-button/AttrButtonComp";
+import { UserService } from '../components/grid/UserService'
 
 
 
 
 const AttributePanel = (props) => {
+    const productService = new ProductService();
+    const userService = new UserService();
     const meta = useMetaContext();
     const { updateMeta } = useUpdateMetaContext();
 
@@ -30,6 +35,46 @@ const AttributePanel = (props) => {
     const availableEvents = meta?.events?.map(ev=> {
         return {label: ev.name, value: ev.id}
     });
+
+    /**
+     * 
+     * @param {This is for testing} e 
+     */
+    async function handleDatasourceChange(e) {
+        console.log('Event', e.value);
+        let columns = [];
+        let rows = [];
+        if(e.value === "API-1") {
+            await productService.getProductsSmall().then((res) => {
+                if(res instanceof Array) {
+                    const firstRec = res[0];
+                    columns = Object.keys(firstRec).map(tCol => {
+                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1)}
+                    });
+                }
+
+                rows = [...res];
+                
+            });
+        
+        } else if(e.value === "API-2") {
+            await userService.getUsers().then((res) => {
+                if(res instanceof Array) {
+                    const firstRec = res[0];
+                    columns = Object.keys(firstRec).map(tCol => {
+                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1)}
+                    });
+                }
+                rows = [...res];
+            });
+        }
+        if(meta.currentElement.ref.current.setResult) {
+            meta.currentElement.ref.current.setResult({
+                columns: columns,
+                rows: rows
+            });
+        }
+    }
 
     /**
      * RULES FOR RENDERING ATTRIBUTES
@@ -158,6 +203,25 @@ const AttributePanel = (props) => {
                         {classDiv}
                     </>
                 )
+            }
+            /* Render Grid Attributes */
+            if(meta.currentElement.type === CONTROL.GRID) {
+                return (
+                  <>
+                    <label>Grid Attributes</label>
+                    <div className="field col-12">
+                      <label htmlFor="label">Datasource</label>
+                      <Dropdown
+                        name="datasource"
+                        value={meta.currentElement?.attributes?.datasource}
+                        options={["API-1", "API-2"]}
+                        onChange={handleDatasourceChange}
+                        placeholder="Select type"
+                      />
+                    </div>
+                    {classDiv}
+                  </>
+                );
             }
 
         }

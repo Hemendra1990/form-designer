@@ -20,6 +20,7 @@ const ConfirmationContextProvider = ({ children }) => {
       const modal = (
         <ConfirmDialog
           visible={true}
+          key={uniqueConfirmDialogId()}
           onHide={() => this.onHide(onHideCallback)}
           message="Are you sure you want to proceed?"
           header="Confirmation"
