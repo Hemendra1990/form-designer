@@ -36,16 +36,28 @@ const AttributePanel = (props) => {
         return {label: ev.name, value: ev.id}
     });
 
+    const resFun = new Function('response', 'responseToUse', `
+        if(responseToUse) {
+            const key = responseToUse.split("response.")[1];
+            return response[key];    
+        }
+
+        return [];
+    `);
+
     /**
      * 
      * @param {This is for testing} e 
      */
     async function handleDatasourceChange(e) {
-        console.log('Event', e.value);
+        const datasource = meta.currentElement.attributes.datasource;
+        const responseToUse = meta.currentElement.attributes.responseToUse;
+        console.log('Event', datasource);
         let columns = [];
         let rows = [];
-        if(e.value === "API-1") {
+        if(datasource === "API-1") {
             await productService.getProductsSmall().then((res) => {
+                res = resFun(res, responseToUse);
                 if(res instanceof Array) {
                     const firstRec = res[0];
                     columns = Object.keys(firstRec).map(tCol => {
@@ -57,8 +69,9 @@ const AttributePanel = (props) => {
                 
             });
         
-        } else if(e.value === "API-2") {
+        } else if(datasource === "API-2") {
             await userService.getUsers().then((res) => {
+                res = resFun(res, responseToUse);
                 if(res instanceof Array) {
                     const firstRec = res[0];
                     columns = Object.keys(firstRec).map(tCol => {
@@ -175,7 +188,6 @@ const AttributePanel = (props) => {
                   </>
                 );
             }
-
             /* Render Container Attributes */
             if(meta.currentElement.type === CONTROL.CONTAINER) {
                 return(
@@ -184,7 +196,6 @@ const AttributePanel = (props) => {
                     </>
                 )
             }
-
             /* Render Panel Attributes */
             if(meta.currentElement.type === CONTROL.PANEL) {
                 return (
@@ -194,7 +205,6 @@ const AttributePanel = (props) => {
                     </>
                 )
             }
-
             /* Render Fieldset Attributes */
             if(meta.currentElement.type === CONTROL.FIELDSET) {
                 return (
@@ -206,17 +216,33 @@ const AttributePanel = (props) => {
             }
             /* Render Grid Attributes */
             if(meta.currentElement.type === CONTROL.GRID) {
+                const ds = ["API-1", "API-2"]
                 return (
                   <>
-                    <label>Grid Attributes</label>
+                    <label>
+                        <b>Grid Attributes 
+                        </b>
+                        <i>(API as datasource is the first implementation)</i>
+                    </label>
                     <div className="field col-12">
-                      <label htmlFor="label">Datasource</label>
+                      <label htmlFor="datasource">Datasource</label>
                       <Dropdown
                         name="datasource"
                         value={meta.currentElement?.attributes?.datasource}
-                        options={["API-1", "API-2"]}
-                        onChange={handleDatasourceChange}
-                        placeholder="Select type"
+                        options={ds}
+                        onChange={(e) => { handleAttributeChange(e); handleDatasourceChange(e);} }
+                        placeholder="Select Datasource"
+                      />
+                    </div>
+                    <div className="field col-12">
+                      <label htmlFor="datasource"><b>Response to use</b>
+                      (<i>use like 'response.data or response.result' an array from the response</i>)
+                      </label>
+                      <InputText
+                        name="responseToUse"
+                        onBlur={(e) => {handleAttributeChange(e); handleDatasourceChange(e);}}
+                        value={currAttribute?.responseToUse} /* value={currAttribute?.maxLength} */
+                        placeholder="response.data or response.result"
                       />
                     </div>
                     {classDiv}

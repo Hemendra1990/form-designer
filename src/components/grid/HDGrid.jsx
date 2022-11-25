@@ -3,6 +3,7 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  memo,
 } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -53,4 +54,4 @@ const HDGrid = forwardRef((props, ref) => {
   );
 });
 
-export default HDGrid;
+export default memo(HDGrid);

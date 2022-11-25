@@ -2,7 +2,7 @@
 export class ProductService {
 
     async getProductsSmall() {
-        return await fetch('./products.json').then(res => res.json()).then(d => d.data);
+        return await fetch('./products.json').then(res => res.json()).then(d => d);
     }
 
     getProducts() {

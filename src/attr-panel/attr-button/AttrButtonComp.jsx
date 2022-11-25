@@ -1,7 +1,6 @@
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import React, { memo } from "react";
-import { useMetaContext } from "../../context/MetaContext";
 
 const BUTTON_TYPES = [
   "p-button-link",
