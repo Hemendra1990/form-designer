@@ -7,6 +7,7 @@ import { CONTROL } from "../constants/Elements";
 import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
 import AttrButtonComp from "./attr-button/AttrButtonComp";
 import { UserService } from '../components/grid/UserService'
+import AttrGrid from './attr-grid/AttrGridComp';
 
 
 
@@ -35,59 +36,6 @@ const AttributePanel = (props) => {
     const availableEvents = meta?.events?.map(ev=> {
         return {label: ev.name, value: ev.id}
     });
-
-    const resFun = new Function('response', 'responseToUse', `
-        if(responseToUse) {
-            const key = responseToUse.split("response.")[1];
-            return response[key];    
-        }
-
-        return [];
-    `);
-
-    /**
-     * 
-     * @param {This is for testing} e 
-     */
-    async function handleDatasourceChange(e) {
-        const datasource = meta.currentElement.attributes.datasource;
-        const responseToUse = meta.currentElement.attributes.responseToUse;
-        console.log('Event', datasource);
-        let columns = [];
-        let rows = [];
-        if(datasource === "API-1") {
-            await productService.getProductsSmall().then((res) => {
-                res = resFun(res, responseToUse);
-                if(res instanceof Array) {
-                    const firstRec = res[0];
-                    columns = Object.keys(firstRec).map(tCol => {
-                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1)}
-                    });
-                }
-
-                rows = [...res];
-                
-            });
-        
-        } else if(datasource === "API-2") {
-            await userService.getUsers().then((res) => {
-                res = resFun(res, responseToUse);
-                if(res instanceof Array) {
-                    const firstRec = res[0];
-                    columns = Object.keys(firstRec).map(tCol => {
-                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1)}
-                    });
-                }
-                rows = [...res];
-            });
-        }
-        if(meta.currentElement.ref.current.setResult) {
-            meta.currentElement.ref.current.setResult({
-                columns: columns,
-                rows: rows
-            });
-        }
-    }
 
     /**
      * RULES FOR RENDERING ATTRIBUTES
@@ -216,38 +164,13 @@ const AttributePanel = (props) => {
             }
             /* Render Grid Attributes */
             if(meta.currentElement.type === CONTROL.GRID) {
-                const ds = ["API-1", "API-2"]
                 return (
-                  <>
-                    <label>
-                        <b>Grid Attributes 
-                        </b>
-                        <i>(API as datasource is the first implementation)</i>
-                    </label>
-                    <div className="field col-12">
-                      <label htmlFor="datasource">Datasource</label>
-                      <Dropdown
-                        name="datasource"
-                        value={meta.currentElement?.attributes?.datasource}
-                        options={ds}
-                        onChange={(e) => { handleAttributeChange(e); handleDatasourceChange(e);} }
-                        placeholder="Select Datasource"
-                      />
-                    </div>
-                    <div className="field col-12">
-                      <label htmlFor="datasource"><b>Response to use</b>
-                      (<i>use like 'response.data or response.result' an array from the response</i>)
-                      </label>
-                      <InputText
-                        name="responseToUse"
-                        onBlur={(e) => {handleAttributeChange(e); handleDatasourceChange(e);}}
-                        value={currAttribute?.responseToUse} /* value={currAttribute?.maxLength} */
-                        placeholder="response.data or response.result"
-                      />
-                    </div>
-                    {classDiv}
-                  </>
-                );
+                    <>
+                        <AttrGrid meta={meta} handleAttributeChange={handleAttributeChange}></AttrGrid>
+                        {classDiv}
+                    </>
+                )
+                
             }
 
         }
