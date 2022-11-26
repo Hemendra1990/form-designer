@@ -1,9 +1,11 @@
 import { ProductService } from "../../components/grid/ProductService";
+import { UserService } from "../../components/grid/UserService";
 
 export class DataConnector {
     constructor(meta) {
         this.meta = meta;
         this.productService = new ProductService();
+        this.userService = new UserService();
     }
 
     /**
