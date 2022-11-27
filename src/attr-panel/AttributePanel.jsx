@@ -166,8 +166,7 @@ const AttributePanel = (props) => {
             if(meta.currentElement.type === CONTROL.GRID) {
                 return (
                     <>
-                        <AttrGrid meta={meta} handleAttributeChange={handleAttributeChange}></AttrGrid>
-                        {classDiv}
+                        <AttrGrid meta={meta} handleAttributeChange={handleAttributeChange} updateClass={updateClass}></AttrGrid>
                     </>
                 )
                 
