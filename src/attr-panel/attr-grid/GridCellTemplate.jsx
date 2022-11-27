@@ -13,6 +13,17 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
     setCellCustomisation(!enableCellCustomisation);
   }
 
+  const updateGridElementConfig = () => {
+    element.attributes.config = element.attributes.config || {};
+    let columnConfig = element.attributes.config;
+    columnConfig[selectedColumn.id] = columnConfig[selectedColumn.id] || {};
+    columnConfig[selectedColumn.id]["cell-template"] = {
+      ...columnConfig[selectedColumn.id]["cell-template"],
+      enabled: enableCellCustomisation,
+      template: cellTemplate
+    };
+  }
+
   return (
     <div>
       <div className="field-checkbox">
@@ -30,6 +41,7 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
         ref={cellTemplateEditorRef}
         value={cellTemplate}
         onChange={(e) => setCellTemplate(e.target.value)}
+        onBlur={updateGridElementConfig}
         rows={5}
         autoResize
       />

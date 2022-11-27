@@ -54,7 +54,7 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
           </p>
         </TabPanel>
         <TabPanel header="Cell Template">
-          <GridCellTemplate meta={meta} element={element} selectedColumn={selectedColumn}></GridCellTemplate>
+          <GridCellTemplate meta={meta} element={currentElement} selectedColumn={selectedColumn}></GridCellTemplate>
         </TabPanel>
       </TabView>
     </div>
