@@ -2,8 +2,7 @@ export const getElement = (meta) => {
   return {};
 };
 
-export const createElementId = () => {
-  let length = 8;
+export const createElementId = (prefix="", length=8) => {
   var result = "";
   var characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -11,5 +10,5 @@ export const createElementId = () => {
   for (var i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  return result;
+  return prefix+result;
 };

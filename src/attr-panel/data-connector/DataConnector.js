@@ -1,5 +1,6 @@
 import { ProductService } from "../../components/grid/ProductService";
 import { UserService } from "../../components/grid/UserService";
+import { createElementId } from "../../utils/Utils";
 
 export class DataConnector {
     static columns = [];
@@ -25,7 +26,7 @@ export class DataConnector {
                 if(res instanceof Array) {
                     const firstRec = res[0];
                     DataConnector.columns = Object.keys(firstRec).map(tCol => {
-                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1)}
+                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1), id: createElementId("column-", 7)}
                     });
                 }
 

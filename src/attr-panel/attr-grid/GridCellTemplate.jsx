@@ -4,8 +4,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Checkbox } from "primereact/checkbox";
 import { useRef } from "react";
 
-const GridCellTemplate = ({ meta, element }) => {
-  const [cellTemplate, setCellTemplate] = useState(null);
+const GridCellTemplate = ({ meta, element, selectedColumn }) => {
+  const [cellTemplate, setCellTemplate] = useState('');
   const [enableCellCustomisation, setCellCustomisation] = useState(false);
   const cellTemplateEditorRef = useRef(null);
 
@@ -21,11 +21,11 @@ const GridCellTemplate = ({ meta, element }) => {
           checked={enableCellCustomisation}
           onChange={handleCheckboxChange}
         />
-        <label htmlFor="binary">Enable Cell Customisation</label>
+        <label htmlFor="binary">Enable Cell Customisation for <i>{`${selectedColumn.header}(${selectedColumn.id})`}</i></label>
       </div>
       <InputTextarea
         disabled={!enableCellCustomisation}
-        placeholder="<div> Cell Customisation </div>"
+        placeholder="<div> Cell Customisation for  </div>"
         style={{ width: "100%" }}
         ref={cellTemplateEditorRef}
         value={cellTemplate}
