@@ -9,10 +9,11 @@ let createJSX = (nodeArray, rowData) => {
     if (attributes) {
       Array.from(attributes).forEach((attribute) => {
         if (attribute.name === "style") {
+          attribute.nodeValue = attribute.nodeValue.trim();
           let styleAttributes = attribute.nodeValue.split(";");
           let styleObj = {};
           styleAttributes.forEach((attribute) => {
-            let [key, value] = attribute.split(":");
+            let [key, value] = attribute.trim().split(":");
             styleObj[key] = value;
           });
           attributeObj[attribute.name] = styleObj;
@@ -21,6 +22,7 @@ let createJSX = (nodeArray, rowData) => {
         }
       });
     }
+    console.log({childNodes});
     return localName
       ? React.createElement(
           localName,
@@ -29,9 +31,18 @@ let createJSX = (nodeArray, rowData) => {
             ? createJSX(Array.from(childNodes), rowData)
             : childNodes
         )
-      : nodeValue;
+      : nodeValue.includes("{")? replaceVal(rowData, nodeValue): nodeValue;
   });
 };
+
+const replaceVal = new Function('rowData', 'expr', `
+console.log(expr);
+console.log(rowData);
+let key = expr.split('\${rowData.')[1];
+key = key.replace('}','');
+const result = rowData[key];
+console.log({result});
+return rowData[key];`)
 
 export const StringToJSX = ({domString, rowData}) => {
   return createJSX(Array.from(getNodes(domString)), rowData);

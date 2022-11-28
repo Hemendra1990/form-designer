@@ -12,7 +12,8 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
   const [selectedColumn, setSelectedColumn] = useState(null);
 
   const applyGridOptions = () => {
-    console.log("Apply Grid Options to the Grid...");
+    console.log("Calling Attr Grid...");
+    hideModal();
   };
 
   const onClick = (name, position) => {};
@@ -24,7 +25,7 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
         <Button
           label="Cancel"
           icon="pi pi-times"
-          onClick={() => hideModal(name)}
+          onClick={() => hideModal()}
           className="p-button-text p-button-danger"
         />
         <Button

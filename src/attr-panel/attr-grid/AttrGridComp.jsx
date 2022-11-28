@@ -16,6 +16,12 @@ const AttrGrid = (props) => {
   const openGridoptions = () => {
     setGridModal(true);
   };
+
+  const applyGridOptions = () => {
+    console.log('Inside Attr grid ...hiding Modal');
+    setGridModal(false);
+    element.ref.current.applyGridOptions && element.ref.current.applyGridOptions(); //calls HDGrid.applyGridOptions()
+  }
   
   const ds = ["API-1", "API-2"];
 
@@ -76,7 +82,7 @@ const AttrGrid = (props) => {
         />
       </div>
       {enbleGridModal && 
-        <GridEditOptions meta={meta} columns={dataConnector.getColumns()} currentElement={element} hideModal={()=> {setGridModal(false)}}></GridEditOptions>}
+        <GridEditOptions meta={meta} columns={dataConnector.getColumns()} currentElement={element} hideModal={applyGridOptions}></GridEditOptions>}
     </>
   );
 };

@@ -4,6 +4,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Checkbox } from "primereact/checkbox";
 import { useRef } from "react";
 
+
+
 const GridCellTemplate = ({ meta, element, selectedColumn }) => {
   const [cellTemplate, setCellTemplate] = useState('');
   const [enableCellCustomisation, setCellCustomisation] = useState(false);
@@ -20,7 +22,10 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
     columnConfig[selectedColumn.id]["cell-template"] = {
       ...columnConfig[selectedColumn.id]["cell-template"],
       enabled: enableCellCustomisation,
-      template: cellTemplate
+      template: (rowData) => { return cellTemplate;} 
+      /* template: (rowData) => {
+        return React.createElement(tempComponent(React, rowData, cellTemplate))
+      } */ 
     };
   }
 

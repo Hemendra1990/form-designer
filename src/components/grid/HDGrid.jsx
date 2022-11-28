@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   memo,
+  useRef,
 } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -11,6 +12,7 @@ import {
   useMetaContext,
   useUpdateMetaContext,
 } from "../../context/MetaContext";
+import {StringToJSX} from "../../utils/StringToJSX"
 
 /**
  * type of grid data
@@ -25,9 +27,11 @@ const HDGrid = forwardRef((props, ref) => {
   const [rows, setRows] = useState([]);
   const { updateMeta } = useUpdateMetaContext();
   const meta = useMetaContext();
+  const gridRef = useRef();
 
   useImperativeHandle(ref, () => ({
     setResult,
+    applyGridOptions
   }));
 
   function setResult({ columns, rows }) {
@@ -35,19 +39,45 @@ const HDGrid = forwardRef((props, ref) => {
     setRows(rows);
   }
 
+  function applyGridOptions() {
+    console.log('Applying Grid Options...', props.element.attributes.config);
+    const gridConfig = props.element.attributes.config;
+    
+    if(gridConfig) {//Apllying only cell template to the grid
+      Object.keys(gridConfig)
+      .forEach((configClmId)=> {
+        let column = columns.find(clm => clm.id === configClmId);
+        if(column) {
+          column.body = (rowData) => {
+            console.log('Inside Grid Column Body...', rowData);
+            return (
+              <>
+                <StringToJSX rowData={rowData} domString={gridConfig[configClmId]['cell-template'].template(rowData)} />
+              </>
+            )
+          }
+        }
+      });
+
+      setColumns(columns); //Update columns so that the grid will re-render to see the result
+    }
+    
+    
+  }
+
   useEffect(() => {
     updateMeta(meta);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getColumns = columns.map((col, i) => {
-    return <Column key={col.field} field={col.field} header={col.header} />;
+  const gridColumns = columns.map((col, i) => {
+    return <Column key={col.id} field={col.field} header={col.header} ref={gridRef} body={col.body}/>;
   });
 
   return (
     <div className="col-12">
       <div className="card">
         <DataTable value={rows} responsiveLayout="scroll">
-          {getColumns}
+          {gridColumns}
         </DataTable>
       </div>
     </div>
