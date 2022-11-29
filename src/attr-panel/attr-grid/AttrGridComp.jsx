@@ -55,13 +55,11 @@ const AttrGrid = (props) => {
         </label>
         <InputText
           name="responseToUse"
+          onChange={e => handleAttributeChange(e)}
           onBlur={(e) => {
-            handleAttributeChange(e);
             dataConnector.handleDatasourceChange(element);
           }}
-          value={
-            currAttribute?.responseToUse
-          } /* value={currAttribute?.maxLength} */
+          value={currAttribute?.responseToUse}
           placeholder="response.data or response.result"
         />
       </div>
@@ -76,7 +74,7 @@ const AttrGrid = (props) => {
       </div>
       <div className="field col-12">
         <Button
-          label="Edit Grid"
+          label="Edit Grid Options"
           className="p-button-danger"
           onClick={openGridoptions}
         />

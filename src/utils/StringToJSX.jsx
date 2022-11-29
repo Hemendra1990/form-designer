@@ -4,7 +4,7 @@ let getNodes = (str) =>
   new DOMParser().parseFromString(str, "text/html").body.childNodes;
 let createJSX = (nodeArray, rowData) => {
   return nodeArray.map((node) => {
-    let attributeObj = {rowData};
+    let attributeObj = {};
     const { attributes, localName, childNodes, nodeValue } = node;
     if (attributes) {
       Array.from(attributes).forEach((attribute) => {
@@ -22,7 +22,6 @@ let createJSX = (nodeArray, rowData) => {
         }
       });
     }
-    console.log({childNodes});
     return localName
       ? React.createElement(
           localName,

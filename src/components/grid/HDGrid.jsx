@@ -61,8 +61,7 @@ const HDGrid = forwardRef((props, ref) => {
         let column = columns.find(clm => clm.id === configClmId);
         if(column) {
           column.body = (rowData) => {
-            console.log('Inside Grid Column Body...', rowData);
-            let cellTempalteString = gridConfig[configClmId]['cell-template'].template(rowData);
+            let cellTempalteString = gridConfig[configClmId]['cell-template'].template;
             let domStr = evaluateCellTemplate(rowData, cellTempalteString);
             return (
               <>

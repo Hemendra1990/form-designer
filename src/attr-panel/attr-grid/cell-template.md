@@ -18,4 +18,9 @@
     if(row.gender === 'male')
         return "<h4 style='color:red'><i class='fa fa-male'></i></h4>";
     else
-        return "<h4 style='color:green'><i class='fa fa-female'></i></h4>";    
+        return "<h4 style='color:green'><i class='fa fa-female'></i></h4>";
+
+## Important: always use the below syntax even if you dont want to add control statements in cell template
+        if(true) {
+            return "hemendra"
+        }

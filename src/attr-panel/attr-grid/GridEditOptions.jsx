@@ -4,7 +4,6 @@ import { Dialog } from "primereact/dialog";
 import { TabView, TabPanel } from "primereact/tabview";
 import { ListBox } from "primereact/listbox";
 import GridCellTemplate from "./GridCellTemplate";
-import { element } from "prop-types";
 
 const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
   const [showGridOptionsModal, setShowGridOptionsModal] = useState(true);
@@ -15,9 +14,6 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
     console.log("Calling Attr Grid...");
     hideModal();
   };
-
-  const onClick = (name, position) => {};
-  const onHide = (name) => {};
 
   const renderFooter = (name) => {
     return (

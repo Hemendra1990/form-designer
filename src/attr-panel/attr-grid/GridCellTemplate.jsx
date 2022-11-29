@@ -3,17 +3,30 @@ import { useState } from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Checkbox } from "primereact/checkbox";
 import { useRef } from "react";
-
-
+import { useEffect } from "react";
 
 const GridCellTemplate = ({ meta, element, selectedColumn }) => {
-  const [cellTemplate, setCellTemplate] = useState('');
+  const [cellTemplate, setCellTemplate] = useState("");
   const [enableCellCustomisation, setCellCustomisation] = useState(false);
   const cellTemplateEditorRef = useRef(null);
 
+  useEffect(() => {
+    if (element.attributes && element.attributes.config) {
+      const clmTemplate = element.attributes.config[selectedColumn.id];
+      if (clmTemplate) {
+        const cellTemplate = clmTemplate["cell-template"];
+        setCellCustomisation(cellTemplate.enabled);
+        setCellTemplate(cellTemplate.template);
+      } else {
+        setCellCustomisation(false);
+        setCellTemplate("");
+      }
+    }
+  }, [selectedColumn]);
+
   const handleCheckboxChange = () => {
     setCellCustomisation(!enableCellCustomisation);
-  }
+  };
 
   const updateGridElementConfig = () => {
     element.attributes.config = element.attributes.config || {};
@@ -22,12 +35,9 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
     columnConfig[selectedColumn.id]["cell-template"] = {
       ...columnConfig[selectedColumn.id]["cell-template"],
       enabled: enableCellCustomisation,
-      template: (rowData) => { return cellTemplate;} 
-      /* template: (rowData) => {
-        return React.createElement(tempComponent(React, rowData, cellTemplate))
-      } */ 
+      template: cellTemplate,
     };
-  }
+  };
 
   return (
     <div>
@@ -37,7 +47,10 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
           checked={enableCellCustomisation}
           onChange={handleCheckboxChange}
         />
-        <label htmlFor="binary">Enable Cell Customisation for <i>{`${selectedColumn.header}(${selectedColumn.id})`}</i></label>
+        <label htmlFor="binary">
+          Enable Cell Customisation for{" "}
+          <i>{`${selectedColumn.header}(${selectedColumn.id})`}</i>
+        </label>
       </div>
       <InputTextarea
         disabled={!enableCellCustomisation}
