@@ -24,3 +24,12 @@
         if(true) {
             return "hemendra"
         }
+
+### Executing event from cell template
+        if(true) {
+            return '<Button label="Link" className="p-button-link" onClick="executeEvent(row);" />'
+        }
+
+        if(true) {
+            return '<Button label="Link" className="p-button-link" onClick="alert(row);" />'
+        }
