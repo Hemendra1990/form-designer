@@ -17,7 +17,7 @@ export class DataConnector {
      */
     async handleDatasourceChange(element) {
         const datasource = element.attributes.datasource;
-        const responseToUse = element.attributes.responseToUse;
+        const responseToUse = element.attributes.responseToUse || 'response.data'; // used || 'response.data' for tesint
         console.log('Event', datasource);
         let rows = [];
         if(datasource === "API-1") {

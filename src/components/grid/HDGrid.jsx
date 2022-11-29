@@ -13,6 +13,16 @@ import {
   useUpdateMetaContext,
 } from "../../context/MetaContext";
 import {StringToJSX} from "../../utils/StringToJSX"
+import createReactClass from "create-react-class"
+import { evaluateCellTemplate } from "../../utils/Utils";
+
+const MyTestFun = new Function('row', `
+  if(row.id === 3809) {
+    return '<h1>Hello World</h1>'
+  } else {
+    return '<h1> Hi </h1>'
+  };
+`)
 
 /**
  * type of grid data
@@ -39,6 +49,8 @@ const HDGrid = forwardRef((props, ref) => {
     setRows(rows);
   }
 
+  
+
   function applyGridOptions() {
     console.log('Applying Grid Options...', props.element.attributes.config);
     const gridConfig = props.element.attributes.config;
@@ -50,9 +62,11 @@ const HDGrid = forwardRef((props, ref) => {
         if(column) {
           column.body = (rowData) => {
             console.log('Inside Grid Column Body...', rowData);
+            let cellTempalteString = gridConfig[configClmId]['cell-template'].template(rowData);
+            let domStr = evaluateCellTemplate(rowData, cellTempalteString);
             return (
               <>
-                <StringToJSX rowData={rowData} domString={gridConfig[configClmId]['cell-template'].template(rowData)} />
+                <StringToJSX rowData={rowData} domString={domStr} />
               </>
             )
           }

@@ -12,3 +12,11 @@ export const createElementId = (prefix="", length=8) => {
   }
   return prefix+result;
 };
+
+/**
+ * My Billiion dollar Code...
+ */
+export const evaluateCellTemplate = new Function('row', 'template', `
+  const evaluate = new Function('row', template);
+  return evaluate(row);
+`); /*eslint no-new-func: */

@@ -35,14 +35,11 @@ let createJSX = (nodeArray, rowData) => {
   });
 };
 
-const replaceVal = new Function('rowData', 'expr', `
-console.log(expr);
-console.log(rowData);
-let key = expr.split('\${rowData.')[1];
+const replaceVal = new Function('row', 'expr', `
+let key = expr.split('\${row.')[1];
 key = key.replace('}','');
-const result = rowData[key];
-console.log({result});
-return rowData[key];`)
+const result = row[key];
+return row[key];`);/*eslint no-new-func: */
 
 export const StringToJSX = ({domString, rowData}) => {
   return createJSX(Array.from(getNodes(domString)), rowData);
