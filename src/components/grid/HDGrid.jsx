@@ -13,7 +13,6 @@ import {
   useUpdateMetaContext,
 } from "../../context/MetaContext";
 import {StringToJSX} from "../../utils/StringToJSX"
-import createReactClass from "create-react-class"
 import { evaluateCellTemplate } from "../../utils/Utils";
 
 const MyTestFun = new Function('row', `
