@@ -15,11 +15,12 @@ import { Dropdown } from "primereact/dropdown";
 import { Checkbox } from "primereact/checkbox";
 import { Password } from "primereact/password";
 import httpService from "../http-service/http-service";
+import {useNavigate} from "react-router-dom";
 
-const DataSourceBuilder = forwardRef((props, ref) => {
+const DataSourceBuilder = (props, ref) => {
   const { setShowDatasourceBuilder } = props;
 
-  const [displayDialog, setDisplayDialog] = useState(false);
+  const [displayDialog, setDisplayDialog] = useState(true);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [filteredDataSource, setFilteredDataSource] = useState(null);
   const [selectedDriver, setSelectedDriver] = useState(null);
@@ -44,6 +45,8 @@ const DataSourceBuilder = forwardRef((props, ref) => {
 
   const [testResponse, setTestResponse] = useState(null);
 
+  let navigate = useNavigate();
+
   const connectionTypes = ["SID", "Service Name"];
   const drivers = [
     { name: "MySql", value: "com.mysql.cj.jdbc.Driver", urlName: "mysql" },
@@ -64,13 +67,13 @@ const DataSourceBuilder = forwardRef((props, ref) => {
     },
   ];
 
-  useImperativeHandle(ref, () => {
+ /* useImperativeHandle(ref, () => {
     return {
       openDataSourceConfigModeler() {
         setDisplayDialog(true);
       },
     };
-  });
+  });*/
 
   const searchDataSource = (event) => {
     httpService.JNDI.list().then((res) => {
@@ -152,7 +155,8 @@ const DataSourceBuilder = forwardRef((props, ref) => {
     httpService.JNDI.save(saveData).then((res) => {
       if (res.data.status) {
         setDisplayDialog(false);
-        setShowDatasourceBuilder(false);
+        /*setShowDatasourceBuilder(false);*/
+        navigate(-1);
       }
     });
   };
@@ -189,7 +193,8 @@ const DataSourceBuilder = forwardRef((props, ref) => {
           icon="pi pi-cancel"
           onClick={() => {
             setDisplayDialog(false);
-            setShowDatasourceBuilder(false);
+            /*setShowDatasourceBuilder(false);*/
+            navigate(-1);
           }}
           className="p-button-outlined p-button-danger"
           autoFocus
@@ -396,6 +401,6 @@ const DataSourceBuilder = forwardRef((props, ref) => {
       </Dialog>
     </Fragment>
   );
-});
+};
 
 export default DataSourceBuilder;

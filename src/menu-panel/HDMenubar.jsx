@@ -6,6 +6,7 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import DataSourceBuilder from "../sql-modeler/DataSourceBuilder";
 import SQLQueryBuilder from "../sql-modeler/query-builder/SQLQueryBuilder";
 import SaveFormDesignResource from "./SaveFormDesignResource";
+import {useNavigate} from "react-router-dom";
 
 const HDMenubar = (props) => {
   const reportConfigRef = useRef();
@@ -28,6 +29,7 @@ const HDMenubar = (props) => {
     configureDataSource,
     configureQueryBuilder,
   } = useUpdateMetaContext();
+  let navigate = useNavigate();
   const end = (
     <p style={{ fontWeight: 400, color: "#fff" }}>
       Hemendra's Low Code Designer
@@ -39,6 +41,8 @@ const HDMenubar = (props) => {
       src="/logo-white.png"
       height="40"
       className="mr-2 mt-2 ml-4"
+      style={{cursor:'pointer'}}
+      onClick={()=> navigate("/")}
     ></img>
   );
   const meta = useMetaContext();
@@ -80,7 +84,7 @@ const HDMenubar = (props) => {
         },
         {
           label: "Configure",
-          icon: "pi pi-fw pi-cog",
+          icon: "fa fa-wrench",
           command: () => {
             setOpenReportConfiguration(true);
             configure(reportConfigRef);
@@ -95,32 +99,35 @@ const HDMenubar = (props) => {
           label: "Events",
           icon: "pi pi-fw pi-cog",
           command: () => {
-            props.toggleEventModal();
+            /*props.toggleEventModal();*/
+            navigate("event-builder");
           },
         },
         {
           label: "Data Source",
           icon: "pi pi-database",
           command: () => {
-            setShowDatasourceBuilder(true);
+            /*setShowDatasourceBuilder(true);
             setTimeout(() => {
               configureDataSource(dataSourceConfigRef);
-            }, 0);
+            }, 0);*/
+            navigate("datasource-builder");
           },
         },
         {
           label: "SQL",
           icon: "pi pi-table",
           command: () => {
-            setShowSQLBuilder(true);
+            /*setShowSQLBuilder(true);
             setTimeout(() => {
               configureQueryBuilder(sqlQueryBuilderRef);
-            }, 0);
+            }, 0);*/
+            navigate("sql-builder")
           },
         },
         {
           label: "API",
-          icon: "",
+          icon: "fa fa-plug",
           command: () => {
             configureApi(apiConfigRef);
           },
@@ -143,18 +150,18 @@ const HDMenubar = (props) => {
       {menuBar()}
       <ReportConfiguration ref={reportConfigRef} />
       <ApiModeler ref={apiConfigRef} />
-      {showDatasourceBuilder && (
+      {/*{showDatasourceBuilder && (
         <DataSourceBuilder
           setShowDatasourceBuilder={setShowDatasourceBuilder}
           ref={dataSourceConfigRef}
         ></DataSourceBuilder>
-      )}
-      {showSQLBuilder && (
+      )}*/}
+      {/*{showSQLBuilder && (
         <SQLQueryBuilder
           setShowSQLBuilder={setShowSQLBuilder}
           ref={sqlQueryBuilderRef}
         ></SQLQueryBuilder>
-      )}
+      )}*/}
 
       {showFormSaveModal && (
         <SaveFormDesignResource

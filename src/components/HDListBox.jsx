@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useImperativeHandle, useState, useRef } from "react";
 import { ListBox } from "primereact/listbox";
 import EventExecutor from "../service/EventExecutor";
 
-const HDListBox = React.forwardRef((props, ref) => {
+const HDListBox = React.forwardRef((props, parentRef) => {
   const { element } = props;
   const [selectedValue, setSelectedValue] = useState(null);
+  const [listOptions, setListOptions] = useState([]);
+
+  const [labelValueOptions, setLabelValueOptions] = useState([]);
+
+  const primeListRef = useRef(parentRef);
+
+  console.log(element);
 
   const handleOnChangeEvent = (e) => {
     if (element.attributes && element.attributes.onchangeevent) {
@@ -27,14 +34,33 @@ const HDListBox = React.forwardRef((props, ref) => {
     }
   };
 
-  const listOptions = [
-    /* This value will come from user's input or from datasource in future */
-    { label: "New York", value: "NY", country: "USA" },
-    { label: "Rome", value: "RM", country: "Italy" },
-    { label: "London", value: "LDN", country: "UK" },
-    { label: "Istanbul", value: "IST", country: "Turkey" },
-    { label: "Paris", value: "PRS", country: "France" },
-  ];
+  const operations = {
+    setResult: (result) => {
+      const rows = result.rows || [];
+      if (result.columns && result.columns.length > 0) {
+        setLabelValueOptions(result.columns);
+      }
+      setListOptions(rows);
+    },
+
+    getLabelAndValueOptions() {
+      return labelValueOptions;
+    },
+
+    startLoader: (value) => {
+      //do some stuff
+    },
+
+    sayHello(value) {
+      alert(value);
+    },
+
+    primeListRef,
+  };
+
+  useImperativeHandle(parentRef, () => {
+    return operations;
+  });
 
   useEffect(() => {
     element.attributes = element.attributes || {};
@@ -44,6 +70,7 @@ const HDListBox = React.forwardRef((props, ref) => {
   return (
     <>
       <ListBox
+        ref={primeListRef}
         value={selectedValue}
         options={listOptions}
         onChange={(e) => {
@@ -57,6 +84,9 @@ const HDListBox = React.forwardRef((props, ref) => {
         filter={element.attributes?.filter || false}
         filterBy={element.attributes?.filterby}
         tooltip={element.attributes?.tooltip}
+        listStyle={{
+          maxHeight: element.attributes?.maxHeight || "225px",
+        }}
       />
       {/* multiple={element.attributes?.multiple || false} */}
     </>

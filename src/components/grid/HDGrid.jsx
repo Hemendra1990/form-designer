@@ -45,6 +45,8 @@ const HDGrid = forwardRef((props, ref) => {
   const gridColRef = useRef();
   const gridRef = useRef();
 
+  const { element } = props;
+
   const [dataTableProps, setDataTableProps] = useState({});
 
   const [refreshgrid, setRefreshgrid] = useState(""); //tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
@@ -56,6 +58,7 @@ const HDGrid = forwardRef((props, ref) => {
     startLoader(value) {
       setLoading(value);
     },
+    primeGridRef: gridRef,
   }));
 
   function setResult({ columns, rows }) {
@@ -70,7 +73,12 @@ const HDGrid = forwardRef((props, ref) => {
   }
 
   function applyGridOptions() {
-    const gridConfig = props.element.attributes.config;
+    if (element.attributes.config === undefined) {
+      element.attributes.config = {};
+      element.attributes.config.paginator = true;
+      element.attributes.config.showGridlines = true;
+    }
+    const gridConfig = element.attributes.config;
     setDataTableProps(gridConfig);
 
     //Setting options
@@ -175,28 +183,32 @@ const HDGrid = forwardRef((props, ref) => {
   });
 
   return (
-    <div className="col-12" refreshgrid={refreshgrid.toString()}>
-      <div className="card">
-        <DataTable
-          ref={gridRef}
-          value={rows}
-          showGridlines={dataTableProps?.showGridlines}
-          resizableColumns={dataTableProps?.resizableColumns}
-          paginator={dataTableProps?.paginator}
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          rows={5}
-          reorderableColumns={dataTableProps?.reorderableColumns}
-          responsiveLayout="scroll"
-          loading={loading}
-          emptyMessage="No data to display"
-          style={{ width: "100%" }}
-          columnResizeMode="absolute"
-          editMode={dataTableProps?.editMode}
-        >
-          {gridColumns}
-        </DataTable>
-      </div>
+    <div refreshgrid={refreshgrid.toString()}>
+      <DataTable
+        ref={gridRef}
+        value={rows}
+        showGridlines={dataTableProps?.showGridlines}
+        resizableColumns={dataTableProps?.resizableColumns}
+        paginator={dataTableProps?.paginator}
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        rows={5}
+        reorderableColumns={dataTableProps?.reorderableColumns}
+        responsiveLayout="scroll"
+        loading={loading}
+        emptyMessage="No data to display"
+        style={{ width: "100%" }}
+        tableStyle={{
+          minHeight: "20rem",
+        }}
+        stripedRows={true}
+        scrollHeight="290px"
+        scrollDirection="both"
+        columnResizeMode="absolute"
+        editMode={dataTableProps?.editMode}
+      >
+        {gridColumns}
+      </DataTable>
     </div>
   );
 });

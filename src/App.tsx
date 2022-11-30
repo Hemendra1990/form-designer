@@ -6,6 +6,12 @@ import { MetaContextProvider } from "./context/MetaContext";
 import ModalContextProvider from "./context/ModalContext";
 import ErrorBoundary from "./error-handler/ErrorBoundary";
 import Homepage from "./Homepage";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import IntroPage from "./intro/IntroPage";
+import SQLQueryBuilder from "./sql-modeler/query-builder/SQLQueryBuilder";
+import DataSourceBuilder from "./sql-modeler/DataSourceBuilder";
+import EventModeler from "./events/builder/EventModeler";
+
 
 /* Problem with Drag n Drop : https://stackoverflow.com/questions/54982182/react-beautiful-dnd-drag-out-of-position-problem */
 
@@ -23,7 +29,16 @@ const App = () => {
         <ModalContextProvider>
           <ConfirmationContextProvider>
           <ErrorBoundary>
-            <Homepage />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<IntroPage />} />
+                <Route path="/form-designer" element={<Homepage />}>
+                  <Route path="sql-builder" element={<SQLQueryBuilder />} />
+                  <Route path="datasource-builder" element={<DataSourceBuilder />} />
+                  <Route path="event-builder" element={<EventModeler />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
           </ErrorBoundary>
           </ConfirmationContextProvider>
         </ModalContextProvider>

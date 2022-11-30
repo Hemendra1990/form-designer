@@ -69,3 +69,12 @@ export const Reference = {
     return null;
   }
 }
+
+/**
+ * Export random UUID
+ *
+ * @returns {*}
+ */
+export function getRandomUUID() {
+  return window.crypto.randomUUID();
+}

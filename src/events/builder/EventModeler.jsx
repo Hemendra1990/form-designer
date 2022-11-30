@@ -19,6 +19,8 @@ import { EVENTS, NODE_TYPES } from "../model/EventModel";
 import "./EventModeler.css";
 import { Dropdown } from "primereact/dropdown";
 import { useMetaContext, useToastContext, useUpdateMetaContext } from "../../context/MetaContext";
+import {Dialog} from "primereact/dialog";
+import {useNavigate} from "react-router-dom";
 
 const initialNodes = [
   /* {
@@ -40,6 +42,7 @@ const EventModeler = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const { toastRef } = useToastContext();
+  let navigate = useNavigate();
 
   const op = useRef(null);
   const [eventId, setEventId] = useState('');
@@ -136,7 +139,8 @@ const EventModeler = (props) => {
       meta.events = [...eventBuckets];
       updateMeta(meta);
   
-      props.hide();
+      //props.hide();
+      navigate(-1);
     } else {
       toastRef.current.show({severity: 'error', summary: 'Error', detail: 'Event Can\'t be saved without a name.'});
     }
@@ -164,76 +168,80 @@ const EventModeler = (props) => {
   }, []);
 
   return (
-    <div>
-      <OverlayPanel ref={op} style={{ width: "400px" }}>
-        <DataTable
-          value={EVENTS}
-          selectionMode="single"
-          paginator
-          rows={4}
-          onSelectionChange={onActionSelection}
-        >
-          <Column field="name" header="Action Name" sortable />
-        </DataTable>
-      </OverlayPanel>
+      <Dialog header="Event Modeler" style={{ width: "95vw" }} visible={true} onHide={()=> {navigate(-1);}}>
+        <div>
+          <OverlayPanel ref={op} style={{ width: "400px" }}>
+            <DataTable
+                value={EVENTS}
+                selectionMode="single"
+                paginator
+                rows={4}
+                onSelectionChange={onActionSelection}
+            >
+              <Column field="name" header="Action Name" sortable />
+            </DataTable>
+          </OverlayPanel>
 
-      <div className="flex">
-        <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
-          <Dropdown
-          className="mr-2"
-            options={meta.events}
-            optionLabel="name"
-            optionValue="id"
-            value={selectedEvent} onChange={onEventSelection} />
-          <InputText
-            placeholder="Event Id"
-            value={eventId}
-            disabled
-          ></InputText>
-          <InputText
-            className="ml-2"
-            placeholder="Event Name"
-            value={eventName}
-            onChange={handleEventNameChange}
-          ></InputText>
-        </div>
-        <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
-          <Button label="Add Action" onClick={addNewActionNode} />
-          <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
-        </div>
-      </div>
+          <div className="flex">
+            <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
+              <Dropdown
+                  className="mr-2"
+                  options={meta.events}
+                  optionLabel="name"
+                  optionValue="id"
+                  value={selectedEvent} onChange={onEventSelection} />
+              <InputText
+                  placeholder="Event Id"
+                  value={eventId}
+                  disabled
+              ></InputText>
+              <InputText
+                  className="ml-2"
+                  placeholder="Event Name"
+                  value={eventName}
+                  onChange={handleEventNameChange}
+              ></InputText>
+            </div>
+            <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
+              <Button label="Add Action" onClick={addNewActionNode} />
+              <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
+            </div>
+          </div>
 
-      <div className="grid">
-        <div className="col" style={{ height: '60vh' }}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            nodeTypes={nodeTypes}
-            snapToGrid={true}
-            snapGrid={snapGrid}
-            style={{ background: bgColor }}
-            connectionLineStyle={connectionLineStyle}
-          >
-            <MiniMap
-              nodeStrokeColor={(n) => {
-                if (n.type === "alert") return "#0041d0";
-                if (n.type === "confirmation") return bgColor;
-                if (n.type === "script") return "#ff0072";
-              }}
-              nodeColor={(n) => {
-                if (n.type === "confirmation") return bgColor;
-                return "#fff";
-              }}
-            />
-            <Controls />
-            <Background />
-          </ReactFlow>
+          <div className="grid">
+            <div className="col" style={{ height: '60vh' }}>
+              <ReactFlow
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onConnect={onConnect}
+                  nodeTypes={nodeTypes}
+                  snapToGrid={true}
+                  snapGrid={snapGrid}
+                  style={{ background: bgColor }}
+                  connectionLineStyle={connectionLineStyle}
+              >
+                <MiniMap
+                    nodeStrokeColor={(n) => {
+                      if (n.type === "alert") return "#0041d0";
+                      if (n.type === "confirmation") return bgColor;
+                      if (n.type === "script") return "#ff0072";
+                    }}
+                    nodeColor={(n) => {
+                      if (n.type === "confirmation") return bgColor;
+                      return "#fff";
+                    }}
+                />
+                <Controls />
+                <Background />
+              </ReactFlow>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+
+      </Dialog>
+
   );
 };
 
