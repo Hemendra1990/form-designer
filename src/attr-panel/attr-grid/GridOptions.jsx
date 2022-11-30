@@ -2,9 +2,10 @@ import { forwardRef, memo, useEffect, useImperativeHandle, useState } from "reac
 import { InputSwitch } from "primereact/inputswitch";
 
 const GridOptions = forwardRef(({element}, ref) => {
+  const [showGridlines, setShowGridlines] = useState(false);
   const [showGridHeader, setShowGridHeader] = useState(false);
-  const [columnResizable, setColumnResizable] = useState(false);
-  const [pagination, setPagination] = useState(false);
+  const [resizableColumns, setColumnResizable] = useState(false);
+  const [paginator, setPagination] = useState(false);
   const [horizontallScroll, setHorizontalScroll] = useState(false);
   const [verticalScroll, setVerticalScroll] = useState(false);
   const [multipleColumnSort, setMultipleColumnSort] = useState(false);
@@ -20,13 +21,15 @@ const GridOptions = forwardRef(({element}, ref) => {
   const [rowSelectionSingleMode, setRowSelectionSingleMode] = useState(false);
   const [rowSelectionOnHover, setRowSelectionOnHover] = useState(false);
   const [uniqueColumn, setUniqueColumn] = useState(false);
+  const [reorderableColumns, setReorderableColumns] = useState(false);
 
   useImperativeHandle(ref, () => ({
     getOptions() {
       return {
+        showGridlines,
         showGridHeader,
-        columnResizable,
-        pagination,
+        resizableColumns,
+        paginator,
         horizontallScroll,
         verticalScroll,
         multipleColumnSort,
@@ -42,15 +45,17 @@ const GridOptions = forwardRef(({element}, ref) => {
         rowSelectionSingleMode,
         rowSelectionOnHover,
         uniqueColumn,
+        reorderableColumns,
       };
     },
   }));
 
   useEffect(() => {
     if(element.attributes.config) {
+      setShowGridlines(element.attributes.config.showGridlines || false);
       setShowGridHeader(element.attributes.config.showGridHeader || false);
-      setColumnResizable(element.attributes.config.columnResizable || false);
-      setPagination(element.attributes.config.pagination || false);
+      setColumnResizable(element.attributes.config.resizableColumns || false);
+      setPagination(element.attributes.config.paginator || false);
       setHorizontalScroll(element.attributes.config.horizontallScroll || false);
       setVerticalScroll(element.attributes.config.verticalScroll || false);
       setMultipleColumnSort(element.attributes.config.multipleColumnSort || false);
@@ -66,6 +71,7 @@ const GridOptions = forwardRef(({element}, ref) => {
       setRowSelectionSingleMode(element.attributes.config.rowSelectionSingleMode || false);
       setRowSelectionOnHover(element.attributes.config.rowSelectionOnHover || false);
       setUniqueColumn(element.attributes.config.uniqueColumn || false);
+      setReorderableColumns(element.attributes.config.reorderableColumns || false);
     } else {
       element.attributes.config = {};
     }
@@ -74,6 +80,16 @@ const GridOptions = forwardRef(({element}, ref) => {
   return (
     <div className="options-wrapper">
       <div className="grid align-content-start">
+        <div className="col-3">
+          <label className="block">Show Grid Line</label>
+          <InputSwitch
+            checked={showGridlines}
+            onChange={(e) => {
+              setShowGridlines(e.value);
+              element.attributes.config["showGridlines"] = e.value;
+            }}
+          />
+        </div>
         <div className="col-3">
           <label className="block">Show Grid Header</label>
           <InputSwitch
@@ -87,20 +103,30 @@ const GridOptions = forwardRef(({element}, ref) => {
         <div className="col-3">
           <label className="block">Column Resizable</label>
           <InputSwitch
-            checked={columnResizable}
+            checked={resizableColumns}
             onChange={(e) => {
               setColumnResizable(e.value);
-              element.attributes.config["columnResizable"] = e.value;
+              element.attributes.config["resizableColumns"] = e.value;
+            }}
+          />
+        </div>
+        <div className="col-3">
+          <label className="block">Reorder Column</label>
+          <InputSwitch
+            checked={reorderableColumns}
+            onChange={(e) => {
+              setReorderableColumns(e.value);
+              element.attributes.config["reorderableColumns"] = e.value;
             }}
           />
         </div>
         <div className="col-3">
           <label className="block">Pagination</label>
           <InputSwitch
-            checked={pagination}
+            checked={paginator}
             onChange={(e) => {
               setPagination(e.value);
-              element.attributes.config["pagination"] = e.value;
+              element.attributes.config["paginator"] = e.value;
             }}
           />
         </div>

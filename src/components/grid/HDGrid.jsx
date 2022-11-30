@@ -12,16 +12,19 @@ import {
   useMetaContext,
   useUpdateMetaContext,
 } from "../../context/MetaContext";
-import {StringToJSX} from "../../utils/StringToJSX"
+import { StringToJSX } from "../../utils/StringToJSX";
 import { evaluateCellTemplate } from "../../utils/Utils";
 
-const MyTestFun = new Function('row', `
+const MyTestFun = new Function(
+  "row",
+  `
   if(row.id === 3809) {
     return '<h1>Hello World</h1>'
   } else {
     return '<h1> Hi </h1>'
   };
-`)
+`
+);
 
 /**
  * type of grid data
@@ -36,11 +39,14 @@ const HDGrid = forwardRef((props, ref) => {
   const [rows, setRows] = useState([]);
   const { updateMeta } = useUpdateMetaContext();
   const meta = useMetaContext();
+  const gridColRef = useRef();
   const gridRef = useRef();
+
+  const [dataTableProps, setDataTableProps] = useState({});
 
   useImperativeHandle(ref, () => ({
     setResult,
-    applyGridOptions
+    applyGridOptions,
   }));
 
   function setResult({ columns, rows }) {
@@ -48,33 +54,35 @@ const HDGrid = forwardRef((props, ref) => {
     setRows(rows);
   }
 
-  
-
   function applyGridOptions() {
-    console.log('Applying Grid Options...', props.element.attributes.config);
+    //console.log(gridRef);;
+    console.log("Applying Grid Options...", props.element.attributes.config);
     const gridConfig = props.element.attributes.config;
-    
-    if(gridConfig) {//Apllying only cell template to the grid
-      Object.keys(gridConfig)
-      .forEach((configClmId)=> {
-        let column = columns.find(clm => clm.id === configClmId);
-        if(column) {
+    setDataTableProps(gridConfig);
+
+    //Setting options
+    //gridRef.current.props = {...gridRef.current.props, ...gridConfig}
+
+    if (gridConfig) {
+      //Apllying only cell template to the grid
+      Object.keys(gridConfig).forEach((configClmId) => {
+        let column = columns.find((clm) => clm.id === configClmId);
+        if (column) {
           column.body = (rowData) => {
-            let cellTempalteString = gridConfig[configClmId]['cell-template'].template;
+            let cellTempalteString =
+              gridConfig[configClmId]["cell-template"].template;
             let domStr = evaluateCellTemplate(rowData, cellTempalteString);
             return (
               <>
                 <StringToJSX rowData={rowData} domString={domStr} />
               </>
-            )
-          }
+            );
+          };
         }
       });
 
       setColumns(columns); //Update columns so that the grid will re-render to see the result
     }
-    
-    
   }
 
   useEffect(() => {
@@ -82,13 +90,33 @@ const HDGrid = forwardRef((props, ref) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const gridColumns = columns.map((col, i) => {
-    return <Column key={col.id} field={col.field} header={col.header} ref={gridRef} body={col.body}/>;
+    return (
+      <Column
+      columnKey={col.id}
+        field={col.field}
+        header={col.header}
+        ref={gridColRef}
+        body={col.body}
+      />
+    );
   });
 
   return (
     <div className="col-12">
       <div className="card">
-        <DataTable value={rows} responsiveLayout="scroll">
+        <DataTable
+          ref={gridRef}
+          value={rows}
+          showGridlines={dataTableProps?.showGridlines}
+          resizableColumns={dataTableProps?.resizableColumns}
+          paginator={dataTableProps?.paginator}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          rowsPerPageOptions={[5,10,25,50]}
+          rows={5}
+          reorderableColumns={dataTableProps?.reorderableColumns}
+          responsiveLayout="scroll"
+          loading={true}
+        >
           {gridColumns}
         </DataTable>
       </div>

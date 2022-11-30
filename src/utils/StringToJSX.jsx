@@ -54,7 +54,7 @@ let createJSX = (nodeArray, rowData) => {
             ? createJSX(Array.from(childNodes), rowData)
             : childNodes
         )
-      : nodeValue.includes("{")? replaceVal(rowData, nodeValue): nodeValue;
+      : nodeValue.includes("${")? replaceVal(rowData, nodeValue): nodeValue;
   });
 };
 
