@@ -14,7 +14,7 @@ let getNodes = (str) =>
   new DOMParser().parseFromString(str, "text/html").body.childNodes;
 let createJSX = (nodeArray, rowData) => {
   return nodeArray.map((node) => {
-    let attributeObj = {};
+    let attributeObj = {rowData};
     const { attributes, localName, childNodes, nodeValue } = node;
     if (attributes) {
       Array.from(attributes).forEach((attribute) => {
@@ -31,25 +31,16 @@ let createJSX = (nodeArray, rowData) => {
           if(attribute.name === 'classname') {
             attributeObj["className"] = attribute.nodeValue;
           } else if(attribute.name === 'onclick') {
-            /* attributeObj["onClick"] = new Function('event',`
-              console.log("hello");
-              alert(JSON.stringify('1'));
-            `); */
-            /* attributeObj["onClick"] = new Function('event',`
-            debugger;
-              console.log("hello");
-              console.log(rowData);
-            `); */
             attributeObj["onClick"] = (e) => {
               debugger;
-              const fun = new Function('event', 'row', 'nodeVal', `
+              const fun = new Function('event', 'row', 'nodeVal', 'attributeObj', `
                               debugger;
                               console.log(nodeVal);
                               let t = new Function('row', nodeVal);
-                              return t()`);
-              fun(e, rowData, attribute.nodeValue);
+                              return t(row)`);
+              fun(e, attributeObj.rowData, attribute.nodeValue, attributeObj);
             };
-          } else {
+          } else if(attributeObj[attribute.name] !== 'rowData') {
             attributeObj[attribute.name] = attribute.nodeValue;
           }
         }
