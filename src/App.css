@@ -42,3 +42,11 @@
 .p-menubar {
     border: unset !important;
 }
+
+.options-wrapper {
+    max-height: calc(90vh - 200px);
+    min-height: calc(90vh - 200px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}

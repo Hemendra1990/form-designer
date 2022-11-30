@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { TabView, TabPanel } from "primereact/tabview";
 import { ListBox } from "primereact/listbox";
 import GridCellTemplate from "./GridCellTemplate";
+import GridOptions from "./GridOptions";
 
-const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
+const GridEditAttributes = ({ meta, currentElement, hideModal, columns }) => {
   const [showGridOptionsModal, setShowGridOptionsModal] = useState(true);
   const [activeIndex1, setActiveIndex1] = useState(0);
   const [selectedColumn, setSelectedColumn] = useState(null);
 
+  const gridOptionsRef = useRef();
+
   const applyGridOptions = () => {
-    console.log("Calling Attr Grid...");
+    console.log("Calling Attr Grid...", gridOptionsRef);
     hideModal();
   };
 
@@ -82,7 +85,9 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
                 {selectedColumn && showColumnOptionTabs}
               </div>
             </TabPanel>
-            <TabPanel header="Options"></TabPanel>
+            <TabPanel header="Options">
+              <GridOptions ref={gridOptionsRef} element={currentElement}/>
+            </TabPanel>
           </TabView>
         </div>
       </Dialog>
@@ -90,4 +95,4 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
   );
 };
 
-export default React.memo(GridEditOptions);
+export default React.memo(GridEditAttributes);

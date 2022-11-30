@@ -48,7 +48,7 @@ let createJSX = (nodeArray, rowData) => {
     }
     return localName
       ? React.createElement(
-          getReactComps[localName],
+          getReactComps[localName] || localName,
           attributeObj,
           childNodes && Array.isArray(Array.from(childNodes))
             ? createJSX(Array.from(childNodes), rowData)

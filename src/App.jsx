@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "primeflex/primeflex.css"
 import ConfirmationContextProvider from "./context/ConfirmationDialogContext";
 import { MetaContextProvider } from "./context/MetaContext";
 import ModalContextProvider from "./context/ModalContext";

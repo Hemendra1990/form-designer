@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { DataConnector } from "../data-connector/DataConnector";
 import { Button } from "primereact/button";
 import { useState } from "react";
-import GridEditOptions from "./GridEditOptions";
+import GridEditAttributes from "./GridEditAttributes";
 
 const AttrGrid = (props) => {
   const meta = props.meta;
@@ -80,7 +80,7 @@ const AttrGrid = (props) => {
         />
       </div>
       {enbleGridModal && 
-        <GridEditOptions meta={meta} columns={dataConnector.getColumns()} currentElement={element} hideModal={applyGridOptions}></GridEditOptions>}
+        <GridEditAttributes meta={meta} columns={dataConnector.getColumns()} currentElement={element} hideModal={applyGridOptions}></GridEditAttributes>}
     </>
   );
 };
