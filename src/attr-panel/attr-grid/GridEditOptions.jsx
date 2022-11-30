@@ -41,17 +41,17 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
         onTabChange={(e) => setActiveIndex1(e.index)}
       >
         <TabPanel header="Header">
-          <p>
-            Header styles and other options
-          </p>
+          <p>Header styles and other options</p>
         </TabPanel>
         <TabPanel header="Cell">
-          <p>
-            Cell Styles and Other Options
-          </p>
+          <p>Cell Styles and Other Options</p>
         </TabPanel>
         <TabPanel header="Cell Template">
-          <GridCellTemplate meta={meta} element={currentElement} selectedColumn={selectedColumn}></GridCellTemplate>
+          <GridCellTemplate
+            meta={meta}
+            element={currentElement}
+            selectedColumn={selectedColumn}
+          ></GridCellTemplate>
         </TabPanel>
       </TabView>
     </div>
@@ -60,25 +60,30 @@ const GridEditOptions = ({ meta, currentElement, hideModal, columns }) => {
   return (
     <>
       <Dialog
-        header="Grid Options"
+        header="Grid Attributes"
         visible={showGridOptionsModal}
-        style={{ width: "70vw" }}
+        style={{ width: "70vw", height: "90vh" }}
         footer={renderFooter("displayBasic")}
         onHide={() => hideModal()}
       >
         <div>
-          <div className="grid">
-            <div className="col-3">
-              <ListBox
-                value={selectedColumn}
-                options={columns}
-                onChange={(e) => setSelectedColumn(e.value)}
-                optionLabel="header"
-                style={{ width: "15rem" }}
-              />
-            </div>
-            {selectedColumn && showColumnOptionTabs}
-          </div>
+          <TabView>
+            <TabPanel header="Columns">
+              <div className="grid">
+                <div className="col-3">
+                  <ListBox
+                    value={selectedColumn}
+                    options={columns}
+                    onChange={(e) => setSelectedColumn(e.value)}
+                    optionLabel="header"
+                    style={{ width: "15rem" }}
+                  />
+                </div>
+                {selectedColumn && showColumnOptionTabs}
+              </div>
+            </TabPanel>
+            <TabPanel header="Options"></TabPanel>
+          </TabView>
         </div>
       </Dialog>
     </>
