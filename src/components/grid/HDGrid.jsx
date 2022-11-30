@@ -115,7 +115,7 @@ const HDGrid = forwardRef((props, ref) => {
           rows={5}
           reorderableColumns={dataTableProps?.reorderableColumns}
           responsiveLayout="scroll"
-          loading={true}
+          loading={false}
         >
           {gridColumns}
         </DataTable>
