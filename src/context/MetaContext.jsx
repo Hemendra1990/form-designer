@@ -106,6 +106,10 @@ export const MetaContextProvider = ({ children }) => {
     console.info("Report Saved", metaJson);
   };
 
+  const configure = () => {
+    console.log('Configure the Events on Report load...');
+  }
+
   const generateElementMap = (prevMeta) => {
     const elementMap = {};
     createElementMap(prevMeta.elements, elementMap);
@@ -136,7 +140,7 @@ export const MetaContextProvider = ({ children }) => {
 
   return (
     <MetaContext.Provider value={meta}>
-      <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport }}>
+      <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport, configure }}>
         {children}
       </UpdateMetaContext.Provider>
     </MetaContext.Provider>

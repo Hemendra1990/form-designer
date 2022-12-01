@@ -3,7 +3,7 @@ import React, { memo } from "react"
 import { useUpdateMetaContext } from "../context/MetaContext";
 
 const HDMenubar = (props) => {
-    const {clearAll, openReport, togglePlaygroundMode, saveReport } = useUpdateMetaContext();
+    const {clearAll, openReport, togglePlaygroundMode, saveReport, configure } = useUpdateMetaContext();
     const end = <label style={{ fontWeight: 800 }}>Hemendra's Low Code Designer</label>;
     const menuItems = [
         {
@@ -35,6 +35,13 @@ const HDMenubar = (props) => {
               icon: "pi pi-fw pi-save",
               command: () => {
                 saveReport();
+              }
+            },
+            {
+              label: "Configure",
+              icon: "pi pi-fw pi-save",
+              command: () => {
+                configure();
               }
             },
           ],
