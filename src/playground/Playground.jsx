@@ -81,6 +81,14 @@ const Playground = (props) => {
       //If source and destination container is Same.
       if(destination.droppableId === source.droppableId) {
         reorderItemsInSameContainer();
+      } else if(source.droppableId.includes("container")) { //Dragged from One Container to Another sibling Container
+        //Remove from Source Container
+        console.log({source, destination});
+        const srcContainerChildren = meta.elementMap[source.droppableId].attributes.children
+        const [containerChild] = srcContainerChildren.splice(source.index, 1);
+        //Add to the destination container
+        destContainer.attributes.children.splice(destination.index, 0, containerChild);
+        destContainer.attributes.children = [...destContainer.attributes.children];
       } else {
         const [reorderItem] = items.splice(dragResult.source.index, 1);
         destContainer = meta.elementMap[dragResult.destination.droppableId];
@@ -99,15 +107,7 @@ const Playground = (props) => {
         }
       }
     } else if(source.droppableId.includes("container") && destination.droppableId.includes("playground")) {/* If item dragged from container and dropped in Playground */
-      console.log({source, destination});
-      //Splice from container children
-      let srcContainerId = source.droppableId;
-      let containerChildren = meta.elementMap[srcContainerId].attributes.children;
-      const [containerChild] = containerChildren.splice(source.index, 1);
-
-      items.splice(dragResult.destination.index, 0, containerChild);
-      items = [...items];
-
+      reorderItemFromContainerToPlayground();
     } else {
       const [reorderItem] = items.splice(dragResult.source.index, 1);
       items.splice(dragResult.destination.index, 0, reorderItem);
@@ -115,6 +115,17 @@ const Playground = (props) => {
 
     meta.elements = [...items]
     updateMeta(meta);
+
+    function reorderItemFromContainerToPlayground() {
+      console.log({ source, destination });
+      //Splice from container children
+      let srcContainerId = source.droppableId;
+      let containerChildren = meta.elementMap[srcContainerId].attributes.children;
+      const [containerChild] = containerChildren.splice(source.index, 1);
+
+      items.splice(dragResult.destination.index, 0, containerChild);
+      items = [...items];
+    }
 
     function reorderItemsInSameContainer() {
       let children = destContainer.attributes.children;
