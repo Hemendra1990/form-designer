@@ -83,12 +83,7 @@ const Playground = (props) => {
         reorderItemsInSameContainer();
       } else if(source.droppableId.includes("container")) { //Dragged from One Container to Another sibling Container
         //Remove from Source Container
-        console.log({source, destination});
-        const srcContainerChildren = meta.elementMap[source.droppableId].attributes.children
-        const [containerChild] = srcContainerChildren.splice(source.index, 1);
-        //Add to the destination container
-        destContainer.attributes.children.splice(destination.index, 0, containerChild);
-        destContainer.attributes.children = [...destContainer.attributes.children];
+        reorderItemFromContainerToSiblingContainer();
       } else {
         const [reorderItem] = items.splice(dragResult.source.index, 1);
         destContainer = meta.elementMap[dragResult.destination.droppableId];
@@ -115,6 +110,15 @@ const Playground = (props) => {
 
     meta.elements = [...items]
     updateMeta(meta);
+
+    function reorderItemFromContainerToSiblingContainer() {
+      console.log({ source, destination });
+      const srcContainerChildren = meta.elementMap[source.droppableId].attributes.children;
+      const [containerChild] = srcContainerChildren.splice(source.index, 1);
+      //Add to the destination container
+      destContainer.attributes.children.splice(destination.index, 0, containerChild);
+      destContainer.attributes.children = [...destContainer.attributes.children];
+    }
 
     function reorderItemFromContainerToPlayground() {
       console.log({ source, destination });
