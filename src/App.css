@@ -1,6 +1,10 @@
 *{
     margin: 0;
 }
+.draggable {
+    top: auto !important;
+    left: auto !important;
+  }
 .edit-mode {
     padding: 10px;
     border: 1px solid rgb(212 212 212)

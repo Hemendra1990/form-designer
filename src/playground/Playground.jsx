@@ -66,36 +66,63 @@ const Playground = (props) => {
    */
   const onDragEnd = (dragResult) => {
     if (!dragResult.destination) return;
-    const items = meta.elements;
+    const {destination, source} = dragResult;
+    let items = meta.elements;
     let destContainer = items.find(
       (itm) => itm.id === dragResult.destination.droppableId
     );
-    const [reorderItem] = items.splice(dragResult.source.index, 1);
+    
     if (dragResult.destination.droppableId.includes("container")) {
       //TODO recursively find the value findContainer(items, dragResult.destination.droppableId, destContainer); 
       /* destContainer = items.find(
         (itm) => itm.id === dragResult.destination.droppableId
       ); */
-      destContainer = meta.elementMap[dragResult.destination.droppableId];
-      if (destContainer && destContainer.attributes) {
-        if (!destContainer.attributes.children) {
-          destContainer.attributes.children = [];
-        }
-        destContainer.attributes.children = [
-          ...destContainer.attributes.children,
-          reorderItem,
-        ];
+
+      //If source and destination container is Same.
+      if(destination.droppableId === source.droppableId) {
+        reorderItemsInSameContainer();
       } else {
-        destContainer.attributes = {};
-        destContainer.attributes.children = [];
-        destContainer.attributes.children.push(reorderItem);
+        const [reorderItem] = items.splice(dragResult.source.index, 1);
+        destContainer = meta.elementMap[dragResult.destination.droppableId];
+        if (destContainer && destContainer.attributes) {
+          if (!destContainer.attributes.children) {
+            destContainer.attributes.children = [];
+          }
+          destContainer.attributes.children = [
+            ...destContainer.attributes.children,
+            reorderItem,
+          ];
+        } else {
+          destContainer.attributes = {};
+          destContainer.attributes.children = [];
+          destContainer.attributes.children.push(reorderItem);
+        }
       }
+    } else if(source.droppableId.includes("container") && destination.droppableId.includes("playground")) {/* If item dragged from container and dropped in Playground */
+      console.log({source, destination});
+      //Splice from container children
+      let srcContainerId = source.droppableId;
+      let containerChildren = meta.elementMap[srcContainerId].attributes.children;
+      const [containerChild] = containerChildren.splice(source.index, 1);
+
+      items.splice(dragResult.destination.index, 0, containerChild);
+      items = [...items];
+
     } else {
+      const [reorderItem] = items.splice(dragResult.source.index, 1);
       items.splice(dragResult.destination.index, 0, reorderItem);
     }
 
     meta.elements = [...items]
     updateMeta(meta);
+
+    function reorderItemsInSameContainer() {
+      let children = destContainer.attributes.children;
+      const [childreOrderitem] = children.splice(dragResult.source.index, 1);
+      children.splice(dragResult.destination.index, 0, childreOrderitem);
+
+      destContainer.attributes.children = [...destContainer.attributes.children];
+    }
   };
 
   /**
