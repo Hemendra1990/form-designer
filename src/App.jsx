@@ -7,6 +7,8 @@ import ModalContextProvider from "./context/ModalContext";
 import ErrorBoundary from "./error-handler/ErrorBoundary";
 import Homepage from "./Homepage";
 
+/* Problem with Drag n Drop : https://stackoverflow.com/questions/54982182/react-beautiful-dnd-drag-out-of-position-problem */
+
 const defaultScriptTextForTesting = `
 debugger;
 //Use this lines to get the reference of the element and update the value
