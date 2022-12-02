@@ -44,6 +44,8 @@ const HDGrid = forwardRef((props, ref) => {
 
   const [dataTableProps, setDataTableProps] = useState({});
 
+  const [refreshGrid, setRefreshGrid] = useState(null);//tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
+
   useImperativeHandle(ref, () => ({
     setResult,
     applyGridOptions,
@@ -82,20 +84,20 @@ const HDGrid = forwardRef((props, ref) => {
           };
         }
       });
-
       setColumns(columns); //Update columns so that the grid will re-render to see the result
+      setRefreshGrid(Math.random())
     }
   }
 
   useEffect(() => {
     updateMeta(meta);
     applyGridOptions();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [columns]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const gridColumns = columns.map((col, i) => {
     return (
       <Column
-      columnKey={col.id}
+        key={col.id}
         field={col.field}
         header={col.header}
         ref={gridColRef}
@@ -105,7 +107,7 @@ const HDGrid = forwardRef((props, ref) => {
   });
 
   return (
-    <div className="col-12">
+    <div className="col-12" refreshGrid>
       <div className="card">
         <DataTable
           ref={gridRef}
