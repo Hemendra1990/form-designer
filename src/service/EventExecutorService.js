@@ -1,6 +1,7 @@
 import { Toast } from "primereact/toast";
 import React from "react";
 import ReactDOM from 'react-dom';
+import { DataConnector } from "../attr-panel/data-connector/DataConnector";
 import { EVENT_TYPE } from "../events/model/EventModel";
 
 export const EventExecutorService = {
@@ -23,6 +24,8 @@ export const EventExecutorService = {
         })
       } else if (eventNode.type === EVENT_TYPE.POP_UP) {
         executePopupModal(meta, eventNode, modalContext)
+      } else if (eventNode.type === EVENT_TYPE.REFRESH_ELEMENTS) {
+        executeRefreshElement(meta, eventNode)
       }
 
     });
@@ -107,5 +110,25 @@ function executePopupModal(meta, eventNode, modalContext) {
   const popupEvDetail = eventNode.data.eventInfo;
   actions.push(popupEvDetail);
   console.log(JSON.stringify(popupEvDetail) + 'Popup Modal executed at ', new Date().toLocaleTimeString())
+}
+
+async function executeRefreshElement(meta, eventNode) {
+  console.log('Executing Refresh Elements');
+  const dataConnector = new DataConnector();
+  let promises = [];
+  eventNode.data.eventInfo.data.forEach(refElementId => {
+    const element = meta.elementMap[refElementId]
+    const promise = new Promise((resolve, reject) => {
+      dataConnector.handleDatasourceChange(element);
+    })
+    promises.push(promise);
+  })
+
+  Promise.all(promises).then(r=> {
+    console.log('Success');
+  }, err=> {
+    console.log('Error');
+  })
+  //const results = await fireQueries().toPromise();
 }
 
