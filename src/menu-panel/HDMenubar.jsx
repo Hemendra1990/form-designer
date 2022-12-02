@@ -17,7 +17,7 @@ const HDMenubar = (props) => {
               },
             },
             {
-              label: "Open Report",
+              label: "Open",
               icon: "pi pi-fw pi-folder-open",
               command: () => {
                 openReport();
@@ -31,7 +31,7 @@ const HDMenubar = (props) => {
               },
             },
             {
-              label: "Save Report",
+              label: "Save",
               icon: "pi pi-fw pi-save",
               command: () => {
                 saveReport();
@@ -39,7 +39,7 @@ const HDMenubar = (props) => {
             },
             {
               label: "Configure",
-              icon: "pi pi-fw pi-save",
+              icon: "pi pi-fw pi-cog",
               command: () => {
                 configure();
               }
@@ -56,7 +56,9 @@ const HDMenubar = (props) => {
                 props.toggleEventModal();
               },
             },
-            { label: "SQL", icon: "pi pi-database" },
+            { label: "Data Source", icon: "pi pi-database" },
+            { label: "API", icon: "" },
+            { label: "SQL", icon: "" },
           ],
         },
       ];

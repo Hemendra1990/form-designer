@@ -152,7 +152,7 @@ const EventModeler = (props) => {
           value={EVENTS}
           selectionMode="single"
           paginator
-          rows={5}
+          rows={4}
           onSelectionChange={onActionSelection}
         >
           <Column field="name" header="Action Name" sortable />

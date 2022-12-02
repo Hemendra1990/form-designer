@@ -1,6 +1,7 @@
 import ConfirmationAlert from "../ConfirmationAlert";
 import MessageAlert from "../MessageAlert";
 import PopupModal from "../PopupModal";
+import RefreshElements from "../RefreshElements";
 import Script from "../Script";
 
 export const EVENTS = [
@@ -24,6 +25,11 @@ export const EVENTS = [
     eventNodeType: "popup",
     eventNodeTypeComponent: PopupModal,
   },
+  {
+    name: "Refresh Elements",
+    eventNodeType: "refreshElements",
+    eventNodeTypeComponent: RefreshElements,
+  },
 ];
 
 export const NODE_TYPES = () => {
@@ -38,5 +44,6 @@ export const EVENT_TYPE  = {
   SCRIPT: "script",
   ALERT: "alert",
   CONFIRMATION: "confirmation",
-  POP_UP: "popup"
+  POP_UP: "popup",
+  REFRESH_ELEMENTS: "refreshElements"
 };
