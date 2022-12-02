@@ -17,6 +17,14 @@ export class DataConnector {
      */
     async handleDatasourceChange(element) {
         const datasource = element.attributes.datasource;
+        let generateColumnIds = true;
+        if(element.attributes.columns) {
+            const prevClms = element.attributes.columns;
+            if(prevClms[0].datasource === datasource) { //prev columns are using the same datasource Id, so we wont be creating the new column Ids
+                DataConnector.columns = [...prevClms];
+                generateColumnIds = false;
+            }
+        }
         const responseToUse = element.attributes.responseToUse || 'response.data'; // used || 'response.data' for tesint
         console.log('Event', datasource);
         let rows = [];
@@ -25,9 +33,11 @@ export class DataConnector {
                 res = resFun(res, responseToUse);
                 if(res instanceof Array) {
                     const firstRec = res[0];
-                    DataConnector.columns = Object.keys(firstRec).map(tCol => {
-                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1), id: createElementId("column-", 7)}
-                    });
+                    if(generateColumnIds) {
+                        DataConnector.columns = Object.keys(firstRec).map(tCol => {
+                            return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1), id: createElementId("column-", 7), datasource}
+                        });
+                    }
                 }
 
                 rows = [...res];
@@ -39,9 +49,11 @@ export class DataConnector {
                 res = resFun(res, responseToUse);
                 if(res instanceof Array) {
                     const firstRec = res[0];
-                    DataConnector.columns = Object.keys(firstRec).map(tCol => {
-                        return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1), id: createElementId("column-", 7)}
-                    });
+                    if(generateColumnIds) {
+                        DataConnector.columns = Object.keys(firstRec).map(tCol => {
+                            return {field: tCol, header: tCol[0].toUpperCase() + tCol.slice(1), id: createElementId("column-", 7), datasource}
+                        });
+                    }
                 }
                 rows = [...res];
             });

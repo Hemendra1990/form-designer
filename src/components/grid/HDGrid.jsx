@@ -50,6 +50,8 @@ const HDGrid = forwardRef((props, ref) => {
   }));
 
   function setResult({ columns, rows }) {
+    const {element} = props;
+    element.attributes["columns"] = columns;
     setColumns(columns);
     setRows(rows);
   }
@@ -87,6 +89,7 @@ const HDGrid = forwardRef((props, ref) => {
 
   useEffect(() => {
     updateMeta(meta);
+    applyGridOptions();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const gridColumns = columns.map((col, i) => {
@@ -116,6 +119,9 @@ const HDGrid = forwardRef((props, ref) => {
           reorderableColumns={dataTableProps?.reorderableColumns}
           responsiveLayout="scroll"
           loading={false}
+          emptyMessage="No data to display"
+          style={{width:'100%'}}
+          columnResizeMode="expand"
         >
           {gridColumns}
         </DataTable>

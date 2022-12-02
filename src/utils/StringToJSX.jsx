@@ -54,16 +54,41 @@ let createJSX = (nodeArray, rowData) => {
             ? createJSX(Array.from(childNodes), rowData)
             : childNodes
         )
-      : nodeValue.includes("${")? replaceVal(rowData, nodeValue): nodeValue;
+      : nodeValue.includes("${")? replaceValueFun(rowData, nodeValue): nodeValue;
   });
 };
 
 const replaceVal = new Function('row', 'expr', `
   let key = expr.split('\${row.')[1];
-  key = key.replace('}','');
-  const result = row[key];
+    key = key.replace('}','');
+    const result = row[key];
   return row[key];
 `);/*eslint no-new-func: */
+
+const replaceValueFun = new Function('row', 'str', `
+
+    function replacer(row, str) {
+      if(str.indexOf('\${row.') < 0) {return str;};
+
+      let namedVarStartPos = str.indexOf("\${row.");
+      let namedVarEndPos = str.indexOf("}", namedVarStartPos);
+      
+      var variableToBeReplaced = str.substring(namedVarStartPos+"\${row.".length, namedVarEndPos);
+
+      const getActualValue = new Function('row','key', 'return row[key]');
+      const replacedValue = getActualValue(row, variableToBeReplaced);
+
+      str = str.replace('\${row.'+variableToBeReplaced+'}', replacedValue);
+      return replacer(row, str);
+    }
+
+		debugger;
+    const rVal = replacer(row, str);
+    return rVal;
+		
+		`);
+
+
 
 export const StringToJSX = ({domString, rowData}) => {
   return createJSX(Array.from(getNodes(domString)), rowData);
