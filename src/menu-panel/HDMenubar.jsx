@@ -1,10 +1,13 @@
 import { Menubar } from "primereact/menubar";
-import React, { memo } from "react"
+import React, { memo, useRef } from "react"
+import ReportConfiguration from "../configuration/ReportConfiguration";
 import { useUpdateMetaContext } from "../context/MetaContext";
 
 const HDMenubar = (props) => {
+    const reportConfigRef = useRef()
     const {clearAll, openReport, togglePlaygroundMode, saveReport, configure } = useUpdateMetaContext();
-    const end = <label style={{ fontWeight: 800 }}>Hemendra's Low Code Designer</label>;
+    const end = <p style={{ fontWeight: 800 }}>Hemendra's Low Code Designer</p>;
+
     const menuItems = [
         {
           label: "Home",
@@ -41,7 +44,7 @@ const HDMenubar = (props) => {
               label: "Configure",
               icon: "pi pi-fw pi-cog",
               command: () => {
-                configure();
+                configure(reportConfigRef);
               }
             },
           ],
@@ -64,10 +67,11 @@ const HDMenubar = (props) => {
       ];
 
     return(
-        <div className="p-fluid grid menubar" style={{ background: "#ffffff" }}>
-        <div className="col">
+        <div className="grid menubar" style={{ background: "#ffffff" }}>
+        <div className="col-12">
           <Menubar className="z-5" model={menuItems} end={end} />
         </div>
+        <ReportConfiguration ref={reportConfigRef}/>
       </div>
     )
 }

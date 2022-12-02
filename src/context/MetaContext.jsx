@@ -106,8 +106,9 @@ export const MetaContextProvider = ({ children }) => {
     console.info("Report Saved", metaJson);
   };
 
-  const configure = () => {
-    console.log('Configure the Events on Report load...');
+  const configure = (reportConfigRef) => {
+    console.log('Configure the Events on Report load...', reportConfigRef);
+    reportConfigRef.current.showReportConfigure && reportConfigRef.current.showReportConfigure();
   }
 
   const generateElementMap = (prevMeta) => {
