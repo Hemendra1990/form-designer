@@ -83,7 +83,7 @@ const CONTROL_ITEMS = () => {
         item.label = comp.label;
         item.value = comp.name;
         return item;
-    })
+    }).sort((a, b)=> a.label > b.label?1: -1);
 }
 
 export {CONTROL, CONTROL_ITEMS};
