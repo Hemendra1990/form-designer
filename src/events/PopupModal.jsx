@@ -19,7 +19,6 @@ const PopupModal = (props) => {
   }
 
   const onPositionChange = (e) => {
-    console.log('Position Change', e);
     setSelectedPosition(e.value);
     data.eventInfo.position  = selectedPosition;
   }

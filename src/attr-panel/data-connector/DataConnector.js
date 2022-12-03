@@ -26,7 +26,6 @@ export class DataConnector {
             }
         }
         const responseToUse = element.attributes.responseToUse || 'response.data'; // used || 'response.data' for tesint
-        console.log('Event', datasource);
         let rows = [];
         if(datasource === "API-1") {
             await this.productService.getProductsSmall().then((res) => {

@@ -35,7 +35,6 @@ const types = [
 ];
 
 const MessageAlert = (props) => {
-  console.log("🚀 ~ file: MessageAlert.jsx ~ line 37 ~ MessageAlert ~ props", props);
   
   const { data, isConnectable, meta, setMeta } = props;
   const [header, setHeader] = useState(data?.eventInfo?.data?.header || '');
@@ -44,8 +43,6 @@ const MessageAlert = (props) => {
   const [selectedPosition, setselectedPosition] = useState(data?.eventInfo?.data?.position || '');
   
   const onTypeChange = (e) => {
-    console.log("🚀 ~ file: MessageAlert.jsx ~ line 63 ~ onTypeChange ~ e", e)
-    console.log(e);
     setSelectedType(e.value);
   }
 

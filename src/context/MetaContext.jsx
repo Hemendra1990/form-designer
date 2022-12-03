@@ -78,7 +78,6 @@ export const MetaContextProvider = ({ children }) => {
    * toggels between Edit and Preview Screen
    */
   const togglePlaygroundMode = () => {
-    console.log("Enable preview");
     setMeta((prevValue) => {
       return {
         ...prevValue,
@@ -122,7 +121,6 @@ export const MetaContextProvider = ({ children }) => {
   }
 
   const saveReportConfiguration = (reportConfigRef) => {
-    console.log('Save Report Configuration...');
     if(reportConfigRef.current){
       const configs = reportConfigRef.current.getEventConfiguration()
       meta.configuration = {...configs};

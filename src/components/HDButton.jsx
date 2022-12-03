@@ -5,7 +5,6 @@ import { useModalContext } from '../context/ModalContext';
 import EventExecutor from '../service/EventExecutor';
 
 const HDButton = React.forwardRef( (props, ref) => {
-    console.log("🚀  ~ file: HDButton.jsx ~ line 7 ~ HDButton ~ props ", props)
     const element = props.element;
     const {actions, modals} = useModalContext();
     

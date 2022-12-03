@@ -1,5 +1,7 @@
 import { forwardRef, memo, useEffect, useImperativeHandle, useState } from "react";
 import { InputSwitch } from "primereact/inputswitch";
+import { SelectButton } from 'primereact/selectbutton';
+ 
 
 const GridOptions = forwardRef(({element}, ref) => {
   const [showGridlines, setShowGridlines] = useState(false);
@@ -22,6 +24,9 @@ const GridOptions = forwardRef(({element}, ref) => {
   const [rowSelectionOnHover, setRowSelectionOnHover] = useState(false);
   const [uniqueColumn, setUniqueColumn] = useState(false);
   const [reorderableColumns, setReorderableColumns] = useState(false);
+  const [editMode, setEditMode] = useState(null);
+
+  const editModeOptions = ['cell', 'row'];
 
   useImperativeHandle(ref, () => ({
     getOptions() {
@@ -46,6 +51,7 @@ const GridOptions = forwardRef(({element}, ref) => {
         rowSelectionOnHover,
         uniqueColumn,
         reorderableColumns,
+        editMode
       };
     },
   }));
@@ -72,6 +78,7 @@ const GridOptions = forwardRef(({element}, ref) => {
       setRowSelectionOnHover(element.attributes.config.rowSelectionOnHover || false);
       setUniqueColumn(element.attributes.config.uniqueColumn || false);
       setReorderableColumns(element.attributes.config.reorderableColumns || false);
+      setEditMode(element.attributes.config.editMode || null);
     } else {
       element.attributes.config = {};
     }
@@ -129,6 +136,10 @@ const GridOptions = forwardRef(({element}, ref) => {
               element.attributes.config["paginator"] = e.value;
             }}
           />
+        </div>
+        <div className="col-3">
+          <label className="block">Edit Mode</label>
+          <SelectButton value={editMode} options={editModeOptions} onChange={(e) => setEditMode(e.value)}></SelectButton>
         </div>
         <div className="col-3">
           <label className="block">Horizontal Scroll</label>

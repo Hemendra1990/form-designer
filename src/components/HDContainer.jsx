@@ -8,7 +8,6 @@ const HDContainer = React.forwardRef((props, ref) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const { element} = props;
-  console.log("🚀 ~ file: HDContainer.jsx ~ line 8 ~ HDContainer ~ element", element)
 
   const createChildElement = useCallback((child, index) => {
     let ref = child.ref;
@@ -37,7 +36,7 @@ const HDContainer = React.forwardRef((props, ref) => {
     event.preventDefault();
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
-    console.log('Element click', event);
+    
     meta.currentElement = child;
     updateMeta(meta);
   };

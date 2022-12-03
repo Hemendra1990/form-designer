@@ -25,14 +25,12 @@ const RefreshElements = (props) => {
   }, []);
 
   const udpateEventData = (e) => {
-    console.log(data);
     if(data.eventInfo.data) {
         data.eventInfo.data = [ ...e.value]; 
     } else {
         data.eventInfo.data = [];
         data.eventInfo.data = [...e.value];
     }
-    console.log(data);
   }
 
   return (

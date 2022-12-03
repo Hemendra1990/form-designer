@@ -12,8 +12,6 @@ const Form = () => {
             prevValue[event.target.name] = event.target.value;
             return prevValue;
         })
-
-        console.log(form);
     }
 
 

@@ -8,12 +8,14 @@ import React, {
 } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import {InputNumber} from "primereact/inputnumber";
 import {
   useMetaContext,
   useUpdateMetaContext,
 } from "../../context/MetaContext";
 import { StringToJSX } from "../../utils/StringToJSX";
 import { evaluateCellTemplate } from "../../utils/Utils";
+import { Dropdown } from "primereact/dropdown";
 
 const MyTestFun = new Function(
   "row",
@@ -59,7 +61,6 @@ const HDGrid = forwardRef((props, ref) => {
   }
 
   function applyGridOptions() {
-    //console.log(gridRef);;
     console.log("Applying Grid Options...", props.element.attributes.config);
     const gridConfig = props.element.attributes.config;
     setDataTableProps(gridConfig);
@@ -72,6 +73,7 @@ const HDGrid = forwardRef((props, ref) => {
       Object.keys(gridConfig).forEach((configClmId) => {
         let column = columns.find((clm) => clm.id === configClmId);
         if (column) {
+          //1. Body for Cell template
           column.body = (rowData) => {
             let cellTempalteString =
               gridConfig[configClmId]["cell-template"].template;
@@ -82,6 +84,12 @@ const HDGrid = forwardRef((props, ref) => {
               </>
             );
           };
+
+          //2. If Cell is Editable
+          if(gridConfig[configClmId].editable) {
+            column.editor = getEditor[gridConfig[configClmId].editableType];
+          }
+
         }
       });
       setColumns(columns); //Update columns so that the grid will re-render to see the result
@@ -89,12 +97,50 @@ const HDGrid = forwardRef((props, ref) => {
     }
   }
 
+  const TextEditor = (options) => {
+    console.log({options, rows})
+    return (<b>Text Editor</b>)
+  }
+  const DropdownEditor = (options) => {
+    console.log({options, rows})
+    return (
+      <Dropdown value={options.value} options={rows} optionLabel="name" onChange={(e) => options.editorCallback(e.value)}></Dropdown>
+    )
+  }
+  const MultiselectEditor = (options) => {
+    console.log({options, rows})
+    return (<b>MultiselectEditor Editor</b>)
+  }
+  const CheckboxEditor = (options) => {
+    console.log({options, rows})
+    return (<b>CheckboxEditor Editor</b>)
+  }
+  const DatepickerEditor = (options) => {
+    console.log({options, rows})
+    return (<b>DatepickerEditor Editor</b>)
+  }
+
+  /* const editableFieldTypes = ['None', 'Text', 'Dropdown', 'Multiselect', 'Checkbox', 'Datepicker']; */
+  const getEditor = {
+    "None": null,
+    "Text": TextEditor,
+    "Dropdown": DropdownEditor,
+    "Multiselect": MultiselectEditor,
+    "Checkbox": CheckboxEditor,
+    "Datepicker": DatepickerEditor
+  }
+
   useEffect(() => {
     updateMeta(meta);
     applyGridOptions();
   }, [columns]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const numberEditor = (options) => {
+    return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} mode="currency" currency="USD" locale="en-US" />
+  }
+
   const gridColumns = columns.map((col, i) => {
+    console.log('%c', 'color:red', col);
     return (
       <Column
         key={col.id}
@@ -102,6 +148,8 @@ const HDGrid = forwardRef((props, ref) => {
         header={col.header}
         ref={gridColRef}
         body={col.body}
+        editor={col.editor}
+        onCellEditComplete={()=> {}}
       />
     );
   });
@@ -124,6 +172,7 @@ const HDGrid = forwardRef((props, ref) => {
           emptyMessage="No data to display"
           style={{width:'100%'}}
           columnResizeMode="expand"
+          editMode={dataTableProps?.editMode}
         >
           {gridColumns}
         </DataTable>

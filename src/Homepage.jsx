@@ -39,9 +39,7 @@ const Homepage = (props) => {
   };
 
   const openModal = () => {
-    console.log({actions, modals});
     actions.push(`Hello Modal Calling from Homepage Button ${new Date().toLocaleTimeString()}`, (poppedModal) => {
-        console.log(poppedModal);
     });
       //push('Hello Modal Calling from Homepage Button');
   }
