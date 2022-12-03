@@ -13,7 +13,7 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
   useEffect(() => {
     if (element.attributes && element.attributes.config) {
       const clmTemplate = element.attributes.config[selectedColumn.id];
-      if (clmTemplate) {
+      if (clmTemplate && clmTemplate["cell-template"]) {
         const cellTemplate = clmTemplate["cell-template"];
         setCellCustomisation(cellTemplate.enabled);
         setCellTemplate(cellTemplate.template);
@@ -49,7 +49,7 @@ const GridCellTemplate = ({ meta, element, selectedColumn }) => {
         />
         <label htmlFor="binary">
           Enable Cell Customisation for{" "}
-          <i>{`${selectedColumn.header}(${selectedColumn.id})`}</i>
+          <i style={{color: '#822fdb'}}>{`${selectedColumn.header}(Id: '${selectedColumn.id}', field : '${selectedColumn.field}' )`}</i>
         </label>
       </div>
       <InputTextarea

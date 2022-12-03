@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
@@ -32,6 +32,12 @@ const GridEditAttributes = ({ meta, currentElement, hideModal, columns }) => {
     }
     
   }
+
+  useEffect(() => {
+    if(selectedColumn && currentElement.attributes.config[selectedColumn.id]) {
+      setSelectedEditableType(currentElement.attributes.config[selectedColumn.id].editableType)
+    }
+  }, [selectedColumn])
 
   const renderFooter = (name) => {
     return (

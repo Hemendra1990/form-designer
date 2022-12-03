@@ -74,15 +74,19 @@ const HDGrid = forwardRef((props, ref) => {
         let column = columns.find((clm) => clm.id === configClmId);
         if (column) {
           //1. Body for Cell template
-          column.body = (rowData) => {
-            let cellTempalteString =
+          if(gridConfig[configClmId]["cell-template"]) {
+            column.body = (rowData) => {
+            
+              let cellTempalteString =
               gridConfig[configClmId]["cell-template"].template;
-            let domStr = evaluateCellTemplate(rowData, cellTempalteString);
-            return (
-              <>
-                <StringToJSX rowData={rowData} domString={domStr} />
-              </>
-            );
+              let domStr = evaluateCellTemplate(rowData, cellTempalteString);
+              return (
+                <>
+                  <StringToJSX rowData={rowData} domString={domStr} />
+                </>
+              );
+            }
+            
           };
 
           //2. If Cell is Editable
