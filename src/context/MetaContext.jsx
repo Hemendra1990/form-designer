@@ -1,5 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { existingReport } from "../tests/report";
+import { Toast } from 'primereact/toast';
+ 
 
 import getComponent, { jsonStringifyIgnoredList } from "../constants/HemendraConstants";
 
@@ -34,6 +36,7 @@ export const MetaContextProvider = ({ children }) => {
     editMode: true,
   };
   const [meta, setMeta] = useState(sharedMeta);
+  const toastRef = useRef();
 
   /**
    * Updates a perticular object in the meta
@@ -100,15 +103,29 @@ export const MetaContextProvider = ({ children }) => {
    * Save the current report
    */
   const saveReport = () => {
-    const metaJson = JSON.stringify(meta, (key, value) => {
-      return jsonStringifyIgnoredList.includes(key) ? undefined : value;
-    });
-    console.info("Report Saved", metaJson);
+    if(meta.elements && meta.elements.length > 0) {
+      const metaJson = JSON.stringify(meta, (key, value) => {
+        return jsonStringifyIgnoredList.includes(key) ? undefined : value;
+      });
+      console.info("Report Saved", metaJson);
+    } else {
+      toastRef.current && 
+      toastRef.current.show({severity: 'error', summary: 'Can\'t Save ', detail: 'Report with no elements can\'t be saved.'});
+       
+    }
   };
 
   const configure = (reportConfigRef) => {
-    console.log('Configure the Events on Report load...', reportConfigRef);
     reportConfigRef.current.showReportConfigure && reportConfigRef.current.showReportConfigure();
+  }
+
+  const saveReportConfiguration = (reportConfigRef) => {
+    console.log('Save Report Configuration...');
+    if(reportConfigRef.current){
+      const configs = reportConfigRef.current.getEventConfiguration()
+      meta.configuration = {...configs};
+      updateMeta();
+    }
   }
 
   const generateElementMap = (prevMeta) => {
@@ -140,10 +157,13 @@ export const MetaContextProvider = ({ children }) => {
   
 
   return (
-    <MetaContext.Provider value={meta}>
-      <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport, configure }}>
-        {children}
-      </UpdateMetaContext.Provider>
-    </MetaContext.Provider>
+    <>
+      <MetaContext.Provider value={meta}>
+        <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport, configure, saveReportConfiguration }}>
+          {children}
+        </UpdateMetaContext.Provider>
+      </MetaContext.Provider>
+      <Toast ref={toastRef} position="top-right" />
+    </>
   );
 };
