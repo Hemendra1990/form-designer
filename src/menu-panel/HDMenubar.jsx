@@ -1,11 +1,14 @@
 import { Menubar } from "primereact/menubar";
-import React, { memo, useRef } from "react"
+import React, { memo, useRef, useState } from "react"
+import ApiModeler from "../api-modeler/ApiModeler";
 import ReportConfiguration from "../configuration/ReportConfiguration";
 import { useUpdateMetaContext } from "../context/MetaContext";
 
 const HDMenubar = (props) => {
     const reportConfigRef = useRef()
-    const {clearAll, openReport, togglePlaygroundMode, saveReport, configure } = useUpdateMetaContext();
+    const apiConfigRef = useRef()
+    const [openReportConfiguration, setOpenReportConfiguration] = useState(false);
+    const {clearAll, openReport, togglePlaygroundMode, saveReport, configure, configureApi } = useUpdateMetaContext();
     const end = <p style={{ fontWeight: 800 }}>Hemendra's Low Code Designer</p>;
 
     const menuItems = [
@@ -44,6 +47,7 @@ const HDMenubar = (props) => {
               label: "Configure",
               icon: "pi pi-fw pi-cog",
               command: () => {
+                setOpenReportConfiguration(true);
                 configure(reportConfigRef);
               }
             },
@@ -60,18 +64,24 @@ const HDMenubar = (props) => {
               },
             },
             { label: "Data Source", icon: "pi pi-database" },
-            { label: "API", icon: "" },
+            { 
+              label: "API", icon: "", command: ()=> {
+                console.log('api..');
+                configureApi(apiConfigRef);
+              } 
+            },
             { label: "SQL", icon: "" },
           ],
         },
       ];
 
     return(
-        <div className="grid menubar" style={{ background: "#ffffff" }}>
+        <div className="grid menubar" style={{ background: "#fff" }}>
         <div className="col-12">
           <Menubar className="z-5" model={menuItems} end={end} />
+          <ReportConfiguration ref={reportConfigRef}/>
+          <ApiModeler ref={apiConfigRef}/>
         </div>
-        <ReportConfiguration ref={reportConfigRef}/>
       </div>
     )
 }

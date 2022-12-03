@@ -4,6 +4,7 @@ import { Toast } from 'primereact/toast';
  
 
 import getComponent, { jsonStringifyIgnoredList } from "../constants/HemendraConstants";
+import ApiModeler from "../api-modeler/ApiModeler";
 
 /**
  * Contexts created to share the data between the child components without usign the props
@@ -37,6 +38,7 @@ export const MetaContextProvider = ({ children }) => {
   };
   const [meta, setMeta] = useState(sharedMeta);
   const toastRef = useRef();
+  const api = useRef();
 
   /**
    * Updates a perticular object in the meta
@@ -128,6 +130,10 @@ export const MetaContextProvider = ({ children }) => {
     }
   }
 
+  const configureApi = (apiConfigureRef) => {
+    apiConfigureRef.current && apiConfigureRef.current.openApiConfigModeler();
+  }
+
   const generateElementMap = (prevMeta) => {
     const elementMap = {};
     createElementMap(prevMeta.elements, elementMap);
@@ -159,7 +165,7 @@ export const MetaContextProvider = ({ children }) => {
   return (
     <>
       <MetaContext.Provider value={meta}>
-        <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport, configure, saveReportConfiguration }}>
+        <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport, configure, saveReportConfiguration, configureApi }}>
           {children}
         </UpdateMetaContext.Provider>
       </MetaContext.Provider>

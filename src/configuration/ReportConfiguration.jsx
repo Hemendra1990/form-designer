@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
-import { UpdateMetaContext, useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { Button } from "primereact/button";
 
 const ReportConfiguration = forwardRef((props, ref) => {
