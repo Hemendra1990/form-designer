@@ -42,18 +42,18 @@ function executeConfirmation(meta, eventNode, confirmDialogContext) {
   return new Promise((resolve, reject) => {
 
     const ConfirmationDialogHideCallback = () => {
-      console.log('On Hide Confirmatino Callback');
+      
     }
     
     const ConfirmationDialogAcceptCallback = () => {
-      console.log('%c on Accept Confirmatin Callback', 'background: #222; color: green');
+      
       //event.success
       //executeNext(eventNode.success)
       resolve();
     }
     
     const ConfirmationDialogRejectCallback = () => {
-      console.log('%c on Reject Confirmatin Callback', 'background: #222; color: red');
+      
       //event.failure
       //executeNext(eventNode.failure)
       reject();
@@ -68,7 +68,7 @@ function executeConfirmation(meta, eventNode, confirmDialogContext) {
 function executeMessageAlert(meta, eventNode) {
     const { eventInfo } = eventNode.data;
     const { header, message, position, type} = eventInfo.data
-    console.log("🚀 ~ file: EventExecutorService.js ~ line 19 ~ executeMessageAlert ~ header, message, position, type", header, message, position, type)
+    
   if (meta.toastRef) {
     setTimeout(()=> {
       const toastElem = React.createElement(Toast, {ref: React.createRef()});
@@ -109,11 +109,11 @@ function executePopupModal(meta, eventNode, modalContext) {
   const { actions } = modalContext;
   const popupEvDetail = eventNode.data.eventInfo;
   actions.push(popupEvDetail);
-  console.log(JSON.stringify(popupEvDetail) + 'Popup Modal executed at ', new Date().toLocaleTimeString())
+  
 }
 
 async function executeRefreshElement(meta, eventNode) {
-  console.log('Executing Refresh Elements');
+  
   const dataConnector = new DataConnector();
   let promises = [];
   eventNode.data.eventInfo.data.forEach(refElementId => {
@@ -125,9 +125,9 @@ async function executeRefreshElement(meta, eventNode) {
   })
 
   Promise.all(promises).then(r=> {
-    console.log('Success');
+    
   }, err=> {
-    console.log('Error');
+    
   })
   //const results = await fireQueries().toPromise();
 }

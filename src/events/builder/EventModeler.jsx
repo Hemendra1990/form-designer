@@ -103,11 +103,11 @@ const EventModeler = (props) => {
   };
 
   const updateEvent = (eventInfo, nodeId) => {
-    console.log(eventInfo);
+    
   }
 
   const saveEvent = (eventData) => {
-    console.log(nodes);
+    
     const event = {
       id: eventId,
       name: eventName,
@@ -127,7 +127,7 @@ const EventModeler = (props) => {
 
     meta.events = [...eventBuckets];
     updateMeta(meta);
-    console.log('Saving events into meta', meta);
+    
     props.hide();
   }
 
@@ -142,7 +142,7 @@ const EventModeler = (props) => {
 
   useEffect(()=> {
     setEventId(`event-${createElementId()}`);
-    console.log(meta.events);
+    
   }, []);
 
   return (

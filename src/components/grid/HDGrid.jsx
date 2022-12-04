@@ -8,14 +8,14 @@ import React, {
 } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import {InputNumber} from "primereact/inputnumber";
 import {
   useMetaContext,
   useUpdateMetaContext,
 } from "../../context/MetaContext";
 import { StringToJSX } from "../../utils/StringToJSX";
 import { evaluateCellTemplate } from "../../utils/Utils";
-import { Dropdown } from "primereact/dropdown";
+import ColumnTextEditor from "./editors/ColumnTextEditor";
+import ColumnDropdownEditor from "./editors/ColumnDropdownEditor";
 
 const MyTestFun = new Function(
   "row",
@@ -46,7 +46,7 @@ const HDGrid = forwardRef((props, ref) => {
 
   const [dataTableProps, setDataTableProps] = useState({});
 
-  const [refreshGrid, setRefreshGrid] = useState(null);//tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
+  const [refreshgrid, setRefreshgrid] = useState("");//tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
 
   useImperativeHandle(ref, () => ({
     setResult,
@@ -61,7 +61,7 @@ const HDGrid = forwardRef((props, ref) => {
   }
 
   function applyGridOptions() {
-    console.log("Applying Grid Options...", props.element.attributes.config);
+    
     const gridConfig = props.element.attributes.config;
     setDataTableProps(gridConfig);
 
@@ -91,36 +91,35 @@ const HDGrid = forwardRef((props, ref) => {
 
           //2. If Cell is Editable
           if(gridConfig[configClmId].editable) {
-            column.editor = getEditor[gridConfig[configClmId].editableType];
+            //column.editor = getEditor[gridConfig[configClmId].editableType];
+            column.editor = (options) => {
+              const editor = getEditor[gridConfig[configClmId].editableType];
+              return editor(options, configClmId); 
+            }
           }
 
         }
       });
       setColumns(columns); //Update columns so that the grid will re-render to see the result
-      setRefreshGrid(Math.random())
+      setRefreshgrid(Math.random())
     }
   }
 
-  const TextEditor = (options) => {
-    console.log({options, rows})
-    return (<b>Text Editor</b>)
+  const TextEditor = (options, configClmId) => {
+    return (<ColumnTextEditor options={options} columnId={configClmId}></ColumnTextEditor>)
   }
-  const DropdownEditor = (options) => {
-    console.log({options, rows})
-    return (
-      <Dropdown value={options.value} options={rows} optionLabel="name" onChange={(e) => options.editorCallback(e.value)}></Dropdown>
-    )
+  const DropdownEditor = (options, configClmId) => {
+    return <ColumnDropdownEditor options={options} rows= {rows} element={props.element} columnId={configClmId} />
   }
-  const MultiselectEditor = (options) => {
-    console.log({options, rows})
+  const MultiselectEditor = (options, configClmId) => {
     return (<b>MultiselectEditor Editor</b>)
   }
-  const CheckboxEditor = (options) => {
-    console.log({options, rows})
+  const CheckboxEditor = (options, configClmId) => {
+    
     return (<b>CheckboxEditor Editor</b>)
   }
-  const DatepickerEditor = (options) => {
-    console.log({options, rows})
+  const DatepickerEditor = (options, configClmId) => {
+    
     return (<b>DatepickerEditor Editor</b>)
   }
 
@@ -139,12 +138,16 @@ const HDGrid = forwardRef((props, ref) => {
     applyGridOptions();
   }, [columns]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const numberEditor = (options) => {
-    return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} mode="currency" currency="USD" locale="en-US" />
-  }
+  const onCellEditComplete = (e) => {
+    let { rowData, newValue, field, originalEvent: event } = e;
+    
+    if (newValue.length > 0)
+      rowData[field] = newValue;
+    else
+      event.preventDefault();
+}
 
   const gridColumns = columns.map((col, i) => {
-    console.log('%c', 'color:red', col);
     return (
       <Column
         key={col.id}
@@ -153,13 +156,13 @@ const HDGrid = forwardRef((props, ref) => {
         ref={gridColRef}
         body={col.body}
         editor={col.editor}
-        onCellEditComplete={()=> {}}
+        onCellEditComplete={onCellEditComplete}
       />
     );
   });
 
   return (
-    <div className="col-12" refreshGrid>
+    <div className="col-12" refreshgrid={refreshgrid.toString()}>
       <div className="card">
         <DataTable
           ref={gridRef}

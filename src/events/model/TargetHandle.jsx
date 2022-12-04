@@ -7,7 +7,7 @@ const TargetHandle = ({ data, isConnectable }) => {
       type="target"
       position="left"
       style={{ background: "#a6ba0d", height:'10px', width: '10px' }}
-      onConnect={(params) => console.log("handle onConnect", params)}
+      onConnect={(params) => {}}
       isConnectable={isConnectable}
     />
   );

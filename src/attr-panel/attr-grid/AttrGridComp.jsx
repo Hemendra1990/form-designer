@@ -18,7 +18,6 @@ const AttrGrid = (props) => {
   };
 
   const applyGridOptions = () => {
-    console.log('Inside Attr grid ...hiding Modal');
     setGridModal(false);
     element.ref.current.applyGridOptions && element.ref.current.applyGridOptions(); //calls HDGrid.applyGridOptions()
   }

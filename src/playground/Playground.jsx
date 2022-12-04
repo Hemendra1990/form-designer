@@ -10,7 +10,7 @@ const Playground = (props) => {
   const { updateMeta } = useUpdateMetaContext();
   const [changePlaygroundState, setChangePlaygroundState] = useState(true); //This is required to reload the controls 
 
-  console.log("Playground Main Component", props);
+  
   const toastRef = useRef(null);
   useEffect(() => {
     meta.toastRef = toastRef;
@@ -26,7 +26,7 @@ const Playground = (props) => {
     event.preventDefault();
     event.stopPropagation();
     meta.currentElement = element;
-    console.log("🚀 ~ file: Playground.jsx ~ line 29 ~ updateCurrentElement ~ currentElement", meta.currentElement);
+    
     updateMeta(meta);
   };
 
@@ -112,7 +112,7 @@ const Playground = (props) => {
     updateMeta(meta);
 
     function reorderItemFromContainerToSiblingContainer() {
-      console.log({ source, destination });
+      
       const srcContainerChildren = meta.elementMap[source.droppableId].attributes.children;
       const [containerChild] = srcContainerChildren.splice(source.index, 1);
       //Add to the destination container
@@ -121,7 +121,7 @@ const Playground = (props) => {
     }
 
     function reorderItemFromContainerToPlayground() {
-      console.log({ source, destination });
+      
       //Splice from container children
       let srcContainerId = source.droppableId;
       let containerChildren = meta.elementMap[srcContainerId].attributes.children;

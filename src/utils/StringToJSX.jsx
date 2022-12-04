@@ -7,7 +7,7 @@ const getReactComps = {
 }
 
 const executeEvent = (eventName, row) => {
-  console.log('execute event on grid item click...');
+  
 }
 
 let getNodes = (str) =>
@@ -34,8 +34,8 @@ let createJSX = (nodeArray, rowData) => {
             attributeObj["onClick"] = (e) => {
               debugger;
               const fun = new Function('event', 'row', 'nodeVal', 'attributeObj', `
-                              debugger;
-                              console.log(nodeVal);
+                              //debugger;
+                              
                               let t = new Function('row', nodeVal);
                               return t(row)`);
               fun(e, attributeObj.rowData, attribute.nodeValue, attributeObj);
@@ -82,7 +82,7 @@ const replaceValueFun = new Function('row', 'str', `
       return replacer(row, str);
     }
 
-		debugger;
+		//debugger;
     const rVal = replacer(row, str);
     return rVal;
 		

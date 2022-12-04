@@ -1,43 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Dropdown } from "primereact/dropdown";
 import { TabView, TabPanel } from "primereact/tabview";
 import { ListBox } from "primereact/listbox";
 import GridCellTemplate from "./GridCellTemplate";
 import GridOptions from "./GridOptions";
+import GridColumnEditable from "./GridColumnEditable";
 
 const GridEditAttributes = ({ meta, currentElement, hideModal, columns }) => {
   const [showGridOptionsModal, setShowGridOptionsModal] = useState(true);
   const [activeIndex1, setActiveIndex1] = useState(0);
   const [selectedColumn, setSelectedColumn] = useState(null);
-  const [selectedEditableType, setSelectedEditableType] = useState(null);
-
-  const editableFieldTypes = ['None', 'Text', 'Dropdown', 'Multiselect', 'Checkbox', 'Datepicker'];
 
   const gridOptionsRef = useRef();
 
   const applyGridOptions = () => {
-    console.log("Calling Attr Grid...", gridOptionsRef);
+    
     hideModal();
   };
-
-  function updateElement(e) {
-    setSelectedEditableType(e.value); 
-    if(currentElement.attributes) {
-      currentElement.attributes.config = currentElement.attributes.config || {};
-      currentElement.attributes.config[selectedColumn.id] = currentElement.attributes.config[selectedColumn.id] || {}
-      currentElement.attributes.config[selectedColumn.id].editable = true;
-      currentElement.attributes.config[selectedColumn.id].editableType = e.value;
-    }
-    
-  }
-
-  useEffect(() => {
-    if(selectedColumn && currentElement.attributes.config[selectedColumn.id]) {
-      setSelectedEditableType(currentElement.attributes.config[selectedColumn.id].editableType)
-    }
-  }, [selectedColumn])
 
   const renderFooter = (name) => {
     return (
@@ -78,7 +58,8 @@ const GridEditAttributes = ({ meta, currentElement, hideModal, columns }) => {
           ></GridCellTemplate>
         </TabPanel>
         <TabPanel header="Editable">
-          <Dropdown value={selectedEditableType} options={editableFieldTypes} onChange={(e)=> {updateElement(e)}}></Dropdown>
+          <GridColumnEditable element={currentElement} selectedColumn={selectedColumn} columns={columns} />
+          {/* `<Dropdown value={selectedEditableType} options={editableFieldTypes} onChange={(e)=> {updateElement(e)}}></Dropdown>` */}
         </TabPanel>
       </TabView>
     </div>

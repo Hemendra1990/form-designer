@@ -20,7 +20,7 @@ export const ModalContextProvider = ({ children }) => {
     push(content, onHideCallback) {// => means push: () => {}
       let modal;
       if(typeof(content) === 'object') {
-        console.log("🚀 ~ file: ModalContext.jsx ~ line 23 ~ push ~ content", content)
+        
         modal = (
           <Dialog visible={true} position ={content.position} key={uniqueModalId()} header="Modal Header" onHide={() => this.onHide(onHideCallback) }> {/*TODO  What if I want to handle the event on Modal close */}
             <p>{content.popupText}</p>

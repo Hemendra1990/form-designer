@@ -40,7 +40,7 @@ const startExecution = function (
           break;
         }
       }
-      //console.log("%c NextNode", "color: white, background: #000", nextNode);
+      //
 
       let nextNodeId = undefined;
       if (nextNode && nextNode.target) {
@@ -62,7 +62,7 @@ const startExecution = function (
     },
     (error) => {
       //'No'
-      //console.log("%c Inside No failure", "background: #222, color: red");
+      //
       const adjNodes = adjList[nodeId];
       if (!adjNodes) {
         return;
@@ -77,7 +77,7 @@ const startExecution = function (
           break;
         }
       }
-      //console.log("%c NextNode", "color: white, background: #000", nextNode);
+      //
 
       let nextNodeId = undefined;
       if (nextNode && nextNode.target) {
@@ -119,7 +119,7 @@ class EventExecutor {
     //get the event detail from the eventId, we will do it later
     //Initially I am trying with Script Event
     if (meta.editMode) {
-      console.log(`Event cannot be executed on Edit mode.`);
+      
       return;
     }
     const eventToExecute = meta.events.find((ev) => ev.id === eventId);

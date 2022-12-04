@@ -66,7 +66,7 @@ const HDMenubar = (props) => {
             { label: "Data Source", icon: "pi pi-database" },
             { 
               label: "API", icon: "", command: ()=> {
-                console.log('api..');
+                
                 configureApi(apiConfigRef);
               } 
             },

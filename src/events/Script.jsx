@@ -14,7 +14,7 @@ const Script = (props) => {
         data.eventInfo.scriptText  = scriptText;
     }
     function handleConnect(params) {
-        console.log({params, data, meta});
+        
     }
     return(
         <Card>

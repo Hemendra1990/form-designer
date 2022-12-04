@@ -36,7 +36,7 @@ const PopupModal = (props) => {
         type="source"
         position="right"
         style={{ background: "#555", height: "10px", width: "10px" }}
-        onConnect={(params) => console.log("handle onConnect", params)}
+        onConnect={(params) => {}}
         isConnectable={true}
       />
     </Card>
