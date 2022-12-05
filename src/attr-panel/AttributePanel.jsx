@@ -8,6 +8,7 @@ import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
 import AttrButtonComp from "./attr-button/AttrButtonComp";
 import { UserService } from '../components/grid/UserService'
 import AttrGrid from './attr-grid/AttrGridComp';
+import AttrInput from './attr-input/AttrInput';
 
 
 
@@ -73,23 +74,7 @@ const AttributePanel = (props) => {
             if(meta.currentElement.type === CONTROL.INPUT) {
                 return (
                   <>
-                    <div className="field col-12">
-                        <label htmlFor="controlId">Control ID</label>
-                        <InputText name="placeholder"  value={meta.currentElement.id} disabled />
-                    </div>
-                    <div className="field col-12">
-                      <label htmlFor="maxLen">Max Length</label>
-                        <InputNumber
-                        name="maxLength"
-                        inputId="maxLen"
-                        onChange={handleAttributeChange}
-                        value={currAttribute?.maxLength}
-                        />
-                    </div>
-                    <div className="field col-12">
-                      <label htmlFor="maxLen">Placeholder {currAttribute?.placeholder} </label>
-                      <InputText name="placeholder" placeholder="Enter Placeholder" onChange={handleAttributeChange} value={currAttribute?.placeholder || ""}/>
-                    </div>
+                    <AttrInput meta={meta} handleAttributeChange={handleAttributeChange} eventOptions={availableEvents}/>
                     {classDiv}
                   </>
                 );
