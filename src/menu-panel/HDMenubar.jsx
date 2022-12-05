@@ -76,7 +76,7 @@ const HDMenubar = (props) => {
       ];
 
     return(
-        <div className="grid menubar" style={{ background: "#fff" }}>
+        <div className="grid">
         <div className="col-12">
           <Menubar className="z-5" model={menuItems} end={end} />
           <ReportConfiguration ref={reportConfigRef}/>

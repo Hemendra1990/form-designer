@@ -1,7 +1,7 @@
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductService } from '../components/grid/ProductService';
 import { CONTROL } from "../constants/Elements";
 import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
@@ -9,6 +9,8 @@ import AttrButtonComp from "./attr-button/AttrButtonComp";
 import { UserService } from '../components/grid/UserService'
 import AttrGrid from './attr-grid/AttrGridComp';
 import AttrInput from './attr-input/AttrInput';
+import { Sidebar } from 'primereact/sidebar';
+ 
 
 
 
@@ -18,6 +20,7 @@ const AttributePanel = (props) => {
     const userService = new UserService();
     const meta = useMetaContext();
     const { updateMeta } = useUpdateMetaContext();
+    const [showSidebar, setShowSidebar] = useState(false);
 
     const [classNameValue, setClassNameValue] = useState(meta.currentElement?.attributes?.className|| "");
     
@@ -33,6 +36,12 @@ const AttributePanel = (props) => {
         setClassNameValue(e.target.value);
         handleAttributeChange(e);
     }
+
+    useEffect(()=> {
+        if(meta.currentElement) {
+            setShowSidebar(true);
+        }
+    }, [meta.currentElement])
 
     const availableEvents = meta?.events?.map(ev=> {
         return {label: ev.name, value: ev.id}
@@ -164,9 +173,9 @@ const AttributePanel = (props) => {
     return (
         <>
             <div className="p-fluid grid">
-                {
-                    renderAttributes()
-                }
+            <Sidebar position="right" visible={showSidebar} onHide={() => { setShowSidebar(false)}}>
+                    {renderAttributes()}
+                </Sidebar>
             </div>
         </>
     )

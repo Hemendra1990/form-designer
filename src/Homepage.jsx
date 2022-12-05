@@ -22,8 +22,8 @@ const Homepage = (props) => {
   //Initialize the EvenExecutor and pass the modalContext
   setTimeout(() => {
     new EventExecutor(modalContext, confirmDialogContext);
-  },0)
-  
+  }, 0);
+
   const [displayBasic, setDisplayBasic] = useState(false);
   const onHide = () => {
     setDisplayBasic(!displayBasic);
@@ -39,10 +39,12 @@ const Homepage = (props) => {
   };
 
   const openModal = () => {
-    actions.push(`Hello Modal Calling from Homepage Button ${new Date().toLocaleTimeString()}`, (poppedModal) => {
-    });
-      //push('Hello Modal Calling from Homepage Button');
-  }
+    actions.push(
+      `Hello Modal Calling from Homepage Button ${new Date().toLocaleTimeString()}`,
+      (poppedModal) => {}
+    );
+    //push('Hello Modal Calling from Homepage Button');
+  };
 
   return (
     <>
@@ -57,26 +59,26 @@ const Homepage = (props) => {
         <></>
       )}
       <div
-        className="p-fluid grid"
+        className="grid p-fluid"
         style={{ height: "90vh", width: "100vw", marginTop: "10px" }}
       >
         <div
           className={`${
-            meta.editMode ? "col-10 playground" : "col-12 playground-preview m-20"
+            meta.editMode
+              ? "col-12 playground"
+              : "col-12 playground-preview m-20"
           }`}
         >
-          <div>
-            <Playground />
-          </div>
+          <Playground />
         </div>
-        {meta.editMode ? (
-          <div className="col-2 attribute-panel">
-            <AttributePanel />
-          </div>
-        ) : (
-          <></>
-        )}
       </div>
+      {meta.editMode ? (
+        <div className="attribute-panel">
+          <AttributePanel />
+        </div>
+      ) : (
+        <></>
+      )}
       <Dialog
         header="Event Modeler"
         visible={displayBasic}
