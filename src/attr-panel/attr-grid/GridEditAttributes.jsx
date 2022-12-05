@@ -7,10 +7,17 @@ import GridCellTemplate from "./GridCellTemplate";
 import GridOptions from "./GridOptions";
 import GridColumnEditable from "./GridColumnEditable";
 
-const GridEditAttributes = ({ meta, currentElement, hideModal, columns }) => {
+const GridEditAttributes = ({ meta, currentElement, hideModal }) => {
   const [showGridOptionsModal, setShowGridOptionsModal] = useState(true);
   const [activeIndex1, setActiveIndex1] = useState(0);
   const [selectedColumn, setSelectedColumn] = useState(null);
+  const [columns, setColumns] = useState([]);
+
+  console.log(currentElement);
+
+  useEffect(()=> {
+    setColumns(currentElement?.attributes?.columns || []);
+  }, [])
 
   const gridOptionsRef = useRef();
 
@@ -80,11 +87,13 @@ const GridEditAttributes = ({ meta, currentElement, hideModal, columns }) => {
               <div className="grid">
                 <div className="col-3">
                   <ListBox
+                    className="mr-2"
+                    filter={true}
                     value={selectedColumn}
                     options={columns}
                     onChange={(e) => setSelectedColumn(e.value)}
                     optionLabel="header"
-                    style={{ width: "15rem" }}
+                    style={{ width: "13rem" }}
                   />
                 </div>
                 {selectedColumn && showColumnOptionTabs}
