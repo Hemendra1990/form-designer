@@ -18,40 +18,44 @@ const AttrButton = (props) => {
   return (
     <>
       <div className="field col-12">
-        <label htmlFor="controlId">Control ID</label>
+        <label htmlFor="controlId" className="block">Control ID</label>
         <InputText
+          style={{width:'100%'}}
           name="placeholder"
           value={meta.currentElement.id}
           disabled
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="eventId">Event ID</label>
+        <label htmlFor="eventId" className="block">Event ID</label>
         <Dropdown
           name="eventId"
           value={meta.currentElement?.attributes?.eventId}
           options={eventOptions || []}
           onChange={handleAttributeChange}
           placeholder="Select a Event"
+          style={{width:'100%'}}
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="label">Label</label>
+        <label htmlFor="label" className="block">Label</label>
         <InputText
           name="label"
           placeholder="Enter Button Label"
           onChange={handleAttributeChange}
           value={meta.currentElement?.attributes?.label}
+          style={{width:'100%'}}
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="label">Type</label>
+        <label htmlFor="label" className="block">Type</label>
         <Dropdown
           name="type"
           value={meta.currentElement?.attributes?.type}
           options={BUTTON_TYPES}
           onChange={handleAttributeChange}
           placeholder="Select type"
+          style={{width:'100%'}}
         />
       </div>
     </>

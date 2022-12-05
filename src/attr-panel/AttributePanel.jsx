@@ -59,11 +59,12 @@ const AttributePanel = (props) => {
 
             const classDiv = (
               <div className="field col-12">
-                <label htmlFor="class">Class</label>
+                <label htmlFor="class" className='block'>Class</label>
                 <InputText
                     name="className"
                     placeholder="col-12 md:col-6 lg:col-3"
                     value={currAttribute?.className || ""}
+                    style={{width:'100%'}}
                     onChange={updateClass}
                 />
               </div>
@@ -173,7 +174,7 @@ const AttributePanel = (props) => {
     return (
         <>
             <div className="p-fluid grid">
-            <Sidebar position="right" visible={showSidebar} onHide={() => { setShowSidebar(false)}}>
+            <Sidebar dismissable={false} modal={false} position="right" visible={showSidebar} onHide={() => { setShowSidebar(false)}}>
                     {renderAttributes()}
                 </Sidebar>
             </div>

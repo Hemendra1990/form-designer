@@ -3,11 +3,11 @@
     top: 50%;
     left: 10%;
     width: 220px;
-    background: #f8f9fa;
+    background: #764abc;
     position: absolute;
-    border-radius: 10px;
+    border-radius: 5px;
     transform: translate(-50%, -50%);
-    box-shadow: aqua;
+    /* opacity: 0.7; */
 }
 
 .control-panel-wrapper header {
@@ -15,6 +15,8 @@
     font-weight: 200;
     padding: 10px;
     border: 1px solid #bfbfbf;
+    color: #fff;
+    text-align: center;
 }
 
 .control-panel-wrapper header.active {

@@ -43,6 +43,12 @@
     box-shadow: rgb(0 0 0 / 3%) 0px 4px 10px, rgb(0 0 0 / 6%) 0px 0px 2px, rgb(0 0 0 / 12%) 0px 2px 6px;
 }
 
+.p-menuitem-text {
+    color: #764abc !important;
+    font-size: 15px;
+    font-weight: 500;
+}
+
 .p-menubar {
     border: unset !important;
 }
@@ -53,4 +59,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
+}
+
+.p-listbox .p-listbox-header {
+    background: #fff !important;
 }
