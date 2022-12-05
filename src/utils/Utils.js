@@ -32,10 +32,10 @@ const deepClone = (obj) => {
   } else {
     return deepCloneNative(obj);
   }
-}
+};
 
 /* https://stackoverflow.com/questions/4459928/how-to-deep-clone-in-javascript */
-const deepCloneNative = (obj, hash = new WeakMap()) {
+const deepCloneNative = (obj, hash = new WeakMap()) => {
   if (Object(obj) !== obj) return obj; // primitives
   if (hash.has(obj)) return hash.get(obj); // cyclic reference
   const result = obj instanceof Set ? new Set(obj) // See note about this!
@@ -50,4 +50,4 @@ const deepCloneNative = (obj, hash = new WeakMap()) {
   hash.set(obj, result);
   return Object.assign(result, ...Object.keys(obj).map(
       key => ({ [key]: deepClone(obj[key], hash) }) ));
-}
+};
