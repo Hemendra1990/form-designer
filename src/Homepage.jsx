@@ -49,20 +49,20 @@ const Homepage = (props) => {
       {modals}
       {confirmDialogs}
       <HDMenubar toggleEventModal={onHide} />
+      {meta.editMode ? (
+        <div className="control-panel">
+          <ControlPanel />
+        </div>
+      ) : (
+        <></>
+      )}
       <div
         className="p-fluid grid"
         style={{ height: "90vh", width: "100vw", marginTop: "10px" }}
       >
-        {meta.editMode ? (
-          <div className="col-2 control-panel">
-            <ControlPanel />
-          </div>
-        ) : (
-          <></>
-        )}
         <div
           className={`${
-            meta.editMode ? "col-8 playground" : "col-12 playground-preview"
+            meta.editMode ? "col-10 playground" : "col-12 playground-preview"
           }`}
         >
           <div>
