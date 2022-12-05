@@ -62,7 +62,7 @@ const Homepage = (props) => {
       >
         <div
           className={`${
-            meta.editMode ? "col-10 playground" : "col-12 playground-preview"
+            meta.editMode ? "col-10 playground" : "col-12 playground-preview m-20"
           }`}
         >
           <div>

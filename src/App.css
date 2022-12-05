@@ -13,7 +13,7 @@
     padding: 10px;
 }
 .playground {
-    background: url('./assets/tiny-checkers.png');
+    /* background: url('./assets/tiny-checkers.png'); */
 }
 .playground-preview {
     background: unset;

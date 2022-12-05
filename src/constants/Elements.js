@@ -51,7 +51,7 @@ const ComponentConfig = [
         component: HDListBox
     },
     {
-        label: "Dynamic HTML Container",
+        label: "HTML Editor",
         name: "dynamicHtmlContainer",
         component: HDHtmlEditor
     },

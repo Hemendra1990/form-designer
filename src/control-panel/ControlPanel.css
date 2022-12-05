@@ -1,9 +1,9 @@
 
 .control-panel-wrapper {
     top: 50%;
-    left: 50%;
+    left: 10%;
     width: 220px;
-    background: #fff;
+    background: #f8f9fa;
     position: absolute;
     border-radius: 10px;
     transform: translate(-50%, -50%);
@@ -20,4 +20,8 @@
 .control-panel-wrapper header.active {
     cursor: move;
     user-select: none;
+}
+
+.p-listbox-filter {
+    height: 35px;
 }
