@@ -76,4 +76,9 @@
 
 .p-sidebar {
     height: 500px !important;
+    right: 0.5%;
+}
+
+.p-sidebar-header {
+    justify-content: flex-start;
 }
