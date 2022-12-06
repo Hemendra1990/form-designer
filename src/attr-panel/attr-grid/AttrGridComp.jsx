@@ -31,8 +31,9 @@ const AttrGrid = (props) => {
         <i>(API as datasource is the first implementation)</i>
       </label>
       <div className="field col-12">
-        <label htmlFor="datasource">Datasource</label>
+        <label htmlFor="datasource" className="block">Datasource</label>
         <Dropdown
+          style={{width: '100%'}}
           name="datasource"
           value={meta.currentElement?.attributes?.datasource}
           options={ds}
@@ -44,7 +45,7 @@ const AttrGrid = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="datasource">
+        <label htmlFor="datasource" className="block">
           <b>Response to use</b>(
           <i>
             use like 'response.data or response.result' an array from the
@@ -53,6 +54,7 @@ const AttrGrid = (props) => {
           )
         </label>
         <InputText
+          style={{width: '100%'}}
           name="responseToUse"
           onChange={e => handleAttributeChange(e)}
           onBlur={(e) => {
@@ -63,8 +65,9 @@ const AttrGrid = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="class">Class</label>
+        <label className="block">Class</label>
         <InputText
+          style={{width: '100%'}}
           name="className"
           placeholder="col-12 md:col-6 lg:col-3"
           value={currAttribute?.className || ""}

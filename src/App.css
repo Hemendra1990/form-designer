@@ -40,17 +40,21 @@
 }
 
 .menubar {
-    box-shadow: rgb(0 0 0 / 3%) 0px 4px 10px, rgb(0 0 0 / 6%) 0px 0px 2px, rgb(0 0 0 / 12%) 0px 2px 6px;
+    /* box-shadow: rgb(0 0 0 / 3%) 0px 4px 10px, rgb(0 0 0 / 6%) 0px 0px 2px, rgb(0 0 0 / 12%) 0px 2px 6px; */
+}
+
+.p-menuitem {
+    background: #24292f;
 }
 
 .p-menuitem-text {
-    color: #764abc !important;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 800;
 }
 
 .p-menubar {
     border: unset !important;
+    background: #24292f;
 }
 
 .options-wrapper {
@@ -63,4 +67,18 @@
 
 .p-listbox .p-listbox-header {
     background: #fff !important;
+}
+
+.preview-shortcut {
+    top: 80%;
+    left: 95%;
+}
+
+.p-sidebar {
+    height: 500px !important;
+    right: 0.5%;
+}
+
+.p-sidebar-header {
+    justify-content: flex-start;
 }

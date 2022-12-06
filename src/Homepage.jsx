@@ -3,13 +3,15 @@ import { Dialog } from "primereact/dialog";
 import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import { useConfirmationContext } from "./context/ConfirmationDialogContext";
-import { useMetaContext } from "./context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "./context/MetaContext";
 import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
 import HDMenubar from "./menu-panel/HDMenubar";
 import Playground from "./playground/Playground";
 import EventExecutor from "./service/EventExecutor";
+
+import Draggable from 'react-draggable';
 
 const Homepage = (props) => {
   const meta = useMetaContext();
@@ -18,6 +20,8 @@ const Homepage = (props) => {
 
   const confirmDialogContext = useConfirmationContext();
   const { confirmDialogs } = confirmDialogContext;
+
+  const { togglePlaygroundMode } = useUpdateMetaContext();
 
   //Initialize the EvenExecutor and pass the modalContext
   setTimeout(() => {
@@ -50,17 +54,27 @@ const Homepage = (props) => {
     <>
       {modals}
       {confirmDialogs}
-      <HDMenubar toggleEventModal={onHide} />
-      {meta.editMode ? (
-        <div className="control-panel">
-          <ControlPanel />
+      <div className="grid p-fluid">
+        <div className="col-12">
+          <HDMenubar toggleEventModal={onHide} />
         </div>
-      ) : (
-        <></>
-      )}
+      </div>
+
+      <div className="grid p-fluid">
+        <div className="col-12">
+          {meta.editMode ? (
+            <div className="control-panel">
+              <ControlPanel />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+      </div>
+
       <div
         className="grid p-fluid"
-        style={{ height: "90vh", width: "100vw", marginTop: "10px" }}
+        style={{ height: "80vh", width: '100%'}}
       >
         <div
           className={`${
@@ -70,6 +84,13 @@ const Homepage = (props) => {
           }`}
         >
           <Playground />
+          <Draggable>
+            <Button
+              onClick={(e) => togglePlaygroundMode()}
+              icon={meta.editMode ? "pi pi-eye" : "pi pi-pencil"}
+              className="p-button-rounded p-button-secondary  preview-shortcut"
+            />
+          </Draggable>
         </div>
       </div>
       {meta.editMode ? (
