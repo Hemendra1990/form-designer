@@ -2,20 +2,12 @@ import React, { memo, useState } from "react";
 import { InputNumber } from 'primereact/inputnumber';
 
 const HDNumeric = React.forwardRef((props, ref) => {
+    const [value, setValue] = useState("");
 
-    const InputNumberDemo = () => {
-        const [values, setValues] = useState("");
-
-        return (
-            <div>
-                <div className="p-fluid grid formgrid">
-                    <div className="field col-12 md:col-3">
-                        <label htmlFor="integeronly"></label>
-                        <InputNumber inputId="integeronly" value={values} onValueChange={(e) => setValues(e.value)}/>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+    return (
+        <>
+            <InputNumber ref={ref} value={value} onValueChange={(e) => setValue(e.value)} />
+        </>
+    )
 });
 export default memo(HDNumeric);
