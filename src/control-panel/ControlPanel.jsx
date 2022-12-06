@@ -4,6 +4,7 @@ import { CONTROL_ITEMS } from "../constants/Elements";
 import getComponent from "../constants/HemendraConstants";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { createElementId } from "../utils/Utils";
+import Draggable from "react-draggable";
 
 import "./ControlPanel.css";
 
@@ -35,8 +36,7 @@ const ControlPanel = () => {
   };
 
   useEffect(() => {
-
-    const wrapperElement = wrapperRef.current;
+    /* const wrapperElement = wrapperRef.current;
     const headerElement = headerRef.current;
 
     headerElement.addEventListener("mousedown", () => {
@@ -47,36 +47,41 @@ const ControlPanel = () => {
     document.addEventListener("mouseup", () => {
       headerElement.classList.remove("active");
       headerElement.removeEventListener("mousemove", onDrag);
-    });
+    }); */
   }, []);
 
   /* 
   const header = wrapper.querySelector("header"); */
-  const onDrag = ({ movementX, movementY }) => {
+  /* const onDrag = ({ movementX, movementY }) => {
     const wrapper = document.querySelector(".control-panel-wrapper");
     let getStyle = window.getComputedStyle(wrapper);
     let left = parseInt(getStyle.left);
     let top = parseInt(getStyle.top);
     wrapper.style.left = `${left + movementX}px`;
     wrapper.style.top = `${top + movementY}px`;
-  };
+  }; */
 
   return (
-    <div
-      className="control-panel-wrapper"
-      ref={wrapperRef}
-      style={{ zIndex: "1000" }}
-    >
-      <header ref={headerRef}>Control Panel</header>
-      <div className="control-panel-content">
-        <ListBox
-          filter={true}
-          options={CONTROL_ITEMS()}
-          onChange={handleElementClick}
-          listStyle={{ height: "180px" }}
-        />
+    /* This draggable is from https://www.npmjs.com/package/react-draggable */
+    <Draggable>
+      <div
+        className="control-panel-wrapper"
+        ref={wrapperRef}
+        style={{ zIndex: "1000" }}
+      >
+        <header ref={headerRef}>
+          <i style={{ color: "var(--gray-400)" }} className="fa fa-bars"></i>
+        </header>
+        <div className="control-panel-content">
+          <ListBox
+            filter={true}
+            options={CONTROL_ITEMS()}
+            onChange={handleElementClick}
+            listStyle={{ height: "180px" }}
+          />
+        </div>
       </div>
-    </div>
+    </Draggable>
   );
 };
 

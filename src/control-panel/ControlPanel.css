@@ -3,7 +3,6 @@
     top: 50%;
     left: 10%;
     width: 220px;
-    background: #764abc;
     position: absolute;
     border-radius: 5px;
     transform: translate(-50%, -50%);
@@ -11,12 +10,8 @@
 }
 
 .control-panel-wrapper header {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 200;
-    padding: 10px;
-    border: 1px solid #bfbfbf;
-    color: #fff;
-    text-align: center;
 }
 
 .control-panel-wrapper header.active {
