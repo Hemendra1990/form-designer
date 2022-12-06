@@ -35,12 +35,13 @@ const AttrInput = (props) => {
   return (
     <>
       <div className="field col-12">
-        <label htmlFor="controlId">Control ID</label>
-        <InputText name="placeholder" value={meta.currentElement.id} disabled />
+        <label htmlFor="controlId" className="block">Control ID</label>
+        <InputText name="placeholder" style={{width : '100%'}} value={meta.currentElement.id} disabled />
       </div>
       <div className="field col-12">
         <label htmlFor="maxLen">Max Length</label>
-        <InputNumber
+        <InputNumber 
+          style={{width : '100%'}}
           name="maxLength"
           inputId="maxLen"
           onChange={handleAttributeChange}
@@ -48,8 +49,9 @@ const AttrInput = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="onBlur">On Blur</label>
-        <Dropdown
+        <label htmlFor="onBlur" className="block">On Blur</label>
+        <Dropdown 
+          style={{width : '100%'}}
           name="onblur"
           value={onBlur}
           options={eventOptions}
@@ -58,8 +60,9 @@ const AttrInput = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="onFocus">On Focus</label>
+        <label htmlFor="onFocus" className="block">On Focus</label>
         <Dropdown
+          style={{width : '100%'}}
           name="onfocus"
           value={onFocus}
           options={eventOptions}
@@ -68,8 +71,9 @@ const AttrInput = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="onKeyup">On Keyup</label>
+        <label htmlFor="onKeyup" className="block">On Keyup</label>
         <Dropdown
+          style={{width : '100%'}}
           name="onkeyup"
           value={onKeyup}
           options={eventOptions}
@@ -78,8 +82,9 @@ const AttrInput = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="onKeyDown">On KeyDown</label>
+        <label htmlFor="onKeyDown" className="block">On KeyDown</label>
         <Dropdown
+          style={{width : '100%'}}
           name="onkeydown"
           value={onKeyDown}
           options={eventOptions}
@@ -88,10 +93,11 @@ const AttrInput = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="maxLen">
+        <label htmlFor="maxLen" className="block">
           Placeholder {currAttribute?.placeholder}{" "}
         </label>
         <InputText
+          style={{width : '100%'}}
           name="placeholder"
           placeholder="Enter Placeholder"
           onChange={handleAttributeChange}

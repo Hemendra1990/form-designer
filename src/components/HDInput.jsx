@@ -40,8 +40,8 @@ const HDInput = React.forwardRef((props, ref) => {
 }
 
 const executeKeyupEvent = () => {
-  if(element.attributes && element.attributes.onfocus) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onfocus, null, null);
+  if(element.attributes && element.attributes.onkeyup) {
+      EventExecutor.executeEvent(props.meta, element.attributes.onkeyup, null, null);
   }
 }
 
@@ -67,7 +67,7 @@ const executeKeyDownEvent = () => {
         onChange={(e) => setValue(e.target.value)}
         onBlur={(e) => executeBlurEvent()}
         onFocus={(e) => executeFocusEvent()}
-        onKeyup={(e) => executeKeyupEvent()}
+        onKeyUp={(e) => executeKeyupEvent()}
         onKeyDown={(e) => executeKeyDownEvent()}
       />
     </>
