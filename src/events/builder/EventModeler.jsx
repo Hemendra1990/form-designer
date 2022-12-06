@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import {createElementId} from '../../utils/Utils'
+import { createElementId } from '../../utils/Utils'
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
@@ -36,7 +36,7 @@ const snapGrid = [20, 20];
 const nodeTypes = NODE_TYPES();
 
 const EventModeler = (props) => {
-  
+
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
 
@@ -51,7 +51,7 @@ const EventModeler = (props) => {
 
   const [bgColor, setBgColor] = useState(initBgColor);
   const [selectedEvent, setSelectedEvent] = useState("");
-  
+
   const onChange = (event) => {
     setNodes((nds) =>
       nds.map((node) => {
@@ -81,68 +81,74 @@ const EventModeler = (props) => {
 
   const onActionSelection = (action) => {
     setNodes((prevNodes) => {
-        return prevNodes.concat({
-          type: action.value.eventNodeType, //'type' is very important as we are using custom nodes... By providing the type value react-flow renders that components 
-          id: `${prevNodes.length + 1}`,
-          position: {
-            x: 0,
-            y: 0,
+      return prevNodes.concat({
+        type: action.value.eventNodeType, //'type' is very important as we are using custom nodes... By providing the type value react-flow renders that components 
+        id: `${prevNodes.length + 1}`,
+        position: {
+          x: 0,
+          y: 0,
+        },
+        data: {
+          label: `Action_${prevNodes.length + 1}`,
+          onChange: onChange,
+          updateEvent: updateEvent,
+          color: initBgColor,
+          eventInfo: {
+            type: action.value.eventNodeType
           },
-          data: {
-            label: `Action_${prevNodes.length + 1}`,
-            onChange: onChange,
-            updateEvent: updateEvent,
-            color: initBgColor,
-            eventInfo: {
-              type: action.value.eventNodeType
-            },
-            meta,
-          },
-        });
+          meta,
+        },
       });
+    });
   };
 
   const updateEvent = (eventInfo, nodeId) => {
-    
+
   }
 
   const saveEvent = (eventData) => {
-    
-    const event = {
-      id: eventId,
-      name: eventName,
-      bucket: {nodes, edges} 
-    };
 
-    const existingEventId = meta.events.find((ev) => ev.id === eventId);
-    let eventBuckets = [];
-    if (existingEventId) {
-      eventBuckets = meta.events.map((pEvent) => {
-        pEvent.bucket = { nodes, edges };
-        return pEvent;
-      });
+    if(eventName){
+
+      const event = {
+        id: eventId,
+        name: eventName,
+        bucket: { nodes, edges }
+      };
+  
+      const existingEventId = meta.events.find((ev) => ev.id === eventId);
+      let eventBuckets = [];
+      if (existingEventId) {
+        eventBuckets = meta.events.map((pEvent) => {
+          pEvent.bucket = { nodes, edges };
+          return pEvent;
+        });
+      } else {
+        eventBuckets = [...meta.events, event];
+      }
+  
+      meta.events = [...eventBuckets];
+      updateMeta(meta);
+  
+      props.hide();
     } else {
-      eventBuckets = [...meta.events, event];
+      alert("Please give valid Event Name");
     }
 
-    meta.events = [...eventBuckets];
-    updateMeta(meta);
-    
-    props.hide();
   }
 
   const onEventSelection = (e) => {
     setSelectedEvent(e.value);
     setEventId(e.value);
-    const metaEvent = meta.events.find(me=> me.id === e.value);
+    const metaEvent = meta.events.find(me => me.id === e.value);
     setEventName(metaEvent.name);
     setEdges(metaEvent.bucket.edges);
     setNodes(metaEvent.bucket.nodes);
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     setEventId(`event-${createElementId()}`);
-    
+
   }, []);
 
   return (
@@ -160,29 +166,29 @@ const EventModeler = (props) => {
       </OverlayPanel>
 
       <div className="flex">
-            <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
-              <Dropdown 
-                options={meta.events} 
-                optionLabel="name" 
-                optionValue="id"
-                value={selectedEvent} onChange={onEventSelection} />
-              <InputText
-                placeholder="Event Id"
-                value={eventId}
-                disabled
-              ></InputText>
-            <InputText
+        <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
+          <Dropdown
+            options={meta.events}
+            optionLabel="name"
+            optionValue="id"
+            value={selectedEvent} onChange={onEventSelection} />
+          <InputText
+            placeholder="Event Id"
+            value={eventId}
+            disabled
+          ></InputText>
+          <InputText
             className="ml-2"
             placeholder="Event Name"
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
           ></InputText>
-            </div>
-            <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
-              <Button label="Add Action" onClick={addNewActionNode}/>
-              <Button style={{marginLeft: '5px'}} className="p-button-danger" label="Save Event" onClick={saveEvent}/>
-            </div>
         </div>
+        <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
+          <Button label="Add Action" onClick={addNewActionNode} />
+          <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
+        </div>
+      </div>
 
       <div className="grid">
         <div className="col" style={{ height: '60vh' }}>

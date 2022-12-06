@@ -8,6 +8,8 @@ import HDRadioButton from "../components/HDRadioButton";
 import HDListBox from "../components/HDListBox";
 import HDHtmlEditor from "../components/HDHtmlEditor";
 import HDGrid from "../components/grid/HDGrid";
+import HDNumeric from "../components/HDNumeric";
+
 
 const ComponentConfig = [
     {
@@ -60,9 +62,13 @@ const ComponentConfig = [
         name: "grid",
         component: HDGrid
     },
+    {
+        label: "Numeric",
+        name: "inputnumber",
+        component: HDNumeric
+    },
 ]
 export default ComponentConfig;
-
 
 const CONTROL = {
     BUTTON : 'button',
@@ -74,7 +80,8 @@ const CONTROL = {
     RADIO: 'radio',
     LISTBOX: 'listbox',
     DYNAMIC_HTMLEDITOR: 'dynamicHtmlContainer',
-    GRID: 'grid'
+    GRID: 'grid',
+    NUMERIC: 'inputnumber',
 }
 
 const CONTROL_ITEMS = () => {
