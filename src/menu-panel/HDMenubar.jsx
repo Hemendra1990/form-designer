@@ -9,7 +9,7 @@ const HDMenubar = (props) => {
     const apiConfigRef = useRef()
     const [openReportConfiguration, setOpenReportConfiguration] = useState(false);
     const {clearAll, openReport, togglePlaygroundMode, saveReport, configure, configureApi } = useUpdateMetaContext();
-    const end = <p style={{ fontWeight: 800, background: '#764abc', color:'#fff', height:'50px', padding: '13px' }}>Hemendra's Low Code Designer</p>;
+    const end = <p style={{ fontWeight: 600, background: 'var(--bluegray-700);', color:'#fff', height:'50px', padding: '13px' }}>Hemendra's Low Code Designer</p>;
 
     const menuItems = [
         {
