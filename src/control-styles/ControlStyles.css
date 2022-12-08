@@ -1,0 +1,37 @@
+.list-mw {
+    min-width: 130px;
+}
+
+.border-top {
+    border-top: 1px solid rgb(222, 226, 230) !important;
+}
+.border-left {
+    border-left: 1px solid rgb(222, 226, 230) !important;
+}
+
+.ovf-auto {
+    overflow: auto;
+}
+
+.container {
+    border-bottom: 1px solid #ccc;
+    padding-top: 0.5rem;
+}
+
+.cursp {
+    cursor: pointer;
+}
+
+.p-ai-center {
+    align-items: center;
+}
+
+@media screen and (min-width: 576px) {
+    .p-sm-9 {
+        width: 75%;
+    }
+}
+
+.p-mb-2 {
+    margin-bottom: 0.5rem !important;
+}

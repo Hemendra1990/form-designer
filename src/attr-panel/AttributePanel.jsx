@@ -11,6 +11,7 @@ import AttrGrid from './attr-grid/AttrGridComp';
 import AttrInput from './attr-input/AttrInput';
 import AttrRadio from './attr-radio/AttrRadio';
 import { Sidebar } from 'primereact/sidebar';
+import ControlStyles from '../control-styles/ControlStyles';
 
 const AttributePanel = (props) => {
     const productService = new ProductService();
@@ -273,7 +274,9 @@ const AttributePanel = (props) => {
             <div className="p-fluid grid">
                 <Sidebar dismissable={false} modal={false} position="right" visible={showSidebar} onHide={() => { setShowSidebar(false) }}>
                     {renderAttributes()}
+                    {/* <ControlStyles></ControlStyles> */}
                 </Sidebar>
+                {/* Testing */}
             </div>
         </>
     )

@@ -133,9 +133,11 @@ export const MetaContextProvider = ({ children }) => {
   }
 
   const generateElementMap = (prevMeta) => {
-    const elementMap = {};
-    createElementMap(prevMeta.elements, elementMap);
-    return elementMap;
+    if(prevMeta.elements && prevMeta.elements.length > 0) {
+      const elementMap = {};
+      createElementMap(prevMeta.elements, elementMap);
+      return elementMap;
+    }
   }
 
   function createElementMap(elements, elementMap) {

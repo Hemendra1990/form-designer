@@ -9,6 +9,7 @@ import HDListBox from "../components/HDListBox";
 import HDHtmlEditor from "../components/HDHtmlEditor";
 import HDGrid from "../components/grid/HDGrid";
 import HDNumeric from "../components/HDNumeric";
+import HDLabel from "../components/HDLabel";
 
 
 const ComponentConfig = [
@@ -64,8 +65,13 @@ const ComponentConfig = [
     },
     {
         label: "Numeric",
-        name: "inputnumber",
+        name: "numeric",
         component: HDNumeric
+    },
+    {
+        label: "Label",
+        name: "label",
+        component: HDLabel
     },
 ]
 export default ComponentConfig;
@@ -81,7 +87,8 @@ const CONTROL = {
     LISTBOX: 'listbox',
     DYNAMIC_HTMLEDITOR: 'dynamicHtmlContainer',
     GRID: 'grid',
-    NUMERIC: 'inputnumber',
+    NUMERIC: 'numeric',
+    LABEL: 'label'
 }
 
 const CONTROL_ITEMS = () => {

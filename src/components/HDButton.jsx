@@ -1,12 +1,31 @@
 
 import { Button } from 'primereact/button';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useImperativeHandle, useState } from 'react';
+import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
 import { useModalContext } from '../context/ModalContext';
+import { ControlStyleModel } from '../control-styles/ControlStyleModel';
 import EventExecutor from '../service/EventExecutor';
 
 const HDButton = React.forwardRef( (props, ref) => {
     const element = props.element;
     const {actions, modals} = useModalContext();
+    const {updateMeta} =  useUpdateMetaContext();
+    const {meta} = useMetaContext();
+
+    const [controlStyle, setControlStyle] = useState();
+
+    
+
+    useImperativeHandle(ref, ()=> ({
+        getStyleAttributes: () => {
+            return ControlStyleModel.getButtonStyle();
+        },
+
+        addStyle(style = "") {
+            setControlStyle(style);
+        }
+    }));
+
     
     
     if(!(element.attributes && element.attributes.label)) {
@@ -23,7 +42,10 @@ const HDButton = React.forwardRef( (props, ref) => {
 
     return (
         <>
-            <Button className={props.element?.attributes?.type} ref={ref} label={props.element?.attributes?.label} onClick={executeEvent}/>
+            <style>
+                {controlStyle}
+            </style>
+            <Button ref={ref} id={element.id} className={props.element?.attributes?.type} label={props.element?.attributes?.label} onClick={executeEvent}/>
         </>
     );
 });

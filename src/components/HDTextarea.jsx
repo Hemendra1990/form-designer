@@ -2,6 +2,7 @@ import React, { memo } from 'react'
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
 import { useImperativeHandle } from 'react';
+import { ControlStyleModel } from '../control-styles/ControlStyleModel';
 
 const HDTextarea = React.forwardRef((props, ref) => {
     const {element, meta, setMeta} = props;
@@ -9,7 +10,10 @@ const HDTextarea = React.forwardRef((props, ref) => {
 
     useImperativeHandle(ref, ()=> ({
         updateValue: (value) => {setValue(value)},
-        getActualRef: () => {return {...ref};}
+        getActualRef: () => {return {...ref};},
+        getStyleAttributes: () => {
+            return ControlStyleModel.getTextareaStyle();
+        }
     }))
 
     const handleChange = (e) => {
