@@ -47,8 +47,9 @@ export const MetaContextProvider = ({ children }) => {
    */
   const updateMeta = (prevMeta) => {
     const elementMap = generateElementMap(prevMeta);
-    setMeta(()=> {
+    setMeta((meta)=> {
       return {
+        ...meta,
         ...prevMeta,
         elementMap
       }
@@ -71,7 +72,8 @@ export const MetaContextProvider = ({ children }) => {
   const clearAll = () => {
     meta.elements.length = 0;
     meta.currentElement = null;
-    updateMeta(meta);
+    /* updateMeta(meta); */
+    setMeta(sharedMeta)
   };
 
   /**

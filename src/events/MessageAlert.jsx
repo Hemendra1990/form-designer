@@ -74,22 +74,22 @@ const MessageAlert = (props) => {
       footer={footer}
     >
       
-      <div className="grid">
-          <div className="col">
+      <div className="grid fluid">
+          <div className="col-12">
             <label className="block">Header</label>
             <InputText value={header} style={{width : '100%'}} onChange={(e)=> {console.log('Header Change'); setHeader(e.target.value)}} />
           </div>
-          <div className="col">
+          <div className="col-12">
             <label className="block">
               Message
             </label>
             <InputText value={message} style={{width : '100%'}} onChange={(e)=> setMessage(e.target.value)} />
           </div>
-          <div className="col">
+          <div className="col-6">
             <label className="block">Type</label>
             <Dropdown name="type" style={{width : '100%'}} options={types} value={selectedType} onChange={onTypeChange} />
           </div>
-          <div className="col">
+          <div className="col-6">
             <label className="block">Position</label>
             <Dropdown
               style={{width : '100%'}}

@@ -51,3 +51,18 @@ const deepCloneNative = (obj, hash = new WeakMap()) => {
   return Object.assign(result, ...Object.keys(obj).map(
       key => ({ [key]: deepClone(obj[key], hash) }) ));
 };
+
+export const Reference = {
+  of: (meta, elementId) => {
+    if(!elementId) {
+      console.error(`element Id is null or undefined`)
+      return null;
+    }
+    if(meta.elementMap) {
+      const instance = meta.elementMap[elementId].ref.current
+      return instance;
+    }
+
+    return null;
+  }
+}

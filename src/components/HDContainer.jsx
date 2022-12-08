@@ -1,25 +1,87 @@
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { memo, useCallback, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import getComponent from "../constants/HemendraConstants";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext"
+import { TEST_REPORTS_FOR_TESTING } from "../tests/report";
 
 const HDContainer = React.forwardRef((props, ref) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const { element} = props;
 
+  const [containerMeta, setContainerMeta] = useState({});
+  const [loadedReport, setLoadedReport] = useState();
+
+  function initializeComponent(reportElements) {
+    if(!reportElements) {
+      return;
+    }
+    reportElements.forEach(el => {
+      el.component = getComponent(el.type);
+      if(el.attributes && el.attributes.children && el.attributes.children.length > 0) {
+        initializeComponent(el.attributes.children);
+      }
+    })
+  }
+
+  function createElementMap(elements, elementMap) {
+    elements.forEach(elm => {
+      elementMap[elm.name] = elm;
+      if(elm.attributes && elm.attributes.children.length > 0) {
+        createElementMap(elm.attributes.children, elementMap);
+      }
+    })
+  }
+
+  const generateElementMap = (preMeta) => {
+    if(preMeta.elements && preMeta.elements.length > 0) {
+      const elementMap = {};
+      createElementMap(preMeta.elements, elementMap);
+      containerMeta.elementMap = elementMap;
+      setContainerMeta(containerMeta);
+    }
+    return <></>;
+  }
+
+  useImperativeHandle(ref, () => ({
+    loadReport(resourceId, data={}) {
+      //TODO: we need to make the server call taking the resourceId
+
+      //This is for testing
+      const json = TEST_REPORTS_FOR_TESTING.find(trpt => trpt.id === resourceId).json; //we will be getting the json string from the server
+      const report = JSON.parse(json);
+      initializeComponent(report.elements);
+      if(element.attributes && element.attributes.children) {
+        element.attributes.children = [];
+        element.attributes.children = report.elements;
+        setContainerMeta(report);
+      }
+    },
+    addStyle(style = "") {
+      //TODO: implementation of style
+      /* code to add styles from the Style Control component */
+    },
+  }));
+
   const createChildElement = useCallback((child, index) => {
     let ref = child.ref;
     if(!ref) {
       ref = React.createRef();
+    }
+    let cMeta;
+    if(Object.keys(containerMeta).length > 0) {
+      cMeta = containerMeta;
+    } else {
+      cMeta = meta;
     }
     const reactComponent = React.createElement(child.component, {
       ref: ref,
       key: index + 1,
       name: `${child.name}`,
       setMeta: updateMeta,
-      meta: meta,
+      meta: cMeta,
       element: child,
       enteredValue: "",
     });
@@ -45,7 +107,7 @@ const HDContainer = React.forwardRef((props, ref) => {
     <Droppable droppableId={`${element.id}`} type="pgElement">
       {(provided, snapshot) => (
         <div
-        className="grid"
+        className="grid col-12"
           ref={provided.innerRef}
           {...provided.droppableProps}
           style={{
@@ -55,7 +117,7 @@ const HDContainer = React.forwardRef((props, ref) => {
             margin: "10px 0",
             border: meta.editMode ? '1px dashed grey' : ''
           }}>
-          <div className="grid">
+          <div className="col-12 grid">
             {element?.attributes?.children.map((child, index) => {
               return (
                 <Draggable
@@ -80,6 +142,7 @@ const HDContainer = React.forwardRef((props, ref) => {
                 </Draggable>
               );
             })}
+            {generateElementMap(containerMeta)}
           </div>
           {provided.placeholder}
         </div>

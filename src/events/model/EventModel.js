@@ -1,4 +1,5 @@
 import ConfirmationAlert from "../ConfirmationAlert";
+import LoadReportInContainer from "../LoadReportInContainer";
 import MessageAlert from "../MessageAlert";
 import PopupModal from "../PopupModal";
 import RefreshElements from "../RefreshElements";
@@ -30,6 +31,11 @@ export const EVENTS = [
     eventNodeType: "refreshElements",
     eventNodeTypeComponent: RefreshElements,
   },
+  {
+    name: "Load Report",
+    eventNodeType: "loadReport",
+    eventNodeTypeComponent: LoadReportInContainer,
+  },
 ];
 
 export const NODE_TYPES = () => {
@@ -45,5 +51,6 @@ export const EVENT_TYPE  = {
   ALERT: "alert",
   CONFIRMATION: "confirmation",
   POP_UP: "popup",
-  REFRESH_ELEMENTS: "refreshElements"
+  REFRESH_ELEMENTS: "refreshElements",
+  LOAD_REPORT: "loadReport"
 };

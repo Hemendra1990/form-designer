@@ -1,5 +1,7 @@
 *{
     margin: 0;
+    left: 0;
+    right: 0;
 }
 .draggable {
     top: auto !important;
@@ -14,6 +16,7 @@
 }
 .playground {
     /* background: url('./assets/tiny-checkers.png'); */
+    background-color: hsl(0,0%,96.5%);
 }
 .playground-preview {
     background: unset;
@@ -44,7 +47,11 @@
 }
 
 .p-menuitem {
-    background: #24292f;
+    /* background: #24292f; */
+}
+
+.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-text {
+    color: #e7ecf0;
 }
 
 .p-menuitem-text {
@@ -54,6 +61,7 @@
 
 .p-menubar {
     border: unset !important;
+    border-radius: unset !important;
     background: #24292f;
 }
 
@@ -81,4 +89,17 @@
 
 .p-sidebar-header {
     justify-content: flex-start;
+}
+
+.layout-footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #24292f;
+    height: 40px;
+}
+.layout-footer p {
+    color: #e7ecf0;
 }

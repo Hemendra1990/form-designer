@@ -37,6 +37,8 @@ const HDButton = React.forwardRef( (props, ref) => {
         //check if the button is configured with the event or not
         if(element.attributes && element.attributes.eventId) {
             EventExecutor.executeEvent(props.meta, element.attributes.eventId, actions, modals);
+        } else {
+            console.info("Event not binded with Button.")
         }
     }
 

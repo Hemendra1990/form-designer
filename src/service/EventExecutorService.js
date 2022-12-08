@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import { DataConnector } from "../attr-panel/data-connector/DataConnector";
 import { EVENT_TYPE } from "../events/model/EventModel";
+import { Reference } from "../utils/Utils";
 
 export const EventExecutorService = {
   execute: (meta, eventNode, modalContext, confirmDialogContext) => {
@@ -26,6 +27,12 @@ export const EventExecutorService = {
         executePopupModal(meta, eventNode, modalContext)
       } else if (eventNode.type === EVENT_TYPE.REFRESH_ELEMENTS) {
         executeRefreshElement(meta, eventNode)
+      } else if (eventNode.type === EVENT_TYPE.LOAD_REPORT) {
+        console.log('Load report in container...', {eventDetail});
+        const containerInstance = Reference.of(meta, eventDetail.data.contianer);
+        if(containerInstance.loadReport) {
+          containerInstance.loadReport(eventDetail.data.resource || eventDetail.data.resourceId, meta);
+        }
       }
 
     });

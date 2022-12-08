@@ -52,13 +52,11 @@ const Homepage = (props) => {
 
   return (
     <>
+      <div className="top-menubar">
+        <HDMenubar toggleEventModal={onHide} />
+      </div>
       {modals}
       {confirmDialogs}
-      <div className="grid p-fluid">
-        <div className="col-12">
-          <HDMenubar toggleEventModal={onHide} />
-        </div>
-      </div>
 
       <div className="grid p-fluid">
         <div className="col-12">
@@ -100,6 +98,12 @@ const Homepage = (props) => {
       ) : (
         <></>
       )}
+      
+      <div className="layout-footer align-items-center justify-content-end flex">
+        <footer>
+        <p className="mr-3">&copy; 2022 Hemendra Sethi</p>
+        </footer>
+      </div>
       <Dialog
         header="Event Modeler"
         visible={displayBasic}

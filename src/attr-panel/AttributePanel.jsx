@@ -133,6 +133,10 @@ const AttributePanel = (props) => {
             if (meta.currentElement.type === CONTROL.CONTAINER) {
                 return (
                     <>
+                        <div className="field col-12">
+                            <label htmlFor="controlId">Control ID</label>
+                            <InputText name="placeholder" value={meta.currentElement.id} disabled />
+                        </div>
                         {classDiv}
                     </>
                 )

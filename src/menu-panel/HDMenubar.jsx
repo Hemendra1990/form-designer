@@ -9,7 +9,8 @@ const HDMenubar = (props) => {
     const apiConfigRef = useRef()
     const [openReportConfiguration, setOpenReportConfiguration] = useState(false);
     const {clearAll, openReport, togglePlaygroundMode, saveReport, configure, configureApi } = useUpdateMetaContext();
-    const end = <p style={{ fontWeight: 600, color:'#fff', height:'50px', padding: '13px' }}>Hemendra's Low Code Designer</p>;
+    const end = <p style={{ fontWeight: 600, color:'#fff'}}>Hemendra's Low Code Designer</p>;
+    const start = <img alt="logo" src="/logo-white.png" height="40" className="mr-2 mt-2 ml-4"></img>;
 
     const menuItems = [
         {
@@ -76,13 +77,11 @@ const HDMenubar = (props) => {
       ];
 
     return(
-        <div className="grid">
-        <div className="col-12">
-          <Menubar className="z-5" model={menuItems} end={end} />
+        <>
+        <Menubar model={menuItems} start={start} />
           <ReportConfiguration ref={reportConfigRef}/>
           <ApiModeler ref={apiConfigRef}/>
-        </div>
-      </div>
+        </>
     )
 }
 
