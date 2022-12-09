@@ -72,7 +72,7 @@ const Homepage = (props) => {
 
       <div
         className="grid p-fluid"
-        style={{ height: "80vh", width: '100%'}}
+        style={{ height: "90vh", width: '100%'}}
       >
         <div
           className={`${

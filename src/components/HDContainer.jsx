@@ -114,7 +114,6 @@ const HDContainer = React.forwardRef((props, ref) => {
             display: "flex",
             backgroundColor: snapshot.isDraggingOver ? "cyan" : "",
             width: "100%",
-            margin: "10px 0",
             border: meta.editMode ? '1px dashed grey' : ''
           }}>
           <div className="col-12 grid">
