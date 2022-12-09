@@ -195,21 +195,7 @@ const AttributePanel = (props) => {
                 return (
                     <>
                         <AttrRadio meta={meta} handleAttributeChange={handleAttributeChange} eventOptions={availableEvents} />
-                    
-                        <div className="field col-12">
-                            <label htmlFor="controlId">Control ID</label>
-                            <InputText name="placeholder" value={meta.currentElement.id} disabled />
-                        </div>
-                        <div className="field col-12">
-                            <label htmlFor="maxLen">Max Length</label>
-                            <InputNumber
-                                style={{ width: '100%' }}
-                                name="maxLength"
-                                inputId="maxLen"
-                                onChange={handleAttributeChange}
-                                value={currAttribute?.maxLength}
-                            />
-                        </div>
+                        {classDiv}
                     </>
                 )
 
