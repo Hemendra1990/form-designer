@@ -39,6 +39,7 @@ const gridData = {
 const HDGrid = forwardRef((props, ref) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { updateMeta } = useUpdateMetaContext();
   const meta = useMetaContext();
   const gridColRef = useRef();
@@ -51,13 +52,20 @@ const HDGrid = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     setResult,
     applyGridOptions,
+    
+    startLoader(value) {
+      setLoading(value);
+    }
   }));
 
   function setResult({ columns, rows }) {
-    const {element} = props;
-    element.attributes["columns"] = columns;
-    setColumns(columns);
-    setRows(rows);
+    setTimeout(() => { //This i have ketpt for testing, remove setTimeout
+      const {element} = props;
+      element.attributes["columns"] = columns;
+      setColumns(columns);
+      setRows(rows);
+      setLoading(false);
+    }, 1000);
   }
 
   function applyGridOptions() {
@@ -175,7 +183,7 @@ const HDGrid = forwardRef((props, ref) => {
           rows={5}
           reorderableColumns={dataTableProps?.reorderableColumns}
           responsiveLayout="scroll"
-          loading={false}
+          loading={loading}
           emptyMessage="No data to display"
           style={{width:'100%'}}
           columnResizeMode="expand"

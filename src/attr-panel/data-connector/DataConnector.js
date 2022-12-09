@@ -1,5 +1,6 @@
 import { ProductService } from "../../components/grid/ProductService";
 import { UserService } from "../../components/grid/UserService";
+import { CONTROL } from "../../constants/Elements";
 import { createElementId } from "../../utils/Utils";
 
 export class DataConnector {
@@ -58,6 +59,9 @@ export class DataConnector {
             });
         }
         if(element.ref.current.setResult) {
+            if(element.type == CONTROL.GRID) {
+                element.ref.current.startLoader(true);
+            }
             element.ref.current.setResult({
                 columns: DataConnector.columns,
                 rows: rows
