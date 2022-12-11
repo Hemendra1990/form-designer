@@ -135,8 +135,13 @@ const ControlStyles = (props) => {
    * Append New Row
    */
   const onAddRow = () => {
-    //TODO: Implementation is pending
-    append({ selectedStyleClass: getValues().selectedStyleClass, selectedState: getValues().selectedState });
+    if(getValues().selectedStyleClass && getValues().selectedState) {
+      append({ selectedStyleClass: getValues().selectedStyleClass, selectedState: getValues().selectedState });
+    } else if(!getValues().selectedStyleClass) {
+      meta.toastRef.current.show({severity: 'error', summary: 'Choose Class', detail: 'Choose Class from listbox'});
+    } else if(!getValues().selectedState) {
+      meta.toastRef.current.show({severity: 'error', summary: 'Choose State', detail: 'Choose State from Switces'});
+    }
   };
 
   const saveDetails = (data) => {
