@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { Fragment, memo, useCallback, useEffect, useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -357,13 +357,16 @@ const ControlStyles = (props) => {
                         //cssprops
 
                         return (
-                          <>
-                            <div key={item.id} className="col-5">
+                          <Fragment key={item.id}>
+                            <div className="col-5">
                               <Controller
                                 control={control}
                                 name={`${selectedStyleClass}.cssprops[${index}].className`}
                                 render={({ field }) => (
                                   <InputText
+                                    key={field.id}
+                                    value={field.value}
+                                    
                                     placeholder="background-color"
                                     id={field.name}
                                     {...field}
@@ -378,7 +381,8 @@ const ControlStyles = (props) => {
                                 control={control}
                                 name={`${selectedStyleClass}.cssprops[${index}].classValue`}
                                 render={({ field }) => (
-                                  <InputText
+                                  <InputText key={field.id}
+                                    value={field.value}
                                     placeholder="#fafacd"
                                     id={field.name}
                                     {...field}
@@ -396,7 +400,7 @@ const ControlStyles = (props) => {
                                 className="p-button-rounded p-button-danger p-button-outlined"
                               />
                             </div>
-                          </>
+                          </Fragment>
                         );
                       })}
                 </div>
