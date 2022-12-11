@@ -19,6 +19,7 @@ const AttributePanel = (props) => {
     const meta = useMetaContext();
     const { updateMeta } = useUpdateMetaContext();
     const [showSidebar, setShowSidebar] = useState(false);
+    const [showControlStyle, setShowControlStyle] = useState(false);
 
     const [classNameValue, setClassNameValue] = useState(meta.currentElement?.attributes?.className || "");
 
@@ -44,6 +45,10 @@ const AttributePanel = (props) => {
     const availableEvents = meta?.events?.map(ev => {
         return { label: ev.name, value: ev.id }
     });
+
+    const openControlStyle = (e)=> {
+        setShowControlStyle(true); 
+    }
 
     /**
      * RULES FOR RENDERING ATTRIBUTES
@@ -205,17 +210,54 @@ const AttributePanel = (props) => {
         return <></>
     }
 
+    const getControlStyle = () => {
+        if(showControlStyle) {
+            return <ControlStyles showControlStyle={showControlStyle} setShowControlStyle={setShowControlStyle}></ControlStyles>
+        }
+        
+        return <></>;
+    }
+
     return (
-        <>
-            <div className="p-fluid grid">
-                <Sidebar dismissable={false} modal={false} position="right" visible={showSidebar} onHide={() => { setShowSidebar(false) }}>
-                    {renderAttributes()}
-                    {/* <ControlStyles></ControlStyles> */}
-                </Sidebar>
-                {/* Testing */}
+      <>
+        {meta.currentElement && (
+          <>
+            <div className="control-attr-panel">
+              <button type="button" value="Configure">
+                <span className="pi pi-cog"></span>
+              </button>
+              <button type="button" value="Attributes">
+                <span className="pi pi-code"></span>
+              </button>
+              <button type="button" value="Data Mapper">
+                <span className="pi pi-database"></span>
+              </button>
+              <button
+                type="button"
+                value="Control Style"
+                onClick={(e) => openControlStyle(e)}
+              >
+                <span className="pi pi-box"></span>
+              </button>
             </div>
-        </>
-    )
+          </>
+        )}
+        <div className="p-fluid grid">
+          <Sidebar
+            dismissable={false}
+            modal={false}
+            position="right"
+            visible={showSidebar}
+            onHide={() => {
+              setShowSidebar(false);
+            }}
+          >
+            {renderAttributes()}
+          </Sidebar>
+        </div>
+        {getControlStyle()}
+      </>
+    );
 }
 
 /* value={meta.currentElement?.attributes?.className} */

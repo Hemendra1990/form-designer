@@ -1,35 +1,38 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { AutoComplete } from "primereact/autocomplete";
 import { ListBox } from "primereact/listbox";
 import { SelectButton } from "primereact/selectbutton";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useMetaContext } from "../context/MetaContext";
 
 import "./ControlStyles.css";
+import { InputText } from "primereact/inputtext";
 
 const ControlStyles = (props) => {
+  console.log("Control Style ....");
   const [elementStyles, setElementStyles] = useState(null);
-
-  const [showControlStyle, setShowControlStyle] = useState(true);
   const [styleTemplate, setStyleTemplate] = useState(null);
   const [filteredStyleTemplates, setFilteredStyleTemplates] = useState(null);
-  const [selectedStyleClass, setSelectedStyleClass] = useState(null);
-  const [selectedState, setSelectedState] = useState("default");
+  const [styleClassChanged, setStyleClassChanged] = useState(true);
+  const [selectedStateChanged, setSelectedStateChanged] = useState(true);
 
   const [selectedStateObj, setSelectedStateObj] = useState();
+  const [isLoading, setLoading] = useState(true);
+
+  const { showControlStyle, setShowControlStyle } = props;
+  const formRef = useRef();
+  const refSubmitButton = useRef();
 
   /* const [styleStateList, setStyleStateList] = useState([]); */
   let styleClasses = [];
 
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    reset,
-  } = useForm({});
+  //Hook form for adding property
+  const { control, handleSubmit, reset, watch, getValues } = useForm({});
+  const { fields, append, prepend, remove, swap, move, insert, replace } =
+    useFieldArray({ control, name: "cssprops" });
 
   const meta = useMetaContext();
   const styleStateList = [
@@ -44,7 +47,7 @@ const ControlStyles = (props) => {
 
   const element = meta.currentElement;
 
-  const populateStyleJson = (style) => {
+  const populateStyleJson = useCallback((style) => {
     styleClasses.forEach((el) => {
       if (style[el.value] === undefined) {
         style[el.value] = {};
@@ -74,7 +77,7 @@ const ControlStyles = (props) => {
         style[el.value].selected = {};
       }
     });
-  };
+  });
 
   if (element) {
     const elementInstance = meta.currentElement.ref.current;
@@ -89,10 +92,11 @@ const ControlStyles = (props) => {
   }
 
   useEffect(() => {
+    setLoading(false);
     setElementStyles(element.style); //style is another property inside meta
-    setSelectedState("default");
+    /* setSelectedState("default"); */
     if (styleClasses) {
-      setSelectedStyleClass(styleClasses[0]?.value);
+      /* setSelectedStyleClass(styleClasses[0]?.value); */
       styleClasses.forEach((stl) => {
         if (stl.label === "Header Cell") {
           const selectedStyleClasses = stl.label; //TODO: convert it to the state variables
@@ -100,14 +104,13 @@ const ControlStyles = (props) => {
       });
       //onStyleClassChange();
       if (elementStyles) {
-        setSelectedStateObj(
-          elementStyles[styleClasses[0]?.value][selectedState]
-        );
+        setSelectedStateObj();
+        /* elementStyles[styleClasses[0]?.value][selectedState] */
       } else {
         const elementStyles = element.style;
-        setSelectedStateObj(
+        /* setSelectedStateObj(
           elementStyles[styleClasses[0]?.value][selectedState]
-        );
+        ); */
       }
     }
   }, []);
@@ -129,31 +132,67 @@ const ControlStyles = (props) => {
   };
 
   const onStyleClassChange = (e) => {
+    /* setSelectedStyleClass(e.value); */
     //TODO: style clas change implementation pending
-    setSelectedStateObj(elementStyles[selectedStyleClass][selectedState]);
+    /* setSelectedStateObj(elementStyles[selectedStyleClass][selectedState]); */
   };
 
+  /**
+   * Append New Row
+   */
   const onAddRow = () => {
     //TODO: Implementation is pending
-    elementStyles[selectedStyleClass][selectedState][""] = "";
+    append({ selectedStyleClass: getValues().selectedStyleClass });
   };
 
-  const onSubmit = (data) => {
+  const saveDetails = (data) => {
     //TODO: handle form submit
+    console.log(data);
+  };
+
+  const handleApply = (e) => {
+    console.log(refSubmitButton);
+    console.log(formRef);
+    e.preventDefault();
+    const formValues = getValues();
+    console.log(formValues);
   };
 
   const renderFooter = (name) => {
     return (
       <div>
         <Button
-          label="No"
+          label="Cancel"
           icon="pi pi-times"
           onClick={() => {}}
           className="p-button-text"
         />
-        <Button label="Yes" icon="pi pi-check" onClick={() => {}} autoFocus />
+        <Button
+          label="Apply"
+          icon="pi pi-check"
+          onClick={(data) => {
+            handleApply(data);
+          }}
+        />
       </div>
     );
+  };
+
+  const showSpinner = () => {
+    if (isLoading) {
+      return (
+        <div className="p-d-flex p-ai-center p-jc-center">
+          <ProgressSpinner
+            style={{ width: "25px", height: "25px", float: "left" }}
+            strokeWidth="5"
+            fill="#ffffff"
+            animationDuration="0.5s"
+          />
+          <span className="ml-2">Loading...</span>
+        </div>
+      );
+    }
+    return <></>;
   };
 
   return (
@@ -164,35 +203,30 @@ const ControlStyles = (props) => {
       visible={showControlStyle} /* TODO: this needs to checked later */
       style={{ width: "85%", height: "80vh" }}
       footer={renderFooter("displayBasic2")}
-      onHide={() => setShowControlStyle(false)}
+      onHide={() => {
+        setShowControlStyle(false);
+      }}
       modal={true}
       draggable="true"
       resizable="true"
     >
-      <div className="p-d-flex p-ai-center p-jc-center">
-        {/* If loading.... */}
-        <ProgressSpinner
-          style={{ width: "25px", height: "25px", float: "left" }}
-          strokeWidth="5"
-          fill="#ffffff"
-          animationDuration="0.5s"
-        />
-        <span className="ml-2">Loading...</span>
-      </div>
-
+      {showSpinner()}
       <div className="overflow-x-hidden">
-        {/* If not not loading... */}
         <div className="flex align-items-end">
-          <div className="col-5">
+          <div className="col-5 mb-2">
             <p className="list-mw">Style templates</p>
-            <div className="p-fluid">
-              <span className="p-float-label p-input-icon-left">
+            <div className="fluid">
+              <span className="float-label p-input-icon-left">
                 <AutoComplete
                   value={styleTemplate}
                   suggestions={filteredStyleTemplates}
-                  completeMethod={searchStyleTemplate}
+                  completeMethod={(e) => {
+                    searchStyleTemplate(e);
+                  }}
                   field="caption"
-                  onChange={(e) => setStyleTemplate(e.value)}
+                  onChange={(e) => {
+                    setStyleTemplate(e.value);
+                  }}
                   aria-label="Countries"
                   dropdownAriaLabel="Select Style Template"
                   autoHighlight={true}
@@ -206,78 +240,169 @@ const ControlStyles = (props) => {
               </span>
             </div>
           </div>
-          <div className="p-mb-4 p-ml-auto">
+          <div className="mb-4 ml-auto flex gap-1">
             <Button
               icon="pi pi-undo"
               label="Reset"
               tooltip="Edit style template"
-              onClick={clearField}
+              onClick={(e) => {
+                clearField(e);
+              }}
             ></Button>
             <Button
               icon="pi pi-pencil"
               label="Edit"
               tooltip="Edit style template"
-              onClick={enableFields}
+              onClick={(e) => {
+                enableFields(e);
+              }}
             ></Button>
             <Button
               icon="pi pi-save"
               label="Save"
               tooltip="Edit style template"
-              onClick={saveTemplate}
+              onClick={(e) => {
+                saveTemplate(e);
+              }}
             ></Button>
           </div>
         </div>
 
-        <div className="grid border-top">
-          <div className="p-sm-3 cs-listbox p-pb-3">
-            <ListBox
-              filter={true}
-              value={selectedStyleClass}
-              onChange={
-                onStyleClassChange
-              } /* (e) => setSelectedStyleClass(e.value);  */
-              options={styleClasses}
-              style={{ width: "15rem" }}
-            />
-          </div>
+        <form>
+          <div className="grid border-top">
+            <div className="m-3 cs-listbox pb-3">
+              <Controller
+                name="selectedStyleClass"
+                control={control}
+                render={({ field }) => (
+                  <ListBox
+                    id={field.name}
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.value);
+                      setStyleClassChanged(false);
+                      setTimeout(() => {
+                        setStyleClassChanged(true);
+                      }, 10);
+                    }}
+                    options={styleClasses}
+                    filter={true}
+                    style={{ width: "15rem" }}
+                  />
+                )}
+              />
+            </div>
 
-          <div className="p-sm-9 border-left p-mb-2 ovf-auto">
-            <div className="container">
-              <div className="grid align-items-center">
-                <div className="col-12">
-                  <SelectButton
-                    value={selectedState}
-                    options={styleStateList}
-                    onChange={onStyleClassChange}
-                  ></SelectButton>
+            <div className="col-9 sm-9 border-left mb-2 ovf-auto">
+              <div className="container">
+                <div className="align-items-center">
+                  <div className="col-12">
+                    <Controller
+                      name="selectedState"
+                      control={control}
+                      render={({ field }) => (
+                        <SelectButton
+                          id={field.name}
+                          value={field.value}
+                          options={styleStateList}
+                          onChange={(e) => {
+                            field.onChange(e.value);
+                            setSelectedStateChanged(false);
+                            setTimeout(() => {
+                              setSelectedStateChanged(true);
+                            }, 10);
+                          }}
+                        ></SelectButton>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid col-12 ml-2">
+                    <div className="grid col-11 mt-0">
+                      <h6>Value</h6>
+                      <span
+                        className="ml-2 mt-1 align-items-start flex"
+                        title="Table header and teable cell styles like background-color, text-align, text-decoration etc handle with Edit Options"
+                      >
+                        <em className="pi pi-info-circle"></em>
+                      </span>
+                    </div>
+                    <div className="col-1 ml-auto">
+                      <em
+                        title="Add Property"
+                        onClick={(e) => {
+                          console.log("Add property", getValues());
+                          onAddRow(e);
+                        }}
+                        className="pi pi-plus-circle cursp"
+                      ></em>
+                    </div>
+                  </div>
                 </div>
+                <div className="grid align-items-center ">
+                  {/* Add new rows for the class names */}
+                  {styleClassChanged &&
+                    getValues().selectedStyleClass &&
+                    fields
+                      .filter((fld) => {
+                        console.log("----", fld);
+                        return (
+                          fld.selectedStyleClass ===
+                          getValues().selectedStyleClass
+                        );
+                      })
+                      .map((item, index) => {
+                        let selectedStyleClass = getValues().selectedStyleClass;
+                        //cssprops
 
-                <div className="grid col-12 ml-2">
-                  <div className="grid col-11 mt-0">
-                    <h6>Value</h6>
-                    <span
-                      className="ml-2 mt-1 align-items-start flex"
-                      title="Table header and teable cell styles like background-color, text-align, text-decoration etc handle with Edit Options"
-                    >
-                      {/* if control type grid */}
-                      <em className="pi pi-info-circle"></em>
-                    </span>
-                  </div>
-                  <div className="col-1 ml-auto">
-                    <em
-                      title="Add Property"
-                      onClick={onAddRow}
-                      className="pi pi-plus-circle cursp"
-                    ></em>
-                  </div>
+                        return (
+                          <>
+                            <div key={item.id} className="col-5">
+                              <Controller
+                                control={control}
+                                name={`${selectedStyleClass}.cssprops[${index}].className`}
+                                render={({ field }) => (
+                                  <InputText
+                                    placeholder="background-color"
+                                    id={field.name}
+                                    {...field}
+                                    style={{width: '100%'}}
+                                    autoFocus
+                                  />
+                                )}
+                              />
+                            </div>
+                            <div key={item.id} className="col-5">
+                              <Controller
+                                control={control}
+                                name={`${selectedStyleClass}.cssprops[${index}].classValue`}
+                                render={({ field }) => (
+                                  <InputText
+                                    placeholder="#fafacd"
+                                    id={field.name}
+                                    {...field}
+                                    style={{width: '100%'}}
+                                  />
+                                )}
+                              />
+                            </div>
+                            <div className="col-2">
+                              <Button
+                                icon="pi pi-times"
+                                onClick={() => {
+                                  remove(index);
+                                }}
+                                className="p-button-rounded p-button-danger p-button-outlined"
+                              />
+                            </div>
+                          </>
+                        );
+                      })}
                 </div>
               </div>
-              <form onSubmit={handleSubmit(onSubmit)} className="form_height">
-                <div className="p-grid p-ai-center"></div>
-              </form>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </Dialog>
   );

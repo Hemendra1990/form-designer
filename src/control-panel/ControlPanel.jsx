@@ -70,7 +70,7 @@ const ControlPanel = () => {
         style={{ zIndex: "1000" }}
       >
         <header ref={headerRef}>
-          <i style={{ color: "var(--gray-400)" }} className="fa fa-bars"></i>
+          <i style={{ color: "#5b5252" }} className="fa fa-bars"></i>
         </header>
         <div className="control-panel-content">
           <ListBox

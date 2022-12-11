@@ -30,6 +30,34 @@ body {
     /* border: 1px dashed */
 }
 
+.control-attr-panel {
+    width: 30px;
+    display: inline-block;
+    position: absolute;
+    right: 0%;
+    min-width: 0px;
+    top: 40%;
+    z-index: 99;
+    box-shadow: 1px 2px 3px 1px rgb(0 0 0 / 30%);
+}
+
+.control-attr-panel > button {
+    font-size: 20px;
+}
+.control-attr-panel button:focus {
+    box-shadow: none;
+}
+
+.control-attr-panel button {
+    background-color: #fff;
+    border: none;
+    transition: 0.3s ease;
+}
+.control-attr-panel button:hover, .control-attr-panel button:focus {
+    cursor: pointer;
+    background-color: rgb(238, 238, 238);
+}
+
 .control-panel {
     
 }

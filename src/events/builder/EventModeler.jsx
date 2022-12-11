@@ -108,8 +108,13 @@ const EventModeler = (props) => {
 
   const saveEvent = (eventData) => {
 
-    if(eventName){
+    if(nodes && nodes.length === 0) {
+      meta.toastRef.current.show({severity: 'warn', summary: 'Warning', detail: 'No new event created as no action is choosen.'});
+      props.hide();
+      return;
+    }
 
+    if(eventName){
       const event = {
         id: eventId,
         name: eventName,
@@ -132,7 +137,7 @@ const EventModeler = (props) => {
   
       props.hide();
     } else {
-      alert("Please give valid Event Name");
+      meta.toastRef.current.show({severity: 'error', summary: 'Error', detail: 'Event Can\'t be saved without a name.'});
     }
 
   }
@@ -144,6 +149,12 @@ const EventModeler = (props) => {
     setEventName(metaEvent.name);
     setEdges(metaEvent.bucket.edges);
     setNodes(metaEvent.bucket.nodes);
+  }
+
+  const handleEventNameChange = (e) => {
+    let value = e.target.value;
+    value = value.split(' ').join('_')
+    setEventName(value)
   }
 
   useEffect(() => {
@@ -168,6 +179,7 @@ const EventModeler = (props) => {
       <div className="flex">
         <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
           <Dropdown
+          className="mr-2"
             options={meta.events}
             optionLabel="name"
             optionValue="id"
@@ -181,7 +193,7 @@ const EventModeler = (props) => {
             className="ml-2"
             placeholder="Event Name"
             value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
+            onChange={handleEventNameChange}
           ></InputText>
         </div>
         <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
