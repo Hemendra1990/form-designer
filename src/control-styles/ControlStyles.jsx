@@ -94,9 +94,7 @@ const ControlStyles = (props) => {
   useEffect(() => {
     setLoading(false);
     setElementStyles(element.style); //style is another property inside meta
-    /* setSelectedState("default"); */
     if (styleClasses) {
-      /* setSelectedStyleClass(styleClasses[0]?.value); */
       styleClasses.forEach((stl) => {
         if (stl.label === "Header Cell") {
           const selectedStyleClasses = stl.label; //TODO: convert it to the state variables
@@ -105,12 +103,8 @@ const ControlStyles = (props) => {
       //onStyleClassChange();
       if (elementStyles) {
         setSelectedStateObj();
-        /* elementStyles[styleClasses[0]?.value][selectedState] */
       } else {
         const elementStyles = element.style;
-        /* setSelectedStateObj(
-          elementStyles[styleClasses[0]?.value][selectedState]
-        ); */
       }
     }
   }, []);
@@ -142,7 +136,7 @@ const ControlStyles = (props) => {
    */
   const onAddRow = () => {
     //TODO: Implementation is pending
-    append({ selectedStyleClass: getValues().selectedStyleClass });
+    append({ selectedStyleClass: getValues().selectedStyleClass, selectedState: getValues().selectedState });
   };
 
   const saveDetails = (data) => {
@@ -342,18 +336,19 @@ const ControlStyles = (props) => {
               </div>
               <div className="grid align-items-center mt-1">
                   {/* Add new rows for the class names */}
-                  {styleClassChanged &&
-                    getValues().selectedStyleClass &&
+                  {styleClassChanged && selectedStateChanged && 
+                    getValues().selectedStyleClass && getValues().selectedState &&
                     fields
                       .filter((fld) => {
                         console.log("----", fld);
                         return (
-                          fld.selectedStyleClass ===
-                          getValues().selectedStyleClass
+                          (fld.selectedStyleClass ===
+                            getValues().selectedStyleClass) && (fld.selectedState === getValues().selectedState)
                         );
                       })
                       .map((item, index) => {
                         let selectedStyleClass = getValues().selectedStyleClass;
+                        let selectedState = getValues().selectedState;
                         //cssprops
 
                         return (
@@ -361,7 +356,7 @@ const ControlStyles = (props) => {
                             <div className="col-5">
                               <Controller
                                 control={control}
-                                name={`${selectedStyleClass}.cssprops[${index}].className`}
+                                name={`${selectedStyleClass}.${selectedState}.cssprops[${index}].className`}
                                 render={({ field }) => (
                                   <InputText
                                     key={field.id}
@@ -379,7 +374,7 @@ const ControlStyles = (props) => {
                             <div key={item.id} className="col-5">
                               <Controller
                                 control={control}
-                                name={`${selectedStyleClass}.cssprops[${index}].classValue`}
+                                name={`${selectedStyleClass}.${selectedState}.cssprops[${index}].classValue`}
                                 render={({ field }) => (
                                   <InputText key={field.id}
                                     value={field.value}
