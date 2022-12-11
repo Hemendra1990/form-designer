@@ -339,7 +339,8 @@ const ControlStyles = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="grid align-items-center ">
+              </div>
+              <div className="grid align-items-center mt-1">
                   {/* Add new rows for the class names */}
                   {styleClassChanged &&
                     getValues().selectedStyleClass &&
@@ -399,7 +400,6 @@ const ControlStyles = (props) => {
                         );
                       })}
                 </div>
-              </div>
             </div>
           </div>
         </form>
