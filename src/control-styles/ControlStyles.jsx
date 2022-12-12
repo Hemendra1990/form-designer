@@ -31,6 +31,9 @@ import { Reference } from "../utils/Utils";
 */
 
 const ControlStyles = (props) => {
+  const meta = useMetaContext();
+  const element = meta.currentElement;
+  
   const [elementStyles, setElementStyles] = useState(null);
   const [styleTemplate, setStyleTemplate] = useState(null);
   const [filteredStyleTemplates, setFilteredStyleTemplates] = useState(null);
@@ -48,11 +51,13 @@ const ControlStyles = (props) => {
   let styleClasses = [];
 
   //Hook form for adding property
-  const { control, handleSubmit, reset, watch, getValues } = useForm({});
+  const { control, handleSubmit, reset, watch, getValues } = useForm({
+    defaultValues: element.style || {}
+  });
   const { fields, append, prepend, remove, swap, move, insert, replace } =
     useFieldArray({ control, name: "cssprops" });
 
-  const meta = useMetaContext();
+  
   const styleStateList = [
     { label: "Default", value: "default" },
     { label: "Hover", value: "hover" },
@@ -62,8 +67,6 @@ const ControlStyles = (props) => {
     { label: "After", value: "after" },
     { label: "Last Child", value: "last-child" },
   ];
-
-  const element = meta.currentElement;
 
   const populateStyleJson = useCallback((style) => {
     styleClasses.forEach((el) => {
@@ -195,7 +198,8 @@ const ControlStyles = (props) => {
           ans += ` ${selectedStyleClass}:${selectedState} { ${result}} `;
         }
 
-        elementStyle += ans; 
+        elementStyle += ans;
+        element.style = {...formValues};
         Reference.of(meta, element.id).addStyle(elementStyle);
         console.log(elementStyle);
         setShowControlStyle(false);

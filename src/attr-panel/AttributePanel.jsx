@@ -36,12 +36,6 @@ const AttributePanel = (props) => {
         handleAttributeChange(e);
     }
 
-    useEffect(() => {
-        if (meta.currentElement) {
-            setShowSidebar(true);
-        }
-    }, [meta.currentElement])
-
     const availableEvents = meta?.events?.map(ev => {
         return { label: ev.name, value: ev.id }
     });
@@ -226,7 +220,7 @@ const AttributePanel = (props) => {
               <button type="button" value="Configure">
                 <span className="pi pi-cog"></span>
               </button>
-              <button type="button" value="Attributes">
+              <button type="button" value="Attributes" onClick={(e) => setShowSidebar(!showSidebar)}>
                 <span className="pi pi-code"></span>
               </button>
               <button type="button" value="Data Mapper">
@@ -245,6 +239,8 @@ const AttributePanel = (props) => {
         <div className="p-fluid grid">
           <Sidebar
             dismissable={false}
+            showCloseIcon={false}
+            closeOnEscape={true}
             modal={false}
             position="right"
             visible={showSidebar}

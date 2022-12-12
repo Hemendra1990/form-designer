@@ -31,6 +31,7 @@ body {
 }
 
 .control-attr-panel {
+    height: 30px;
     width: 30px;
     display: inline-block;
     position: absolute;
@@ -45,7 +46,8 @@ body {
     font-size: 20px;
 }
 .control-attr-panel button:focus {
-    box-shadow: none;
+    box-shadow: -2px 2px 5px #fc894d;
+    border: 1px solid #fc894d;
 }
 
 .control-attr-panel button {
@@ -133,4 +135,8 @@ body {
 }
 .layout-footer p {
     color: #e7ecf0;
+}
+
+.p-sidebar-right {
+    margin: -24px;
 }
