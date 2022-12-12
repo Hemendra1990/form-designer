@@ -217,18 +217,19 @@ const AttributePanel = (props) => {
         {meta.currentElement && (
           <>
             <div className="control-attr-panel">
-              <button type="button" value="Configure">
+              <button type="button" value="Configure" title='Configure'>
                 <span className="pi pi-cog"></span>
               </button>
-              <button type="button" value="Attributes" onClick={(e) => setShowSidebar(!showSidebar)}>
+              <button type="button" value="Attributes" onClick={(e) => setShowSidebar(!showSidebar)} title='Attributes'>
                 <span className="pi pi-code"></span>
               </button>
-              <button type="button" value="Data Mapper">
+              <button type="button" value="Data Mapper" title='Data Mapper'>
                 <span className="pi pi-database"></span>
               </button>
               <button
                 type="button"
                 value="Control Style"
+                title='Control Style'
                 onClick={(e) => openControlStyle(e)}
               >
                 <span className="pi pi-box"></span>
