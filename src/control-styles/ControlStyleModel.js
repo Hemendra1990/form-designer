@@ -5,7 +5,6 @@ export class ControlStyleModel {
     static GRID = []; */
 
     static BUTTON = [
-        {label:'Button Container', value: '.button-wrapper'},
         {label:'Button', value: '.p-button'},
         {label:'Label', value: '.p-button-label'},
         {label:'Button Icon', value: '.p-button-icon'},

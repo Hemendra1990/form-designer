@@ -10,9 +10,27 @@ import { useMetaContext } from "../context/MetaContext";
 
 import "./ControlStyles.css";
 import { InputText } from "primereact/inputtext";
+import { Reference } from "../utils/Utils";
+
+/* Final Expectaion */
+/**
+ * 
+  <element-id><classname> {
+    html css classes
+  }
+ 
+ #button-JRzr3Cab.p-button {
+	color: green;
+	background-color: #fafaca;
+} 
+
+#button-JRzr3Cab .p-button-label { 
+  color: violet;
+}
+
+*/
 
 const ControlStyles = (props) => {
-  console.log("Control Style ....");
   const [elementStyles, setElementStyles] = useState(null);
   const [styleTemplate, setStyleTemplate] = useState(null);
   const [filteredStyleTemplates, setFilteredStyleTemplates] = useState(null);
@@ -155,6 +173,34 @@ const ControlStyles = (props) => {
     e.preventDefault();
     const formValues = getValues();
     console.log(formValues);
+    const { cssprops } = formValues;
+
+    if(cssprops && cssprops.length > 0) {
+      let ans = "";
+
+      let elementStyle = "";
+      cssprops.forEach(({selectedState, selectedStyleClass}) => {
+        ans = `#${element.id}`
+        const classStr = selectedStyleClass.substring(1,selectedStyleClass.length);
+        const stateStr = selectedState.charAt(0) === '.'? selectedState.substring(1,selectedState.length): selectedState;
+        const styleProps =  formValues[classStr][stateStr].cssprops;
+        const result  = styleProps.map(({className, classValue}) => {
+          return `${className}:${classValue}`;
+        }).join(";");
+
+        if(selectedState === 'default') {
+          ans += ` ${selectedStyleClass} { ${result}} `;
+          
+        } else {
+          ans += ` ${selectedStyleClass}:${selectedState} { ${result}} `;
+        }
+
+        elementStyle += ans; 
+        Reference.of(meta, element.id).addStyle(elementStyle);
+        console.log(elementStyle);
+        setShowControlStyle(false);
+      })
+    }
   };
 
   const renderFooter = (name) => {

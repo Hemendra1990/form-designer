@@ -47,7 +47,9 @@ const HDButton = React.forwardRef( (props, ref) => {
             <style>
                 {controlStyle}
             </style>
-            <Button ref={ref} id={element.id} className={props.element?.attributes?.type} label={props.element?.attributes?.label} onClick={executeEvent}/>
+            <div id={element.id}>
+                <Button ref={ref} className={props.element?.attributes?.type} label={props.element?.attributes?.label} onClick={executeEvent}/>
+            </div>
         </>
     );
 });
