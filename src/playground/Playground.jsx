@@ -42,9 +42,9 @@ const Playground = (props) => {
     element.attributes.children = element.attributes.children || [];
     let ref = element.ref;
 
-    if(element.reactComponent) {
+    /* if(element.reactComponent) { //Commented beacuse opening report looses current.ref
       return element.reactComponent;
-    }
+    } */
 
     if(!ref) {
       ref = React.createRef();
