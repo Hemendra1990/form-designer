@@ -50,7 +50,7 @@ const MessageAlert = (props) => {
     setselectedPosition(e.value);
   }
 
-  const saveAlert = (e) => {
+  useEffect(()=> {
     const alertEventData = {
       header,
       message,
@@ -58,20 +58,21 @@ const MessageAlert = (props) => {
       position: selectedPosition
     }
     data.eventInfo = {...data.eventInfo, data: alertEventData}
+  })
+  const saveAlert = (e) => {
     //data.updateEvent(alertEventData);
   }
 
   const footer = <span> 
-    <Button label="Save" icon="pi pi-check" style={{marginRight: '.25em'}} onClick={saveAlert}/>
-    <Button label="Clear" icon="pi pi-times" className="p-button-secondary"/>
+    {/* <Button label="Save" icon="pi pi-check" style={{marginRight: '.25em'}} onClick={saveAlert}/>
+    <Button label="Clear" icon="pi pi-times" className="p-button-secondary"/> */}
   </span>;
 
 
   return (
     <Card
       title="Message Alert"
-      style={{ width: "20rem", marginBottom: "2em" }}
-      footer={footer}
+      style={{ width: "20rem" }}
     >
       
       <div className="grid fluid">
