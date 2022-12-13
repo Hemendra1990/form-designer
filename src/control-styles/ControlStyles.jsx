@@ -4,7 +4,14 @@ import { Dialog } from "primereact/dialog";
 import { ListBox } from "primereact/listbox";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { SelectButton } from "primereact/selectbutton";
-import React, { Fragment, memo, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useMetaContext } from "../context/MetaContext";
 
@@ -33,7 +40,7 @@ import "./ControlStyles.css";
 const ControlStyles = (props) => {
   const meta = useMetaContext();
   const element = meta.currentElement;
-  
+
   const [elementStyles, setElementStyles] = useState(null);
   const [styleTemplate, setStyleTemplate] = useState(null);
   const [filteredStyleTemplates, setFilteredStyleTemplates] = useState(null);
@@ -52,12 +59,11 @@ const ControlStyles = (props) => {
 
   //Hook form for adding property
   const { control, handleSubmit, reset, watch, getValues } = useForm({
-    defaultValues: element.style || {}
+    defaultValues: element.style || {},
   });
   const { fields, append, prepend, remove, swap, move, insert, replace } =
     useFieldArray({ control, name: "cssprops" });
 
-  
   const styleStateList = [
     { label: "Default", value: "default" },
     { label: "Hover", value: "hover" },
@@ -156,12 +162,23 @@ const ControlStyles = (props) => {
    * Append New Row
    */
   const onAddRow = () => {
-    if(getValues().selectedStyleClass && getValues().selectedState) {
-      append({ selectedStyleClass: getValues().selectedStyleClass, selectedState: getValues().selectedState });
-    } else if(!getValues().selectedStyleClass) {
-      meta.toastRef.current.show({severity: 'error', summary: 'Choose Class', detail: 'Choose Class from listbox'});
-    } else if(!getValues().selectedState) {
-      meta.toastRef.current.show({severity: 'error', summary: 'Choose State', detail: 'Choose State from Switces'});
+    if (getValues().selectedStyleClass && getValues().selectedState) {
+      append({
+        selectedStyleClass: getValues().selectedStyleClass,
+        selectedState: getValues().selectedState,
+      });
+    } else if (!getValues().selectedStyleClass) {
+      meta.toastRef.current.show({
+        severity: "error",
+        summary: "Choose Class",
+        detail: "Choose Class from listbox",
+      });
+    } else if (!getValues().selectedState) {
+      meta.toastRef.current.show({
+        severity: "error",
+        summary: "Choose State",
+        detail: "Choose State from Switces",
+      });
     }
   };
 
@@ -176,7 +193,12 @@ const ControlStyles = (props) => {
     e.preventDefault();
     const formValues = getValues();
     console.log(formValues);
-    const elementStyle = addElementStyle(formValues, element, meta, setShowControlStyle);
+    const elementStyle = addElementStyle(
+      formValues,
+      element,
+      meta,
+      setShowControlStyle
+    );
     element.style = { ...formValues };
     Reference.of(meta, element.id).addStyle(elementStyle);
     console.log(elementStyle);
@@ -366,70 +388,73 @@ const ControlStyles = (props) => {
                 </div>
               </div>
               <div className="grid align-items-center mt-1">
-                  {/* Add new rows for the class names */}
-                  {styleClassChanged && selectedStateChanged && 
-                    getValues().selectedStyleClass && getValues().selectedState &&
-                    fields
-                      .filter((fld) => {
-                        console.log("----", fld);
-                        return (
-                          (fld.selectedStyleClass ===
-                            getValues().selectedStyleClass) && (fld.selectedState === getValues().selectedState)
-                        );
-                      })
-                      .map((item, index) => {
-                        let selectedStyleClass = getValues().selectedStyleClass;
-                        let selectedState = getValues().selectedState;
-                        //cssprops
+                {/* Add new rows for the class names */}
+                {styleClassChanged &&
+                  selectedStateChanged &&
+                  getValues().selectedStyleClass &&
+                  getValues().selectedState &&
+                  fields
+                    .filter((fld) => {
+                      console.log("----", fld);
+                      return (
+                        fld.selectedStyleClass ===
+                          getValues().selectedStyleClass &&
+                        fld.selectedState === getValues().selectedState
+                      );
+                    })
+                    .map((item, index) => {
+                      let selectedStyleClass = getValues().selectedStyleClass;
+                      let selectedState = getValues().selectedState;
+                      //cssprops
 
-                        return (
-                          <Fragment key={item.id}>
-                            <div className="col-5">
-                              <Controller
-                                control={control}
-                                name={`${selectedStyleClass}.${selectedState}.cssprops[${index}].className`}
-                                render={({ field }) => (
-                                  <InputText
-                                    key={field.id}
-                                    value={field.value}
-                                    
-                                    placeholder="background-color"
-                                    id={field.name}
-                                    {...field}
-                                    style={{width: '100%'}}
-                                    autoFocus
-                                  />
-                                )}
-                              />
-                            </div>
-                            <div key={item.id} className="col-5">
-                              <Controller
-                                control={control}
-                                name={`${selectedStyleClass}.${selectedState}.cssprops[${index}].classValue`}
-                                render={({ field }) => (
-                                  <InputText key={field.id}
-                                    value={field.value}
-                                    placeholder="#fafacd"
-                                    id={field.name}
-                                    {...field}
-                                    style={{width: '100%'}}
-                                  />
-                                )}
-                              />
-                            </div>
-                            <div className="col-2">
-                              <Button
-                                icon="pi pi-times"
-                                onClick={() => {
-                                  remove(index);
-                                }}
-                                className="p-button-rounded p-button-danger p-button-outlined"
-                              />
-                            </div>
-                          </Fragment>
-                        );
-                      })}
-                </div>
+                      return (
+                        <Fragment key={item.id}>
+                          <div className="col-5">
+                            <Controller
+                              control={control}
+                              name={`${selectedStyleClass}.${selectedState}.cssprops[${index}].className`}
+                              render={({ field }) => (
+                                <InputText
+                                  key={field.id}
+                                  value={field.value}
+                                  placeholder="background-color"
+                                  id={field.name}
+                                  {...field}
+                                  style={{ width: "100%" }}
+                                  autoFocus
+                                />
+                              )}
+                            />
+                          </div>
+                          <div key={item.id} className="col-5">
+                            <Controller
+                              control={control}
+                              name={`${selectedStyleClass}.${selectedState}.cssprops[${index}].classValue`}
+                              render={({ field }) => (
+                                <InputText
+                                  key={field.id}
+                                  value={field.value}
+                                  placeholder="#fafacd"
+                                  id={field.name}
+                                  {...field}
+                                  style={{ width: "100%" }}
+                                />
+                              )}
+                            />
+                          </div>
+                          <div className="col-2">
+                            <Button
+                              icon="pi pi-times"
+                              onClick={() => {
+                                remove(index);
+                              }}
+                              className="p-button-rounded p-button-danger p-button-outlined"
+                            />
+                          </div>
+                        </Fragment>
+                      );
+                    })}
+              </div>
             </div>
           </div>
         </form>
@@ -440,7 +465,12 @@ const ControlStyles = (props) => {
 
 export default memo(ControlStyles);
 
-export function addElementStyle(formValues, element, meta, setShowControlStyle) {
+export function addElementStyle(
+  formValues,
+  element,
+  meta,
+  setShowControlStyle
+) {
   const { cssprops } = formValues;
 
   if (cssprops && cssprops.length > 0) {
@@ -449,25 +479,30 @@ export function addElementStyle(formValues, element, meta, setShowControlStyle) 
     let elementStyle = "";
     cssprops.forEach(({ selectedState, selectedStyleClass }) => {
       ans = `#${element.id}`;
-      const classStr = selectedStyleClass.substring(1, selectedStyleClass.length);
-      const stateStr = selectedState.charAt(0) === '.' ? selectedState.substring(1, selectedState.length) : selectedState;
+      const classStr = selectedStyleClass.substring(
+        1,
+        selectedStyleClass.length
+      );
+      const stateStr =
+        selectedState.charAt(0) === "."
+          ? selectedState.substring(1, selectedState.length)
+          : selectedState;
       const styleProps = formValues[classStr][stateStr].cssprops;
-      const result = styleProps.map(({ className, classValue }) => {
-        return `${className}:${classValue}`;
-      }).join(";");
+      const result = styleProps
+        .map(({ className, classValue }) => {
+          return `${className}:${classValue}`;
+        })
+        .join(";");
 
-      if (selectedState === 'default') {
+      if (selectedState === "default") {
         ans += ` ${selectedStyleClass} { ${result}} `;
-
       } else {
         ans += ` ${selectedStyleClass}:${selectedState} { ${result}} `;
       }
 
       elementStyle += ans;
-      
     });
 
     return elementStyle;
   }
 }
-
