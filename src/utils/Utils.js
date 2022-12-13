@@ -52,6 +52,9 @@ const deepCloneNative = (obj, hash = new WeakMap()) => {
       key => ({ [key]: deepClone(obj[key], hash) }) ));
 };
 
+/**
+ * Returns the current element reference (ref.current) object
+ */
 export const Reference = {
   of: (meta, elementId) => {
     if(!elementId) {

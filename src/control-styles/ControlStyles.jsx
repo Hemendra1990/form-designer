@@ -1,16 +1,16 @@
-import React, { Fragment, memo, useCallback, useEffect, useRef, useState } from "react";
-import { Dialog } from "primereact/dialog";
-import { Button } from "primereact/button";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { AutoComplete } from "primereact/autocomplete";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
 import { ListBox } from "primereact/listbox";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { SelectButton } from "primereact/selectbutton";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import React, { Fragment, memo, useCallback, useEffect, useRef, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useMetaContext } from "../context/MetaContext";
 
-import "./ControlStyles.css";
 import { InputText } from "primereact/inputtext";
 import { Reference } from "../utils/Utils";
+import "./ControlStyles.css";
 
 /* Final Expectaion */
 /**
@@ -176,35 +176,11 @@ const ControlStyles = (props) => {
     e.preventDefault();
     const formValues = getValues();
     console.log(formValues);
-    const { cssprops } = formValues;
-
-    if(cssprops && cssprops.length > 0) {
-      let ans = "";
-
-      let elementStyle = "";
-      cssprops.forEach(({selectedState, selectedStyleClass}) => {
-        ans = `#${element.id}`
-        const classStr = selectedStyleClass.substring(1,selectedStyleClass.length);
-        const stateStr = selectedState.charAt(0) === '.'? selectedState.substring(1,selectedState.length): selectedState;
-        const styleProps =  formValues[classStr][stateStr].cssprops;
-        const result  = styleProps.map(({className, classValue}) => {
-          return `${className}:${classValue}`;
-        }).join(";");
-
-        if(selectedState === 'default') {
-          ans += ` ${selectedStyleClass} { ${result}} `;
-          
-        } else {
-          ans += ` ${selectedStyleClass}:${selectedState} { ${result}} `;
-        }
-
-        elementStyle += ans;
-        element.style = {...formValues};
-        Reference.of(meta, element.id).addStyle(elementStyle);
-        console.log(elementStyle);
-        setShowControlStyle(false);
-      })
-    }
+    const elementStyle = addElementStyle(formValues, element, meta, setShowControlStyle);
+    element.style = { ...formValues };
+    Reference.of(meta, element.id).addStyle(elementStyle);
+    console.log(elementStyle);
+    setShowControlStyle(false);
   };
 
   const renderFooter = (name) => {
@@ -463,3 +439,35 @@ const ControlStyles = (props) => {
 };
 
 export default memo(ControlStyles);
+
+export function addElementStyle(formValues, element, meta, setShowControlStyle) {
+  const { cssprops } = formValues;
+
+  if (cssprops && cssprops.length > 0) {
+    let ans = "";
+
+    let elementStyle = "";
+    cssprops.forEach(({ selectedState, selectedStyleClass }) => {
+      ans = `#${element.id}`;
+      const classStr = selectedStyleClass.substring(1, selectedStyleClass.length);
+      const stateStr = selectedState.charAt(0) === '.' ? selectedState.substring(1, selectedState.length) : selectedState;
+      const styleProps = formValues[classStr][stateStr].cssprops;
+      const result = styleProps.map(({ className, classValue }) => {
+        return `${className}:${classValue}`;
+      }).join(";");
+
+      if (selectedState === 'default') {
+        ans += ` ${selectedStyleClass} { ${result}} `;
+
+      } else {
+        ans += ` ${selectedStyleClass}:${selectedState} { ${result}} `;
+      }
+
+      elementStyle += ans;
+      
+    });
+
+    return elementStyle;
+  }
+}
+

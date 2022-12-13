@@ -4,6 +4,7 @@ import React, { memo, useEffect, useImperativeHandle, useState } from 'react';
 import { useMetaContext, useUpdateMetaContext } from '../context/MetaContext';
 import { useModalContext } from '../context/ModalContext';
 import { ControlStyleModel } from '../control-styles/ControlStyleModel';
+import { addElementStyle } from '../control-styles/ControlStyles';
 import EventExecutor from '../service/EventExecutor';
 
 const HDButton = React.forwardRef( (props, ref) => {
@@ -25,6 +26,14 @@ const HDButton = React.forwardRef( (props, ref) => {
             setControlStyle(style);
         }
     }));
+
+    useEffect(()=> {
+        //Apply style if the element already has
+        if(element.style) {
+            const elementStyle = addElementStyle(element.style, element, meta, setControlStyle);
+            setControlStyle(elementStyle);
+        }
+    }, []);
 
     
     
