@@ -13,7 +13,7 @@ import React, {
   useState,
 } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { useMetaContext } from "../context/MetaContext";
+import { useMetaContext, useToastContext } from "../context/MetaContext";
 
 import { InputText } from "primereact/inputtext";
 import { Reference } from "../utils/Utils";
@@ -40,6 +40,8 @@ import "./ControlStyles.css";
 const ControlStyles = (props) => {
   const meta = useMetaContext();
   const element = meta.currentElement;
+
+  const { toastRef } = useToastContext();
 
   const [elementStyles, setElementStyles] = useState(null);
   const [styleTemplate, setStyleTemplate] = useState(null);
@@ -168,13 +170,13 @@ const ControlStyles = (props) => {
         selectedState: getValues().selectedState,
       });
     } else if (!getValues().selectedStyleClass) {
-      meta.toastRef.current.show({
+      toastRef.current.show({
         severity: "error",
         summary: "Choose Class",
         detail: "Choose Class from listbox",
       });
     } else if (!getValues().selectedState) {
-      meta.toastRef.current.show({
+      toastRef.current.show({
         severity: "error",
         summary: "Choose State",
         detail: "Choose State from Switces",
