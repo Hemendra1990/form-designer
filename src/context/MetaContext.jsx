@@ -11,6 +11,7 @@ import ApiModeler from "../api-modeler/ApiModeler";
  */
 export const MetaContext = React.createContext();
 export const UpdateMetaContext = React.createContext();
+export const ToastContext = React.createContext();
 
 /**
  *
@@ -23,6 +24,10 @@ export const useMetaContext = () => {
 export const useUpdateMetaContext = () => {
   return useContext(UpdateMetaContext);
 };
+export const useToastContext = () => {
+  return useContext(ToastContext);
+};
+
 
 /**
  * Context Provider so that I wont be passing the meta and setMeta as the props
@@ -37,6 +42,7 @@ export const MetaContextProvider = ({ children }) => {
     editMode: true,
   };
   const [meta, setMeta] = useState(sharedMeta);
+  const [toastPosition, setToastPosition] = useState('top-right');
   const toastRef = useRef();
   const api = useRef();
 
@@ -168,10 +174,12 @@ export const MetaContextProvider = ({ children }) => {
     <>
       <MetaContext.Provider value={meta}>
         <UpdateMetaContext.Provider value={{ updateMeta, addElement, clearAll, openReport, togglePlaygroundMode, saveReport, configure, saveReportConfiguration, configureApi }}>
-          {children}
+          <ToastContext.Provider value={{toastRef, setToastPosition}}>
+            {children}
+          </ToastContext.Provider>
         </UpdateMetaContext.Provider>
       </MetaContext.Provider>
-      <Toast ref={toastRef} position="top-right" />
+      <Toast ref={toastRef} position={toastPosition} />
     </>
   );
 };

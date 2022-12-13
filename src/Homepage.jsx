@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import { useConfirmationContext } from "./context/ConfirmationDialogContext";
-import { useMetaContext, useUpdateMetaContext } from "./context/MetaContext";
+import { useMetaContext, useToastContext, useUpdateMetaContext } from "./context/MetaContext";
 import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
@@ -22,10 +22,11 @@ const Homepage = (props) => {
   const { confirmDialogs } = confirmDialogContext;
 
   const { togglePlaygroundMode } = useUpdateMetaContext();
+  const toastContext = useToastContext();
 
   //Initialize the EvenExecutor and pass the modalContext
   setTimeout(() => {
-    new EventExecutor(modalContext, confirmDialogContext);
+    new EventExecutor(modalContext, confirmDialogContext, toastContext);
   }, 0);
 
   const [displayBasic, setDisplayBasic] = useState(false);

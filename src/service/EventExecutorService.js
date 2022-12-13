@@ -6,11 +6,11 @@ import { EVENT_TYPE } from "../events/model/EventModel";
 import { Reference } from "../utils/Utils";
 
 export const EventExecutorService = {
-  execute: (meta, eventNode, modalContext, confirmDialogContext) => {
+  execute: (meta, eventNode, modalContext, confirmDialogContext, toastContext) => {
     const eventDetail = eventNode.data.eventInfo;
     return new Promise((resolve, reject) => {
       if (eventNode.type === EVENT_TYPE.ALERT) {
-        executeMessageAlert(meta, eventNode);
+        executeMessageAlert(meta, eventNode, toastContext);
         setTimeout(() => {
           resolve();
         }, 400);
@@ -72,11 +72,22 @@ function executeConfirmation(meta, eventNode, confirmDialogContext) {
 }
 
 
-function executeMessageAlert(meta, eventNode) {
+function executeMessageAlert(meta, eventNode, toastContext) {
     const { eventInfo } = eventNode.data;
     const { header, message, position, type} = eventInfo.data
+
+    if(toastContext && toastContext.toastRef.current.show) {
+      toastContext.setToastPosition(position);
+      toastContext.toastRef.current.show({
+        severity: type,
+        summary: header,
+        detail: message
+      });
+    } else {
+      alert("toast service failed!");
+    }
     
-  if (meta.toastRef) {
+  /* if (meta.toastRef) {
     setTimeout(()=> {
       const toastElem = React.createElement(Toast, {ref: React.createRef()});
       meta.toastRef.current.show({
@@ -88,7 +99,7 @@ function executeMessageAlert(meta, eventNode) {
     },10)
   } else {
     alert("toast service failed!");
-  }
+  } */
 }
 
 /* function executeModal(meta, eventNode) {

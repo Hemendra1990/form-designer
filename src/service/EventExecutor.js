@@ -7,14 +7,16 @@ const startExecution = function (
   nodeId,
   eventToExecute,
   modalContext,
-  confirmContext
+  confirmContext,
+  toastContext
 ) {
   const node = eventToExecute.bucket.nodes.find((nd) => nd.id == nodeId);
   const excutionPromise = EventExecutorService.execute(
     meta,
     node,
     modalContext,
-    confirmContext
+    confirmContext,
+    toastContext
   );
 
   excutionPromise.then(
@@ -56,7 +58,8 @@ const startExecution = function (
           nextNodeId,
           eventToExecute,
           modalContext,
-          confirmContext
+          confirmContext,
+          toastContext
         );
       }
     },
@@ -93,7 +96,8 @@ const startExecution = function (
           nextNodeId,
           eventToExecute,
           modalContext,
-          confirmContext
+          confirmContext,
+          toastContext
         );
       }
     }
@@ -110,9 +114,11 @@ const groupEdge = (xs, key) => {
 class EventExecutor {
   static modalContext;
   static confirmContext;
-  constructor(modalContext, confirmContext) {
+  static toastContext;
+  constructor(modalContext, confirmContext, toastContext) {
     EventExecutor.modalContext = modalContext;
     EventExecutor.confirmContext = confirmContext;
+    EventExecutor.toastContext = toastContext;
   }
 
   static async executeEvent(meta, eventId) {
@@ -163,7 +169,8 @@ class EventExecutor {
         1,
         eventToExecute,
         this.modalContext,
-        this.confirmContext
+        this.confirmContext,
+        this.toastContext
       );
 
       //test
@@ -182,7 +189,8 @@ class EventExecutor {
         meta,
         nodes[0],
         this.modalContext,
-        this.confirmContext
+        this.confirmContext,
+        this.toastContext
       );
     }
   }

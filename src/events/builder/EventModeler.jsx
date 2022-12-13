@@ -18,7 +18,7 @@ import "reactflow/dist/style.css";
 import { EVENTS, NODE_TYPES } from "../model/EventModel";
 import "./EventModeler.css";
 import { Dropdown } from "primereact/dropdown";
-import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
+import { useMetaContext, useToastContext, useUpdateMetaContext } from "../../context/MetaContext";
 
 const initialNodes = [
   /* {
@@ -39,6 +39,7 @@ const EventModeler = (props) => {
 
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
+  const { toastRef } = useToastContext();
 
   const op = useRef(null);
   const [eventId, setEventId] = useState('');
@@ -109,7 +110,7 @@ const EventModeler = (props) => {
   const saveEvent = (eventData) => {
 
     if(nodes && nodes.length === 0) {
-      meta.toastRef.current.show({severity: 'warn', summary: 'Warning', detail: 'No new event created as no action is choosen.'});
+      toastRef.current.show({severity: 'warn', summary: 'Warning', detail: 'No new event created as no action is choosen.'});
       props.hide();
       return;
     }
@@ -137,7 +138,7 @@ const EventModeler = (props) => {
   
       props.hide();
     } else {
-      meta.toastRef.current.show({severity: 'error', summary: 'Error', detail: 'Event Can\'t be saved without a name.'});
+      toastRef.current.show({severity: 'error', summary: 'Error', detail: 'Event Can\'t be saved without a name.'});
     }
 
   }

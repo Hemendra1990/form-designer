@@ -42,9 +42,10 @@ const Playground = (props) => {
     element.attributes.children = element.attributes.children || [];
     let ref = element.ref;
 
-    /* if(element.reactComponent) { //Commented beacuse opening report looses current.ref
-      return element.reactComponent;
-    } */
+    if(element.reactComponent) { //Commented beacuse opening report looses current.ref
+      return React.cloneElement(element.reactComponent, {meta: meta})
+      //return element.reactComponent;
+    }
 
     if(!ref) {
       ref = React.createRef();
@@ -238,7 +239,7 @@ const Playground = (props) => {
           )}
         </Droppable>
       </DragDropContext>
-      <Toast ref={toastRef}></Toast>
+      {/* <Toast ref={toastRef}></Toast> */}
     </>
   );
 };
