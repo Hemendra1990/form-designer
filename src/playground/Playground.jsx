@@ -41,6 +41,11 @@ const Playground = (props) => {
     element.attributes = element.attributes || {};
     element.attributes.children = element.attributes.children || [];
     let ref = element.ref;
+
+    if(element.reactComponent) {
+      return element.reactComponent;
+    }
+
     if(!ref) {
       ref = React.createRef();
     }
@@ -55,6 +60,7 @@ const Playground = (props) => {
     });
 
     element.ref = ref;
+    element.reactComponent = reactComponent; //Important: this is used to handle the rerender of the elements after drag n drop
     return reactComponent;
   };
 

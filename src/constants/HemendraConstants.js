@@ -13,6 +13,7 @@ export const jsonStringifyIgnoredList = [
     "ref",
     "toastRef",
     "currentElement",
+    "reactComponent"
   ];
 
 export default getComponent;
