@@ -121,11 +121,11 @@ class EventExecutor {
     EventExecutor.toastContext = toastContext;
   }
 
-  static async executeEvent(meta, eventId) {
+  static async executeEvent(meta, eventId, data) {
     //get the event detail from the eventId, we will do it later
     //Initially I am trying with Script Event
     if (meta.editMode) {
-      
+      console.info("Event cannot be executed on edit mode.");
       return;
     }
     const eventToExecute = meta.events.find((ev) => ev.id === eventId);
