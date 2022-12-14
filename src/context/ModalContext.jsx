@@ -17,19 +17,37 @@ export const ModalContextProvider = ({ children }) => {
   const [modals, setModals] = useState([]);
 
   const actions = {
-    push(content, onHideCallback) {// => means push: () => {}
+    push(content, onHideCallback) {
+      // => means push: () => {}
       let modal;
-      if(typeof(content) === 'object') {
-        
+      if (typeof content === "object") {
         modal = (
-          <Dialog visible={true} position ={content.position} key={uniqueModalId()} header="Modal Header" onHide={() => this.onHide(onHideCallback) }> {/*TODO  What if I want to handle the event on Modal close */}
+          <Dialog
+            breakpoints={{ "1360px": "75vw", "960px": "75vw", "640px": "90vw" }}
+            style={{ width: "85%", height: "80vh" }}
+            visible={true}
+            position={content.position}
+            key={uniqueModalId()}
+            header="Modal Header"
+            onHide={() => this.onHide(onHideCallback)}
+          >
+            {" "}
+            {/*TODO  What if I want to handle the event on Modal close */}
             <p>{content.popupText}</p>
           </Dialog>
         );
       } else {
-
         modal = (
-          <Dialog visible={true} key={uniqueModalId()} header="Modal Header" onHide={() => this.onHide(onHideCallback) }> {/*TODO  What if I want to handle the event on Modal close */}
+          <Dialog
+            breakpoints={{ "1360px": "75vw", "960px": "75vw", "640px": "90vw" }}
+            style={{ width: "85%", height: "80vh" }}
+            visible={true}
+            key={uniqueModalId()}
+            header="Modal Header"
+            onHide={() => this.onHide(onHideCallback)}
+          >
+            {" "}
+            {/*TODO  What if I want to handle the event on Modal close */}
             <p>{content}</p>
           </Dialog>
         );
@@ -37,16 +55,16 @@ export const ModalContextProvider = ({ children }) => {
       setModals((modals) => [...modals, modal]);
     },
     onHide(onHideCallback) {
-        let prevModal = '';
-        //modals.pop();
-        setModals((prevModals) => {
-            prevModal = prevModals[prevModals.length - 1];
-            prevModals.pop();
-            return [...prevModals]
-        });
+      let prevModal = "";
+      //modals.pop();
+      setModals((prevModals) => {
+        prevModal = prevModals[prevModals.length - 1];
+        prevModals.pop();
+        return [...prevModals];
+      });
 
-        onHideCallback && onHideCallback(prevModal); //This is call back method sot 
-    }
+      onHideCallback && onHideCallback(prevModal); //This is call back method sot
+    },
   };
 
   return (

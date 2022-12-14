@@ -124,7 +124,8 @@ class EventExecutor {
   static async executeEvent(meta, eventId, data) {
     //get the event detail from the eventId, we will do it later
     //Initially I am trying with Script Event
-    if (meta.editMode) {
+    if (meta.editMode === true) {
+      //not sure why
       console.info("Event cannot be executed on edit mode.");
       return;
     }

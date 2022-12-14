@@ -1,12 +1,18 @@
 import { Toast } from "primereact/toast";
 import React from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import { DataConnector } from "../attr-panel/data-connector/DataConnector";
 import { EVENT_TYPE } from "../events/model/EventModel";
 import { Reference } from "../utils/Utils";
 
 export const EventExecutorService = {
-  execute: (meta, eventNode, modalContext, confirmDialogContext, toastContext) => {
+  execute: (
+    meta,
+    eventNode,
+    modalContext,
+    confirmDialogContext,
+    toastContext
+  ) => {
     const eventDetail = eventNode.data.eventInfo;
     return new Promise((resolve, reject) => {
       if (eventNode.type === EVENT_TYPE.ALERT) {
@@ -18,23 +24,32 @@ export const EventExecutorService = {
         executeScript(meta, eventNode);
         resolve();
       } else if (eventNode.type === EVENT_TYPE.CONFIRMATION) {
-        executeConfirmation(meta, eventNode, confirmDialogContext).then(()=> {
-          resolve();
-        }, error => {
-          reject();
-        })
+        executeConfirmation(meta, eventNode, confirmDialogContext).then(
+          () => {
+            resolve();
+          },
+          (error) => {
+            reject();
+          }
+        );
       } else if (eventNode.type === EVENT_TYPE.POP_UP) {
-        executePopupModal(meta, eventNode, modalContext)
+        executePopupModal(meta, eventNode, modalContext);
+        resolve();
       } else if (eventNode.type === EVENT_TYPE.REFRESH_ELEMENTS) {
-        executeRefreshElement(meta, eventNode)
+        executeRefreshElement(meta, eventNode);
       } else if (eventNode.type === EVENT_TYPE.LOAD_REPORT) {
-        console.log('Load report in container...', {eventDetail});
-        const containerInstance = Reference.of(meta, eventDetail.data.contianer);
-        if(containerInstance.loadReport) {
-          containerInstance.loadReport(eventDetail.data.resource || eventDetail.data.resourceId, meta);
+        console.log("Load report in container...", { eventDetail });
+        const containerInstance = Reference.of(
+          meta,
+          eventDetail.data.contianer
+        );
+        if (containerInstance.loadReport) {
+          containerInstance.loadReport(
+            eventDetail.data.resource || eventDetail.data.resourceId,
+            meta
+          );
         }
       }
-
     });
   },
 };
@@ -43,50 +58,46 @@ export const EventExecutorService = {
  * For Confirmatino Dialog Event
  */
 
-
 function executeConfirmation(meta, eventNode, confirmDialogContext) {
-  const {confirmActions} = confirmDialogContext;
+  const { confirmActions } = confirmDialogContext;
   return new Promise((resolve, reject) => {
+    const ConfirmationDialogHideCallback = () => {};
 
-    const ConfirmationDialogHideCallback = () => {
-      
-    }
-    
     const ConfirmationDialogAcceptCallback = () => {
-      
       //event.success
       //executeNext(eventNode.success)
       resolve();
-    }
-    
+    };
+
     const ConfirmationDialogRejectCallback = () => {
-      
       //event.failure
       //executeNext(eventNode.failure)
       reject();
-    }
-    confirmActions.push('This is test', ConfirmationDialogHideCallback, ConfirmationDialogAcceptCallback, ConfirmationDialogRejectCallback)
-
-  })
-
+    };
+    confirmActions.push(
+      "This is test",
+      ConfirmationDialogHideCallback,
+      ConfirmationDialogAcceptCallback,
+      ConfirmationDialogRejectCallback
+    );
+  });
 }
 
-
 function executeMessageAlert(meta, eventNode, toastContext) {
-    const { eventInfo } = eventNode.data;
-    const { header, message, position, type} = eventInfo.data
+  const { eventInfo } = eventNode.data;
+  const { header, message, position, type } = eventInfo.data;
 
-    if(toastContext && toastContext.toastRef.current.show) {
-      toastContext.setToastPosition(position);
-      toastContext.toastRef.current.show({
-        severity: type,
-        summary: header,
-        detail: message
-      });
-    } else {
-      alert("toast service failed!");
-    }
-    
+  if (toastContext && toastContext.toastRef.current.show) {
+    toastContext.setToastPosition(position);
+    toastContext.toastRef.current.show({
+      severity: type,
+      summary: header,
+      detail: message,
+    });
+  } else {
+    alert("toast service failed!");
+  }
+
   /* if (meta.toastRef) {
     setTimeout(()=> {
       const toastElem = React.createElement(Toast, {ref: React.createRef()});
@@ -111,7 +122,7 @@ function executeScript(meta, eventNode) {
   const Reference = {
     of: (elementId) => {
       return meta.elementMap[elementId].ref.current;
-    }
+    },
   };
   const scriptFun = new Function(`
         const meta = arguments[0];
@@ -127,26 +138,22 @@ function executePopupModal(meta, eventNode, modalContext) {
   const { actions } = modalContext;
   const popupEvDetail = eventNode.data.eventInfo;
   actions.push(popupEvDetail);
-  
 }
 
 async function executeRefreshElement(meta, eventNode) {
-  
   const dataConnector = new DataConnector();
   let promises = [];
-  eventNode.data.eventInfo.data.forEach(refElementId => {
-    const element = meta.elementMap[refElementId]
+  eventNode.data.eventInfo.data.forEach((refElementId) => {
+    const element = meta.elementMap[refElementId];
     const promise = new Promise((resolve, reject) => {
       dataConnector.handleDatasourceChange(element);
-    })
+    });
     promises.push(promise);
-  })
+  });
 
-  Promise.all(promises).then(r=> {
-    
-  }, err=> {
-    
-  })
+  Promise.all(promises).then(
+    (r) => {},
+    (err) => {}
+  );
   //const results = await fireQueries().toPromise();
 }
-
