@@ -1,7 +1,7 @@
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Handle } from "reactflow";
 import TargetHandle from "./model/TargetHandle";
 
@@ -23,13 +23,23 @@ const PopupModal = (props) => {
 
   const handelPopupTextChange = (e) => {
     setPopupMessage(e.target.value);
-    data.eventInfo.popupText = popupMessage;
+    /* data.eventInfo.popupText = popupMessage; */
   };
 
   const onPositionChange = (e) => {
     setSelectedPosition(e.value);
-    data.eventInfo.position = selectedPosition;
+    /* data.eventInfo.position = selectedPosition; */
   };
+
+  useEffect(() => {
+    const popupData = {
+      popupText: popupMessage,
+      position: selectedPosition,
+    };
+
+    data.eventInfo = { ...data.eventInfo, ...popupData };
+  }, [popupMessage, selectedPosition, data]);
+
   return (
     <Card style={{ width: "20rem" }}>
       <div className="grid">
