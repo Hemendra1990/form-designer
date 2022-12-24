@@ -3,10 +3,12 @@ import React, { memo, useRef, useState } from "react";
 import ApiModeler from "../api-modeler/ApiModeler";
 import ReportConfiguration from "../configuration/ReportConfiguration";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import DataSourceBuilder from "../sql-modeler/DataSourceBuilder";
 
 const HDMenubar = (props) => {
   const reportConfigRef = useRef();
   const apiConfigRef = useRef();
+  const dataSourceConfigRef = useRef();
   const [openReportConfiguration, setOpenReportConfiguration] = useState(false);
   const {
     clearAll,
@@ -15,6 +17,7 @@ const HDMenubar = (props) => {
     saveReport,
     configure,
     configureApi,
+    configureDataSource,
   } = useUpdateMetaContext();
   const end = (
     <p style={{ fontWeight: 400, color: "#fff" }}>
@@ -83,7 +86,13 @@ const HDMenubar = (props) => {
             props.toggleEventModal();
           },
         },
-        { label: "Data Source", icon: "pi pi-database" },
+        {
+          label: "Data Source",
+          icon: "pi pi-database",
+          command: () => {
+            configureDataSource(dataSourceConfigRef);
+          },
+        },
         {
           label: "API",
           icon: "",
@@ -110,6 +119,7 @@ const HDMenubar = (props) => {
       {menuBar()}
       <ReportConfiguration ref={reportConfigRef} />
       <ApiModeler ref={apiConfigRef} />
+      <DataSourceBuilder ref={dataSourceConfigRef}></DataSourceBuilder>
     </>
   );
 };
