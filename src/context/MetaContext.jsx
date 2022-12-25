@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { existingReport } from "../tests/report";
 import { Toast } from "primereact/toast";
+import { v4 as uuidv4 } from "uuid";
 
 import getComponent, {
   jsonStringifyIgnoredList,
@@ -40,7 +41,9 @@ export const MetaContextProvider = ({ children }) => {
     elements: [],
     sqlVariables: {},
     events: [],
+    sqlList: [],
     editMode: true,
+    sessionId: uuidv4(),
   };
   const [meta, setMeta] = useState(sharedMeta);
   const [toastPosition, setToastPosition] = useState("top-right");

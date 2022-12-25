@@ -16,7 +16,14 @@ const httpService = {
     },
   },
 
-  QUERY: {},
+  QUERY: {
+    test(data) {
+      return axios.post(`${baseURL}/query/test`, data);
+    },
+    cacheQuery(sessionId, data) {
+      return axios.post(`${baseURL}/query/cacheQuery/${sessionId}`, data);
+    },
+  },
 };
 
 export default httpService;

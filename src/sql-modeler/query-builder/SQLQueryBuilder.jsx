@@ -12,6 +12,11 @@ import { TabPanel, TabView } from "primereact/tabview";
 import AddSQL from "./AddSQL";
 import { v4 as uuidv4 } from "uuid";
 import httpService from "../../http-service/http-service";
+import randomstring from "randomstring";
+import {
+  useMetaContext,
+  useUpdateMetaContext,
+} from "../../context/MetaContext";
 
 const tab = {
   id: 0,
@@ -47,6 +52,12 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
   const [showQueryModeler, setShowQueryModeler] = useState(false);
   const [sqlQueryTabs, setSQLQueryTabs] = useState([]);
   const [dataSources, setDataSources] = useState([]);
+  const [tabActiveIndex, setTabActiveIndex] = useState(0);
+  const [queryTestResult, setQueryTestResult] = useState("");
+  const [queryTestStatus, setQueryTestStatus] = useState(null);
+
+  const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext();
 
   const fetchDataSources = () => {
     httpService.JNDI.list().then((res) => {
@@ -63,8 +74,75 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
       openSqlQueryBuilder() {
         setShowQueryModeler(true);
       },
+
+      currentTab(tab) {
+        console.log("Current Tab", tab);
+      },
     };
   });
+
+  const testQuery = (e) => {
+    const currTab = sqlQueryTabs[tabActiveIndex - 1];
+    console.log(currTab);
+    const testQueryData = {
+      usedPlaceHolderList: [],
+      sqlVariables: {},
+      extraParam: {
+        controlIds: [],
+        paginationInfo: "1-25",
+        placeHolders: {},
+      },
+      query: currTab.query,
+      type: currTab.type,
+      queryId: currTab.queryId,
+      datasourceName: currTab.dataSourceName.name,
+      name: currTab.name,
+      sort: {},
+      orderBy: false,
+    };
+    httpService.QUERY.test(testQueryData)
+      .then((res) => {
+        console.log("Query Test Response", res);
+        const resData = res.data;
+        setQueryTestStatus(resData.status);
+        setQueryTestResult(resData.msg);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handleSaveQuery = () => {
+    const currTab = sqlQueryTabs[tabActiveIndex - 1];
+    const cacheQueryData = {
+      [currTab.queryId]: `${currTab.query}`,
+    };
+    httpService.QUERY.cacheQuery(meta.sessionId, cacheQueryData).then((res) => {
+      console.log("Cache Query response", res);
+      if (res.data.status) {
+        //Save the query in the meta.sqlList
+        const saveQueryData = {
+          sqlvariables: {},
+          extraParam: {
+            controlIds: [],
+            paginationInfo: "1-25",
+            placeHolders: {},
+          },
+          type: currTab.type,
+          queryId: currTab.queryId,
+          datasourceName: currTab.dataSourceName.name,
+          name: currTab.name,
+          sort: {},
+          orderBy: false,
+          sessionId: meta.sessionId,
+        };
+        meta.sqlList.push(saveQueryData);
+        updateMeta(meta);
+        console.log(meta);
+        setShowQueryModeler(false);
+      }
+    });
+  };
 
   const footer = (
     <div>
@@ -80,17 +158,18 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
         className="p-button-outlined p-button-secondary"
         label="Test"
         icon="pi pi-check"
-        onClick={() => setShowQueryModeler(false)}
+        onClick={testQuery}
       />
       <Button
         className="p-button-outlined p-button-success"
         label="Save"
         icon="pi pi-save"
-        onClick={() => setShowQueryModeler(false)}
+        onClick={handleSaveQuery}
       />
+      {/* onClick={() => setShowQueryModeler(false)} */}
       <Button
         className="p-button-outlined p-button-danger"
-        label="No"
+        label="Cancel"
         icon="pi pi-times"
         onClick={() => setShowQueryModeler(false)}
       />
@@ -100,15 +179,44 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
   const addNewQuery = () => {
     const uuid = uuidv4();
     tab.id = uuid;
+    tab.queryId = randomstring.generate(8);
     tab.name = `sql_query_${sqlQueryTabs.length}`;
     const tabs = [...sqlQueryTabs, JSON.parse(JSON.stringify(tab))];
     setSQLQueryTabs(tabs);
+    setTabActiveIndex(tabs.length);
+  };
+
+  const handleTabChange = (e) => {
+    setTabActiveIndex(e.index);
+    console.log("Tab Changed!!", e);
+  };
+
+  const renderHeader = () => {
+    if (queryTestStatus) {
+      return (
+        <Fragment>
+          SQL
+          <label className="pull-right" style={{ color: "green" }}>
+            {"Valid Query"}
+          </label>
+        </Fragment>
+      );
+    } else if (queryTestStatus != null && !queryTestStatus) {
+      return (
+        <Fragment>
+          SQL
+          <label className="pull-right" style={{ color: "red" }}>
+            {queryTestResult}
+          </label>
+        </Fragment>
+      );
+    }
   };
 
   return (
     <>
       <Dialog
-        header="SQL"
+        header={renderHeader}
         visible={showQueryModeler}
         style={{ width: "70vw" }}
         footer={footer}
@@ -117,7 +225,7 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
         }}
         closable={false}
       >
-        <TabView>
+        <TabView activeIndex={tabActiveIndex} onTabChange={handleTabChange}>
           <TabPanel header="List">
             <p>Show List of SQLs</p>
           </TabPanel>
