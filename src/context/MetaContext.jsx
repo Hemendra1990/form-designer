@@ -150,6 +150,10 @@ export const MetaContextProvider = ({ children }) => {
   const configureApi = (apiConfigureRef) => {
     apiConfigureRef.current && apiConfigureRef.current.openApiConfigModeler();
   };
+  const configureQueryBuilder = (sqlQueryBuilderRef) => {
+    sqlQueryBuilderRef.current &&
+      sqlQueryBuilderRef.current.openSqlQueryBuilder();
+  };
 
   const generateElementMap = (prevMeta) => {
     if (prevMeta.elements && prevMeta.elements.length > 0) {
@@ -199,6 +203,7 @@ export const MetaContextProvider = ({ children }) => {
             saveReportConfiguration,
             configureApi,
             configureDataSource,
+            configureQueryBuilder,
           }}
         >
           <ToastContext.Provider value={{ toastRef, setToastPosition }}>

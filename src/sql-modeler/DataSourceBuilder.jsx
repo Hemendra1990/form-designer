@@ -71,18 +71,6 @@ const DataSourceBuilder = forwardRef((props, ref) => {
   });
 
   const searchDataSource = (event) => {
-    setTimeout(() => {
-      /* let _filteredCountries;
-      if (!event.query.trim().length) {
-        _filteredCountries = [...countries];
-      } else {
-        _filteredCountries = countries.filter((country) => {
-          return country.name
-            .toLowerCase()
-            .startsWith(event.query.toLowerCase());
-        });
-      } */
-    }, 250);
     httpService.JNDI.list().then((res) => {
       console.log("JNDI List", res);
       setFilteredDataSource(res.data);
@@ -165,13 +153,6 @@ const DataSourceBuilder = forwardRef((props, ref) => {
       }
     });
   };
-
-  /* useEffect(
-    (prevValue) => {
-      console.log("Use Effect", prevValue, selectedDriver);
-    },
-    [selectedDriver]
-  ); */
 
   const showResponseStatus = () => {
     if (testResponse === true) {

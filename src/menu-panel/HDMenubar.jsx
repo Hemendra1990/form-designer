@@ -4,11 +4,13 @@ import ApiModeler from "../api-modeler/ApiModeler";
 import ReportConfiguration from "../configuration/ReportConfiguration";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import DataSourceBuilder from "../sql-modeler/DataSourceBuilder";
+import SQLQueryBuilder from "../sql-modeler/query-builder/SQLQueryBuilder";
 
 const HDMenubar = (props) => {
   const reportConfigRef = useRef();
   const apiConfigRef = useRef();
   const dataSourceConfigRef = useRef();
+  const sqlQueryBuilderRef = useRef();
   const [openReportConfiguration, setOpenReportConfiguration] = useState(false);
   const {
     clearAll,
@@ -18,6 +20,7 @@ const HDMenubar = (props) => {
     configure,
     configureApi,
     configureDataSource,
+    configureQueryBuilder,
   } = useUpdateMetaContext();
   const end = (
     <p style={{ fontWeight: 400, color: "#fff" }}>
@@ -94,13 +97,19 @@ const HDMenubar = (props) => {
           },
         },
         {
+          label: "SQL",
+          icon: "pi pi-table",
+          command: () => {
+            configureQueryBuilder(sqlQueryBuilderRef);
+          },
+        },
+        {
           label: "API",
           icon: "",
           command: () => {
             configureApi(apiConfigRef);
           },
         },
-        { label: "SQL", icon: "" },
       ],
     },
   ];
@@ -120,6 +129,7 @@ const HDMenubar = (props) => {
       <ReportConfiguration ref={reportConfigRef} />
       <ApiModeler ref={apiConfigRef} />
       <DataSourceBuilder ref={dataSourceConfigRef}></DataSourceBuilder>
+      <SQLQueryBuilder ref={sqlQueryBuilderRef}></SQLQueryBuilder>
     </>
   );
 };
