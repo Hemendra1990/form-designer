@@ -40,7 +40,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
   const [evictableIdleTime, setEvictableIdleTime] = useState(50);
   const [timeBetweenEvictions, setTimeBetweenEvictions] = useState(1000);
 
-  const [testResponse, setTestResponse] = useState(undefined);
+  const [testResponse, setTestResponse] = useState(null);
 
   const connectionTypes = ["SID", "Service Name"];
   const drivers = [
@@ -82,9 +82,11 @@ const DataSourceBuilder = forwardRef((props, ref) => {
             .startsWith(event.query.toLowerCase());
         });
       } */
-
-      setFilteredDataSource([]);
     }, 250);
+    httpService.JNDI.list().then((res) => {
+      console.log("JNDI List", res);
+      setFilteredDataSource(res.data);
+    });
   };
 
   const testDataSource = () => {
@@ -128,7 +130,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
       maxWait: `${maxWait}`,
       minEvictableIdleTimeMillis: `${evictableIdleTime}`,
     };
-    httpService.testDataSource(testDsData).then((res) => {
+    httpService.JNDI.testDataSource(testDsData).then((res) => {
       console.log("datasource test response...");
       setTestResponse(res.data.status);
     });
@@ -157,24 +159,24 @@ const DataSourceBuilder = forwardRef((props, ref) => {
         minEvictableIdleTimeMillis: `${evictableIdleTime}`,
       },
     };
-    httpService.saveJndi(saveData).then((res) => {
+    httpService.JNDI.save(saveData).then((res) => {
       if (res.data.status) {
         setDisplayDialog(false);
       }
     });
   };
 
-  useEffect(
+  /* useEffect(
     (prevValue) => {
       console.log("Use Effect", prevValue, selectedDriver);
     },
     [selectedDriver]
-  );
+  ); */
 
   const showResponseStatus = () => {
     if (testResponse === true) {
       return <label style={{ color: "green" }}>Test Successfull.</label>;
-    } else if (!testResponse) {
+    } else if (testResponse != null && !testResponse) {
       return <label style={{ color: "red" }}>Test Failed.</label>;
     }
   };
@@ -236,7 +238,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
               value={selectedDataSource}
               suggestions={filteredDataSource}
               completeMethod={searchDataSource}
-              field="datasource"
+              field="name"
               style={{ width: "100%" }}
               onChange={(e) => {
                 setSelectedDataSource(e.value);
@@ -312,7 +314,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
             <Button
               label="Advanced Options"
               className="p-button-link"
-              onClick={() => showAdvancedOptions(true)}
+              onClick={() => showAdvancedOptions(!enableAdvancedOptions)}
             />
           </div>
         </div>
