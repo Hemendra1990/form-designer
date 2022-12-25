@@ -47,29 +47,29 @@ const HDGrid = forwardRef((props, ref) => {
 
   const [dataTableProps, setDataTableProps] = useState({});
 
-  const [refreshgrid, setRefreshgrid] = useState("");//tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
+  const [refreshgrid, setRefreshgrid] = useState(""); //tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
 
   useImperativeHandle(ref, () => ({
     setResult,
     applyGridOptions,
-    
+
     startLoader(value) {
       setLoading(value);
-    }
+    },
   }));
 
   function setResult({ columns, rows }) {
-    setTimeout(() => { //This i have ketpt for testing, remove setTimeout
-      const {element} = props;
+    setTimeout(() => {
+      //This i have ketpt for testing, remove setTimeout
+      const { element } = props;
       element.attributes["columns"] = columns;
       setColumns(columns);
       setRows(rows);
       setLoading(false);
-    }, 1000);
+    });
   }
 
   function applyGridOptions() {
-    
     const gridConfig = props.element.attributes.config;
     setDataTableProps(gridConfig);
 
@@ -82,64 +82,71 @@ const HDGrid = forwardRef((props, ref) => {
         let column = columns.find((clm) => clm.id === configClmId);
         if (column) {
           //1. Body for Cell template
-          if(gridConfig[configClmId]["cell-template"]) {
+          if (gridConfig[configClmId]["cell-template"]) {
             column.body = (rowData) => {
-            
               let cellTempalteString =
-              gridConfig[configClmId]["cell-template"].template;
+                gridConfig[configClmId]["cell-template"].template;
               let domStr = evaluateCellTemplate(rowData, cellTempalteString);
               return (
                 <>
                   <StringToJSX rowData={rowData} domString={domStr} />
                 </>
               );
-            }
-            
-          };
+            };
+          }
 
           //2. If Cell is Editable
-          if(gridConfig[configClmId].editable) {
+          if (gridConfig[configClmId].editable) {
             //column.editor = getEditor[gridConfig[configClmId].editableType];
             column.editor = (options) => {
               const editor = getEditor[gridConfig[configClmId].editableType];
-              return editor(options, configClmId); 
-            }
+              return editor(options, configClmId);
+            };
           }
-
         }
       });
       setColumns(columns); //Update columns so that the grid will re-render to see the result
-      setRefreshgrid(Math.random())
+      setRefreshgrid(Math.random());
     }
   }
 
   const TextEditor = (options, configClmId) => {
-    return (<ColumnTextEditor options={options} columnId={configClmId}></ColumnTextEditor>)
-  }
+    return (
+      <ColumnTextEditor
+        options={options}
+        columnId={configClmId}
+      ></ColumnTextEditor>
+    );
+  };
   const DropdownEditor = (options, configClmId) => {
-    return <ColumnDropdownEditor options={options} rows= {rows} element={props.element} columnId={configClmId} />
-  }
+    return (
+      <ColumnDropdownEditor
+        options={options}
+        rows={rows}
+        element={props.element}
+        columnId={configClmId}
+      />
+    );
+  };
   const MultiselectEditor = (options, configClmId) => {
-    return (<b>MultiselectEditor Editor</b>)
-  }
+    return <b>MultiselectEditor Editor</b>;
+  };
   const CheckboxEditor = (options, configClmId) => {
-    
-    return (<b>CheckboxEditor Editor</b>)
-  }
+    return <b>CheckboxEditor Editor</b>;
+  };
   const DatepickerEditor = (options, configClmId) => {
-    
-    return (<b>DatepickerEditor Editor</b>)
-  }
+    return <b>DatepickerEditor Editor</b>;
+  };
 
   /* const editableFieldTypes = ['None', 'Text', 'Dropdown', 'Multiselect', 'Checkbox', 'Datepicker']; */
   const getEditor = {
-    "None": null,
-    "Text": TextEditor,
-    "Dropdown": DropdownEditor,
-    "Multiselect": MultiselectEditor,
-    "Checkbox": CheckboxEditor,
-    "Datepicker": DatepickerEditor
-  }
+    None: null,
+    Text: TextEditor,
+    Dropdown: DropdownEditor,
+    Multiselect: MultiselectEditor,
+    Checkbox: CheckboxEditor,
+    Datepicker: DatepickerEditor,
+  };
 
   useEffect(() => {
     updateMeta(meta);
@@ -148,12 +155,10 @@ const HDGrid = forwardRef((props, ref) => {
 
   const onCellEditComplete = (e) => {
     let { rowData, newValue, field, originalEvent: event } = e;
-    
-    if (newValue.length > 0)
-      rowData[field] = newValue;
-    else
-      event.preventDefault();
-}
+
+    if (newValue.length > 0) rowData[field] = newValue;
+    else event.preventDefault();
+  };
 
   const gridColumns = columns.map((col, i) => {
     return (
@@ -179,13 +184,13 @@ const HDGrid = forwardRef((props, ref) => {
           resizableColumns={dataTableProps?.resizableColumns}
           paginator={dataTableProps?.paginator}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          rowsPerPageOptions={[5,10,25,50]}
+          rowsPerPageOptions={[5, 10, 25, 50]}
           rows={5}
           reorderableColumns={dataTableProps?.reorderableColumns}
           responsiveLayout="scroll"
           loading={loading}
           emptyMessage="No data to display"
-          style={{width:'100%'}}
+          style={{ width: "100%" }}
           columnResizeMode="expand"
           editMode={dataTableProps?.editMode}
         >

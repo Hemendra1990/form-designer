@@ -20,6 +20,8 @@ const AttributePanel = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showDataConnectorSidebar, setShowDataConnectorSidebar] =
+    useState(false);
   const [showControlStyle, setShowControlStyle] = useState(false);
 
   const [classNameValue, setClassNameValue] = useState(
@@ -252,6 +254,10 @@ const AttributePanel = (props) => {
     return <></>;
   };
 
+  const renderDataConnector = () => {
+    return <h1>Data Connector</h1>;
+  };
+
   const getControlStyle = () => {
     if (showControlStyle) {
       return (
@@ -281,7 +287,14 @@ const AttributePanel = (props) => {
             >
               <span className="pi pi-code"></span>
             </button>
-            <button type="button" value="Data Mapper" title="Data Mapper">
+            <button
+              type="button"
+              value="Data Mapper"
+              title="Data Mapper"
+              onClick={(e) =>
+                setShowDataConnectorSidebar(!showDataConnectorSidebar)
+              }
+            >
               <span className="pi pi-database"></span>
             </button>
             <button
@@ -308,6 +321,19 @@ const AttributePanel = (props) => {
           }}
         >
           {renderAttributes()}
+        </Sidebar>
+        <Sidebar
+          dismissable={false}
+          showCloseIcon={false}
+          closeOnEscape={true}
+          modal={false}
+          position="right"
+          visible={showDataConnectorSidebar}
+          onHide={() => {
+            showDataConnectorSidebar(false);
+          }}
+        >
+          {renderDataConnector()}
         </Sidebar>
       </div>
       {getControlStyle()}

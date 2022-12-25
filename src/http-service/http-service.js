@@ -23,6 +23,10 @@ const httpService = {
     cacheQuery(sessionId, data) {
       return axios.post(`${baseURL}/query/cacheQuery/${sessionId}`, data);
     },
+
+    getQueryResult(queryData) {
+      return axios.post(`${baseURL}/query/result`, queryData);
+    },
   },
 };
 
