@@ -5,12 +5,18 @@ import ReportConfiguration from "../configuration/ReportConfiguration";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import DataSourceBuilder from "../sql-modeler/DataSourceBuilder";
 import SQLQueryBuilder from "../sql-modeler/query-builder/SQLQueryBuilder";
+import SaveFormDesignResource from "./SaveFormDesignResource";
 
 const HDMenubar = (props) => {
   const reportConfigRef = useRef();
   const apiConfigRef = useRef();
   const dataSourceConfigRef = useRef();
   const sqlQueryBuilderRef = useRef();
+
+  const [showDatasourceBuilder, setShowDatasourceBuilder] = useState(false);
+  const [showSQLBuilder, setShowSQLBuilder] = useState(false);
+  const [showFormSaveModal, setShowFormSaveModal] = useState(false);
+
   const [openReportConfiguration, setOpenReportConfiguration] = useState(false);
   const {
     clearAll,
@@ -66,7 +72,10 @@ const HDMenubar = (props) => {
           label: "Save",
           icon: "pi pi-fw pi-save",
           command: () => {
-            saveReport();
+            setShowFormSaveModal(true);
+            setTimeout(() => {
+              saveReport();
+            }, 0);
           },
         },
         {
@@ -93,14 +102,20 @@ const HDMenubar = (props) => {
           label: "Data Source",
           icon: "pi pi-database",
           command: () => {
-            configureDataSource(dataSourceConfigRef);
+            setShowDatasourceBuilder(true);
+            setTimeout(() => {
+              configureDataSource(dataSourceConfigRef);
+            }, 0);
           },
         },
         {
           label: "SQL",
           icon: "pi pi-table",
           command: () => {
-            configureQueryBuilder(sqlQueryBuilderRef);
+            setShowSQLBuilder(true);
+            setTimeout(() => {
+              configureQueryBuilder(sqlQueryBuilderRef);
+            }, 0);
           },
         },
         {
@@ -128,8 +143,24 @@ const HDMenubar = (props) => {
       {menuBar()}
       <ReportConfiguration ref={reportConfigRef} />
       <ApiModeler ref={apiConfigRef} />
-      <DataSourceBuilder ref={dataSourceConfigRef}></DataSourceBuilder>
-      <SQLQueryBuilder ref={sqlQueryBuilderRef}></SQLQueryBuilder>
+      {showDatasourceBuilder && (
+        <DataSourceBuilder
+          setShowDatasourceBuilder={setShowDatasourceBuilder}
+          ref={dataSourceConfigRef}
+        ></DataSourceBuilder>
+      )}
+      {showSQLBuilder && (
+        <SQLQueryBuilder
+          setShowSQLBuilder={setShowSQLBuilder}
+          ref={sqlQueryBuilderRef}
+        ></SQLQueryBuilder>
+      )}
+
+      {showFormSaveModal && (
+        <SaveFormDesignResource
+          setShowFormSaveModal={setShowFormSaveModal}
+        ></SaveFormDesignResource>
+      )}
     </>
   );
 };

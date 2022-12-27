@@ -28,6 +28,11 @@ const httpService = {
       return axios.post(`${baseURL}/query/result`, queryData);
     },
   },
+  SAVE_FORM: {
+    save(data) {
+      return axios.post(`${baseURL}/form-design-resource/new/save`);
+    },
+  },
 };
 
 export default httpService;

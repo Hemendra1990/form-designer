@@ -17,6 +17,8 @@ import { Password } from "primereact/password";
 import httpService from "../http-service/http-service";
 
 const DataSourceBuilder = forwardRef((props, ref) => {
+  const { setShowDatasourceBuilder } = props;
+
   const [displayDialog, setDisplayDialog] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [filteredDataSource, setFilteredDataSource] = useState(null);
@@ -150,6 +152,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
     httpService.JNDI.save(saveData).then((res) => {
       if (res.data.status) {
         setDisplayDialog(false);
+        setShowDatasourceBuilder(false);
       }
     });
   };
@@ -184,7 +187,10 @@ const DataSourceBuilder = forwardRef((props, ref) => {
         <Button
           label="Cancel"
           icon="pi pi-cancel"
-          onClick={() => setDisplayDialog(false)}
+          onClick={() => {
+            setDisplayDialog(false);
+            setShowDatasourceBuilder(false);
+          }}
           className="p-button-outlined p-button-danger"
           autoFocus
         />
