@@ -10,6 +10,7 @@ import HDHtmlEditor from "../components/HDHtmlEditor";
 import HDGrid from "../components/grid/HDGrid";
 import HDNumeric from "../components/HDNumeric";
 import HDLabel from "../components/HDLabel";
+import HDPassword from "../components/HDPassword";
 
 const ComponentConfig = [
   {
@@ -72,6 +73,11 @@ const ComponentConfig = [
     name: "label",
     component: HDLabel,
   },
+  {
+    label: "Password",
+    name: "password",
+    component: HDPassword,
+  },
 ];
 export default ComponentConfig;
 
@@ -88,6 +94,7 @@ const CONTROL = {
   GRID: "grid",
   NUMERIC: "numeric",
   LABEL: "label",
+  PASSWORD: "password",
 };
 
 const CONTROL_ITEMS = () => {
