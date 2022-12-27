@@ -88,6 +88,7 @@ const Homepage = (props) => {
             <Button
               onClick={(e) => togglePlaygroundMode()}
               icon={meta.editMode ? "pi pi-eye" : "pi pi-pencil"}
+              style={{ position: "fixed" }}
               className="p-button-rounded p-button-secondary  preview-shortcut"
             />
           </Draggable>
