@@ -1,7 +1,7 @@
 import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ProductService } from "../components/grid/ProductService";
 import { CONTROL } from "../constants/Elements";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
@@ -13,6 +13,7 @@ import AttrRadio from "./attr-radio/AttrRadio";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
+import AttrPassword from "./attr-password/AttrPassword";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -32,9 +33,24 @@ const AttributePanel = (props) => {
     if (!meta.currentElement.attributes) {
       meta.currentElement.attributes = {};
     }
-    meta.currentElement.attributes[(e.target || e.originalEvent.target).name] =
-      (e.target || e.originalEvent.target).value;
+    if (e.checked) {
+      //Radio, Dropdown
+      meta.currentElement.attributes[
+        (e.target || e.originalEvent.target).name
+      ] = e.checked;
+    } else if (e.value) {
+      //Dropdowns, Autocomplete, Combobox
+      meta.currentElement.attributes[
+        (e.target || e.originalEvent.target).name
+      ] = e.value;
+    } else {
+      //Other excpet above elements
+      meta.currentElement.attributes[
+        (e.target || e.originalEvent.target).name
+      ] = (e.target || e.originalEvent.target).value;
+    }
     updateMeta(meta);
+    console.log(meta);
   };
 
   const updateClass = (e) => {
@@ -248,6 +264,20 @@ const AttributePanel = (props) => {
             />
             {classDiv}
           </>
+        );
+      }
+
+      /* Render Password Attributes */
+      if (meta.currentElement.type === CONTROL.PASSWORD) {
+        return (
+          <Fragment>
+            <AttrPassword
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              currentElement={meta.currentElement}
+              availableEvents={availableEvents}
+            ></AttrPassword>
+          </Fragment>
         );
       }
     }
