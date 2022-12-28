@@ -1,14 +1,24 @@
-import React, { Fragment, useState } from "react";
+import React, {
+  forwardRef,
+  Fragment,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { Password } from "primereact/password";
 import EventExecutor from "../service/EventExecutor";
+import { useUpdateMetaContext } from "../context/MetaContext";
 
 /* type PasswordProps = {
   element: any;
 } */
 
-const HDPassword = (props) => {
-  const { element, meta, ref } = props;
+const HDPassword = forwardRef((props, ref) => {
+  const { updateMeta } = useUpdateMetaContext();
+  const { element, meta } = props;
   const [passwordValue, setPasswordValue] = useState("");
+  const passwordRef = useRef(ref);
 
   const handlePasswordChangeVal = (event) => {
     setPasswordValue(event.target.value);
@@ -21,10 +31,25 @@ const HDPassword = (props) => {
     }
   };
 
+  useImperativeHandle(ref, () => {
+    return {
+      getValue() {
+        return passwordValue;
+      },
+      setValue(passwordVal) {
+        setPasswordValue(passwordVal);
+      },
+    };
+  });
+
+  useEffect(() => {
+    updateMeta(meta); //This is necesary, put in all the components... we need to update the meta.elementMap so need to call thuis method after the input is rendered
+  }, []);
+
   return (
     <Fragment>
       <Password
-        ref={ref}
+        ref={passwordRef}
         value={passwordValue}
         onChange={handlePasswordChangeVal}
         feedback={element.attributes.showStrengthIndicator}
@@ -33,6 +58,6 @@ const HDPassword = (props) => {
       />
     </Fragment>
   );
-};
+});
 
 export default HDPassword;
