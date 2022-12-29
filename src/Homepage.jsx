@@ -3,7 +3,11 @@ import { Dialog } from "primereact/dialog";
 import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import { useConfirmationContext } from "./context/ConfirmationDialogContext";
-import { useMetaContext, useToastContext, useUpdateMetaContext } from "./context/MetaContext";
+import {
+  useMetaContext,
+  useToastContext,
+  useUpdateMetaContext,
+} from "./context/MetaContext";
 import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
@@ -11,7 +15,7 @@ import HDMenubar from "./menu-panel/HDMenubar";
 import Playground from "./playground/Playground";
 import EventExecutor from "./service/EventExecutor";
 
-import Draggable from 'react-draggable';
+import Draggable from "react-draggable";
 
 const Homepage = (props) => {
   const meta = useMetaContext();
@@ -71,10 +75,7 @@ const Homepage = (props) => {
         </div>
       </div>
 
-      <div
-        className="grid p-fluid"
-        style={{ height: "90vh", width: '100%'}}
-      >
+      <div className="grid p-fluid" style={{ height: "90vh", width: "100%" }}>
         <div
           className={`${
             meta.editMode
@@ -87,6 +88,7 @@ const Homepage = (props) => {
             <Button
               onClick={(e) => togglePlaygroundMode()}
               icon={meta.editMode ? "pi pi-eye" : "pi pi-pencil"}
+              style={{ position: "fixed" }}
               className="p-button-rounded p-button-secondary  preview-shortcut"
             />
           </Draggable>
@@ -99,16 +101,16 @@ const Homepage = (props) => {
       ) : (
         <></>
       )}
-      
+
       <div className="layout-footer align-items-center justify-content-end flex">
         <footer>
-        <p className="mr-3">&copy; 2022 Hemendra Sethi</p>
+          <p className="mr-3">&copy; 2022 Hemendra Sethi</p>
         </footer>
       </div>
       <Dialog
         header="Event Modeler"
         visible={displayBasic}
-        style={{ width: "80vw" }}
+        style={{ width: "95vw" }}
         footer={renderFooter("displayBasic")}
         onHide={() => onHide("displayBasic")}
       >

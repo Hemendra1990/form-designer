@@ -81,6 +81,13 @@ export class DataConnector {
       datasource = element.attributes.sqldatasource;
       if (datasource !== undefined) {
         const queryData = datasource;
+        if (
+          element.type === CONTROL.GRID &&
+          element.ref &&
+          element.ref.current
+        ) {
+          element.ref.current.startLoader(true);
+        }
         httpService.QUERY.getQueryResult(queryData).then((res) => {
           console.log("Fetching Query result", res.data);
           rows = [...res.data.rows];
@@ -98,7 +105,7 @@ export class DataConnector {
           DataConnector.columns = [...resHeaders];
 
           if (element.ref.current.setResult) {
-            if (element.type == CONTROL.GRID) {
+            if (element.type === CONTROL.GRID) {
               element.ref.current.startLoader(true);
             }
             element.ref.current.setResult({

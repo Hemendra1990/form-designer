@@ -17,27 +17,33 @@ const RefreshElements = (props) => {
   //We should list all those controls who has a datasource connected, otherwise adding refreshElement event makes no sense
   useEffect(() => {
     const eles = Object.keys(meta.elementMap)
-      .filter((k) => candidateRefreshElemnts.includes(k.split("-")[0]) && meta.elementMap[k].attributes && meta.elementMap[k].attributes.datasource)
+      .filter(
+        (k) =>
+          candidateRefreshElemnts.includes(k.split("-")[0]) &&
+          meta.elementMap[k].attributes &&
+          (meta.elementMap[k].attributes.datasource ||
+            meta.elementMap[k].attributes.sqldatasource)
+      )
       .map((key) => key);
     setElements(eles);
 
-    setSelectedRefreshElements(data?.eventInfo?.data)
+    setSelectedRefreshElements(data?.eventInfo?.data);
   }, []);
 
   const udpateEventData = (e) => {
-    if(data.eventInfo.data) {
-        data.eventInfo.data = [ ...e.value]; 
+    if (data.eventInfo.data) {
+      data.eventInfo.data = [...e.value];
     } else {
-        data.eventInfo.data = [];
-        data.eventInfo.data = [...e.value];
+      data.eventInfo.data = [];
+      data.eventInfo.data = [...e.value];
     }
-  }
+  };
 
   return (
     <>
       <Card
         title="Refresh Elements"
-        style={{ minWidth: "20rem", maxWidth:"30rem", marginBottom: "2em" }}
+        style={{ minWidth: "20rem", maxWidth: "30rem", marginBottom: "2em" }}
       >
         <div className="grid">
           <div className="col-12">
@@ -45,9 +51,12 @@ const RefreshElements = (props) => {
             <MultiSelect
               value={selectedRefreshElements}
               options={elements}
-              onChange={(e) => {setSelectedRefreshElements(e.value); udpateEventData(e)}}
+              onChange={(e) => {
+                setSelectedRefreshElements(e.value);
+                udpateEventData(e);
+              }}
               placeholder=""
-              style={{width: '100%'}}
+              style={{ width: "100%" }}
             />
           </div>
         </div>

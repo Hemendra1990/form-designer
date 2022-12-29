@@ -17,17 +17,19 @@ import { Password } from "primereact/password";
 import httpService from "../http-service/http-service";
 
 const DataSourceBuilder = forwardRef((props, ref) => {
+  const { setShowDatasourceBuilder } = props;
+
   const [displayDialog, setDisplayDialog] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [filteredDataSource, setFilteredDataSource] = useState(null);
   const [selectedDriver, setSelectedDriver] = useState(null);
-  const [dbName, setDbName] = useState();
-  const [port, setPort] = useState();
-  const [host, setHost] = useState();
-  const [userName, setUserName] = useState();
-  const [password, setPassword] = useState();
-  const [selectedConnection, setSelectedConnection] = useState();
-  const [enableAdvancedOptions, showAdvancedOptions] = useState();
+  const [dbName, setDbName] = useState("");
+  const [port, setPort] = useState("");
+  const [host, setHost] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedConnection, setSelectedConnection] = useState(null);
+  const [enableAdvancedOptions, showAdvancedOptions] = useState(null);
   const [validationQuery, setValidationQuery] = useState("select 1");
   const [removedAbandonedConnections, setRemovedAbandonedConnections] =
     useState(true);
@@ -150,6 +152,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
     httpService.JNDI.save(saveData).then((res) => {
       if (res.data.status) {
         setDisplayDialog(false);
+        setShowDatasourceBuilder(false);
       }
     });
   };
@@ -184,7 +187,10 @@ const DataSourceBuilder = forwardRef((props, ref) => {
         <Button
           label="Cancel"
           icon="pi pi-cancel"
-          onClick={() => setDisplayDialog(false)}
+          onClick={() => {
+            setDisplayDialog(false);
+            setShowDatasourceBuilder(false);
+          }}
           className="p-button-outlined p-button-danger"
           autoFocus
         />
@@ -279,7 +285,7 @@ const DataSourceBuilder = forwardRef((props, ref) => {
               style={{ width: "100%" }}
               feedback={false}
               value={password}
-              onChange={(e) => setPassword(e.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="col-6">
@@ -392,4 +398,4 @@ const DataSourceBuilder = forwardRef((props, ref) => {
   );
 });
 
-export default memo(DataSourceBuilder);
+export default DataSourceBuilder;

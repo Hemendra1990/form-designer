@@ -49,6 +49,7 @@ const queryTypes = [
 ];
 
 const SQLQueryBuilder = forwardRef((props, ref) => {
+  const { setShowSQLBuilder } = props;
   const [showQueryModeler, setShowQueryModeler] = useState(false);
   const [sqlQueryTabs, setSQLQueryTabs] = useState([]);
   const [dataSources, setDataSources] = useState([]);
@@ -140,6 +141,8 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
         updateMeta(meta);
         console.log(meta);
         setShowQueryModeler(false);
+
+        setShowSQLBuilder(false); //Menubar parent
       }
     });
   };
