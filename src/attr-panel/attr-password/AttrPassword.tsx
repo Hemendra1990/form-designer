@@ -21,15 +21,29 @@ const AttrPassword = (props: AttrPasswordProps) => {
 
   const currAttribute = meta?.currentElement?.attributes;
   const [showStrengthIndicator, setShowStrengthIndicator] = useState<any>(null);
+  const [showIconToDisplayPassword, setShowIconToDisplayPassword] = useState<any>(null);
+  const [panelFooterForPassword, setPanelFooterForPassword] = useState<any>(null);
 
   const styleObj = {
     width: "100%",
   };
 
+
+
   const handleShowStrengthIndicatorChange = (e: any) => {
     setShowStrengthIndicator(e.checked);
     handleAttributeChange(e);
   };
+
+  const handelShowIconToDisplayPassword = (e: any) => {
+    setShowIconToDisplayPassword(e.checked);
+    handleAttributeChange(e);
+  }
+
+  const handelPanelFooterForPassword = (e: any) => {
+    setPanelFooterForPassword(e.checked)
+    handleAttributeChange(e);
+  }
 
   return (
     <>
@@ -81,6 +95,28 @@ const AttrPassword = (props: AttrPasswordProps) => {
           inputId="binary"
           checked={showStrengthIndicator}
           onChange={handleShowStrengthIndicatorChange}
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="" className="block">
+          Whether to show an icon to display the password as plain text?
+        </label>
+        <Checkbox
+          name="showIconToDisplayPassword"
+          inputId="binary"
+          checked={showIconToDisplayPassword}
+          onChange={handelShowIconToDisplayPassword}
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="" className="block">
+          Template of panel footer for password format(<b>Strength indicator must be enabled?</b>)
+        </label>
+        <Checkbox
+          name="panelFooterForPassword"
+          inputId="binary"
+          checked={panelFooterForPassword}
+          onChange={handelPanelFooterForPassword}
         />
       </div>
     </>

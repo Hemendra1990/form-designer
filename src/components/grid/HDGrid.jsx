@@ -190,8 +190,8 @@ const HDGrid = forwardRef((props, ref) => {
           responsiveLayout="scroll"
           loading={loading}
           emptyMessage="No data to display"
-          style={{ width: "100%" }}
-          columnResizeMode="expand"
+          style={{ width: "100%", minHeight: "240px" }}
+          columnResizeMode="absolute"
           editMode={dataTableProps?.editMode}
         >
           {gridColumns}

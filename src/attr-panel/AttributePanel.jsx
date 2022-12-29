@@ -15,6 +15,8 @@ import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
 import AttrPassword from "./attr-password/AttrPassword";
+import { Button } from "primereact/button";
+import AttrButtonConfig from "./attr-button/AttrButtonConfig";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -29,6 +31,10 @@ const AttributePanel = (props) => {
   const [classNameValue, setClassNameValue] = useState(
     meta.currentElement?.attributes?.className || ""
   );
+
+  const [showConfigure, setShowConfigure] = useState(false);
+  const [showAttributs, setShowAttributs] = useState(false);
+  const [showDataMapper, setShowDataMapper] = useState(false);
 
   const handleAttributeChange = (e) => {
     if (!meta.currentElement.attributes) {
@@ -315,18 +321,65 @@ const AttributePanel = (props) => {
     return <></>;
   };
 
+  const renderConfiguration = () => {
+
+    if (meta.currentElement.type === CONTROL.BUTTON) {
+
+      return (
+        <AttrButtonConfig
+          meta={meta}
+          handleAttributeChange={handleAttributeChange}
+          eventOptions={availableEvents} />
+      )
+
+    }
+    return (
+      <Fragment>
+        <h1>default</h1>
+      </Fragment>
+    )
+  }
+
+  const handelAttributeOptionChange = (e) => {
+    const name = (e.currentTarget || e.target).name;
+    switch (name) {
+      case 'configure':
+        setShowConfigure(true);
+        setShowAttributs(false);
+        setShowDataMapper(false);
+        setShowSidebar(true);
+        break;
+      case 'attributes':
+        setShowConfigure(false);
+        setShowAttributs(true);
+        setShowDataMapper(false);
+        setShowSidebar(true);
+        break;
+      case 'dataMapper':
+        setShowConfigure(false);
+        setShowAttributs(false);
+        setShowDataMapper(true);
+        setShowSidebar(true);
+        break;
+    }
+  }
+
   return (
     <>
       {meta.currentElement && (
         <>
           <div className="control-attr-panel">
-            <button type="button" value="Configure" title="Configure">
+            <button type="button" value={true}
+              name="configure"
+              title="Configure"
+              onClick={handelAttributeOptionChange}>
               <span className="pi pi-cog"></span>
             </button>
             <button
               type="button"
               value="Attributes"
-              onClick={(e) => setShowSidebar(!showSidebar)}
+              name="attributes"
+              onClick={handelAttributeOptionChange}
               title="Attributes"
             >
               <span className="pi pi-code"></span>
@@ -334,10 +387,9 @@ const AttributePanel = (props) => {
             <button
               type="button"
               value="Data Mapper"
+              name="dataMapper"
               title="Data Mapper"
-              onClick={(e) =>
-                setShowDataConnectorSidebar(!showDataConnectorSidebar)
-              }
+              onClick={handelAttributeOptionChange}
             >
               <span className="pi pi-database"></span>
             </button>
@@ -364,9 +416,27 @@ const AttributePanel = (props) => {
             setShowSidebar(false);
           }}
         >
-          {renderAttributes()}
+          <div>
+            <Button icon="pi pi-times"
+              className="p-button-rounded p-button-danger p-button-text"
+              aria-label="Cancel"
+              style={{
+                float: "right",
+                width: "30px",
+                height: "30px",
+                marginTop: "5px"
+              }} onClick={() => {
+                setShowSidebar(false);
+              }} />
+          </div>
+
+          <div style={{ marginTop: "25px" }}>
+            {showConfigure && renderConfiguration()}
+            {showAttributs && renderAttributes()}
+            {showDataMapper && renderDataConnector()}
+          </div>
         </Sidebar>
-        <Sidebar
+        {/* <Sidebar
           dismissable={false}
           showCloseIcon={false}
           closeOnEscape={true}
@@ -378,7 +448,7 @@ const AttributePanel = (props) => {
           }}
         >
           {renderDataConnector()}
-        </Sidebar>
+        </Sidebar> */}
       </div>
       {getControlStyle()}
     </>

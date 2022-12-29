@@ -38,7 +38,7 @@ const HDButton = React.forwardRef((props, ref) => {
 
   if (!(element.attributes && element.attributes.label)) {
     if (!element.attributes) element.attributes = {};
-    element.attributes.label = "";
+    element.attributes.label = "Click here";
   }
 
   const executeEvent = () => {
@@ -53,7 +53,14 @@ const HDButton = React.forwardRef((props, ref) => {
     } else {
       console.info("Event not binded with Button.");
     }
+    handelLableValue();
   };
+
+  const handelLableValue = () => {
+    if (element?.attributes?.hideLabelContent) {
+      //meta.currAttribute.label = "Click Here";
+    }
+  }
 
   return (
     <>
@@ -62,7 +69,7 @@ const HDButton = React.forwardRef((props, ref) => {
         <Button
           ref={ref}
           className={props.element?.attributes?.type}
-          label={props.element?.attributes?.label}
+          label={element?.attributes?.hideLabelContent ? "Click Here" : element?.attributes?.label}
           onClick={executeEvent}
         />
       </div>

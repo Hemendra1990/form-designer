@@ -11,6 +11,7 @@ import HDGrid from "../components/grid/HDGrid";
 import HDNumeric from "../components/HDNumeric";
 import HDLabel from "../components/HDLabel";
 import HDPassword from "../components/HDPassword";
+import HDToogleButton from "../components/HDToggleButton";
 
 const ComponentConfig = [
   {
@@ -78,6 +79,11 @@ const ComponentConfig = [
     name: "password",
     component: HDPassword,
   },
+  {
+    label: "ButtonToggle",
+    name: "buttontoggle",
+    component: HDToogleButton,
+  },
 ];
 export default ComponentConfig;
 
@@ -95,6 +101,7 @@ const CONTROL = {
   NUMERIC: "numeric",
   LABEL: "label",
   PASSWORD: "password",
+  TOOGLEBUTTON: "buttontoggle"
 };
 
 const CONTROL_ITEMS = () => {
