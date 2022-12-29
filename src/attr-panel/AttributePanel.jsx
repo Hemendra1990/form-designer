@@ -34,12 +34,12 @@ const AttributePanel = (props) => {
     if (!meta.currentElement.attributes) {
       meta.currentElement.attributes = {};
     }
-    if (e.checked) {
+    if (e.checked !== undefined) {
       //Radio, Dropdown
       meta.currentElement.attributes[
         (e.target || e.originalEvent.target).name
       ] = e.checked;
-    } else if (e.value) {
+    } else if (e.value !== undefined) {
       //Dropdowns, Autocomplete, Combobox
       meta.currentElement.attributes[
         (e.target || e.originalEvent.target).name
@@ -99,7 +99,7 @@ const AttributePanel = (props) => {
             <AttrButtonComp
               meta={meta}
               handleAttributeChange={handleAttributeChange}
-              eventOptions={availableEvents}      
+              eventOptions={availableEvents}
             />
             {classDiv}
           </>
@@ -267,7 +267,7 @@ const AttributePanel = (props) => {
           </>
         );
       }
-      
+
       /* Render Password Attributes */
       if (meta.currentElement.type === CONTROL.PASSWORD) {
         return (
