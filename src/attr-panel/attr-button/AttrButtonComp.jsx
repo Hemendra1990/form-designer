@@ -20,18 +20,26 @@ const AttrButton = (props) => {
   const currAttribute = meta?.currentElement?.attributes;
   const [hideLabelContent, setHideLabelContent] = useState(false);
 
+  const [icon, setIcon] = useState("");
+
   const handelHideLableContent = (e) => {
     setHideLabelContent(e.checked);
+    handleAttributeChange(e);
+  }
+
+  const handleIconChange = (e) => {
+    setIcon(e.target.value);
     handleAttributeChange(e);
   }
 
   useEffect(() => {
     setHideLabelContent(currAttribute.hideLabelContent || false);
     if (currAttribute.hideLabelContent) {
-      currAttribute.label = "Click Here";
+      currAttribute.label = "";
     }
     // handleAttributeChange(contentEditable ? meta.currentElement?.attributes?.label : 'Click Here')
   }, []);
+
 
 
   return (
@@ -75,6 +83,17 @@ const AttrButton = (props) => {
           style={{ width: '100%' }}
         />
       </div>
+      <div className="field col-12">
+        <label htmlFor="label" className="block">Icon</label>
+        <InputText
+          name="icon"
+          placeholder="e.g. pi pi-pencil"
+          onChange={handleIconChange}
+          value={icon}
+          style={{ width: '100%' }}
+        />
+      </div>
+
     </>
   );
 };
