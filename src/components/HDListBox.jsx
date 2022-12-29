@@ -6,8 +6,6 @@ const HDListBox = React.forwardRef((props, ref) => {
   const { element } = props;
   const [selectedValue, setSelectedValue] = useState(null);
 
-  console.log(element);
-
   const handleOnChangeEvent = (e) => {
     if (element.attributes && element.attributes.onchangeevent) {
       EventExecutor.executeEvent(
@@ -45,7 +43,6 @@ const HDListBox = React.forwardRef((props, ref) => {
 
   return (
     <>
-      <h1>Mulitple : {element.attributes?.multiple}</h1>
       <ListBox
         value={selectedValue}
         options={listOptions}
