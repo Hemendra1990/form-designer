@@ -10,6 +10,7 @@ import { UserService } from "../components/grid/UserService";
 import AttrGrid from "./attr-grid/AttrGridComp";
 import AttrInput from "./attr-input/AttrInput";
 import AttrRadio from "./attr-radio/AttrRadio";
+import AttrListBox from "./attr-ListBox/AttrListBox";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
@@ -98,7 +99,7 @@ const AttributePanel = (props) => {
             <AttrButtonComp
               meta={meta}
               handleAttributeChange={handleAttributeChange}
-              eventOptions={availableEvents}
+              eventOptions={availableEvents}      
             />
             {classDiv}
           </>
@@ -266,7 +267,7 @@ const AttributePanel = (props) => {
           </>
         );
       }
-
+      
       /* Render Password Attributes */
       if (meta.currentElement.type === CONTROL.PASSWORD) {
         return (
@@ -278,6 +279,19 @@ const AttributePanel = (props) => {
               availableEvents={availableEvents}
             ></AttrPassword>
           </Fragment>
+        );
+      }
+      /* Render ListBox attributes */
+      if (meta.currentElement.type === CONTROL.LISTBOX) {
+        return (
+          <>
+            <AttrListBox
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              eventOptions={availableEvents}
+            />
+          </>
         );
       }
     }
