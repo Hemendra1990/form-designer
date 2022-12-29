@@ -69,8 +69,9 @@ const HDButton = React.forwardRef((props, ref) => {
         <Button
           ref={ref}
           className={props.element?.attributes?.type}
-          label={element?.attributes?.hideLabelContent ? "Click Here" : element?.attributes?.label}
+          label={element?.attributes?.hideLabelContent ? "" : element?.attributes?.label}
           onClick={executeEvent}
+          icon={element?.attributes?.icon}
         />
       </div>
     </>
