@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
 import { ListBox } from 'primereact/listbox';
-const HDListBox = React.forwardRef((props, ref) => {
+import EventExecutor from '../service/EventExecutor';
 
+const HDListBox = React.forwardRef((props, ref) => {
+    const { element } = props;
     const [selectedCity, setSelectedCity] = useState(null);
 
+    const handleOnChangeEvent = (e) => {
+        if(element.attributes && element.attributes.onchangeevent) {
+            EventExecutor.executeEvent(props.meta, element.attributes.onchangeevent, null, null);
+        }
+    }
+      const handleFilterValueChangeEvent = (e) => {
+        if(element.attributes && element.attributes.onfiltervaluechange) {
+            EventExecutor.executeEvent(props.meta, element.attributes.onfiltervaluechange, null, null);
+        }
+    }
+    
     const cities = [
         { name: 'New York', code: 'NY' },
         { name: 'Rome', code: 'RM' },
@@ -58,7 +71,20 @@ const HDListBox = React.forwardRef((props, ref) => {
     const items = Array.from({ length: 100000 }).map((_, i) => ({ label: `Item #${i}`, value: i }));
 
     return (
-        <ListBox value={selectedCity} options={cities} onChange={(e) => setSelectedCity(e.value)} optionLabel="name"/>
+        <ListBox value={selectedCity} 
+        options={cities}        
+        onChange={(e) => {
+            setSelectedCity(e.value);
+            handleOnChangeEvent(e)
+            handleFilterValueChangeEvent(e)
+        }} 
+        optionLabel="name"               
+        disabled={element.attributes.disabled}
+        multiple={element.attributes.multiple}
+        filter={element.attributes.filter}
+        filterBy={element.attributes.filterBy}
+        tooltip={element.attributes.tooltip}
+        />
     );
 })
 
