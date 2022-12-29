@@ -1,6 +1,7 @@
+import { Checkbox } from "primereact/checkbox";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 
 const BUTTON_TYPES = [
   "p-button-link",
@@ -15,26 +16,42 @@ const BUTTON_TYPES = [
 const AttrButton = (props) => {
   const meta = props.meta;
   const { eventOptions, handleAttributeChange } = props;
+
+  const currAttribute = meta?.currentElement?.attributes;
+  const [hideLabelContent, setHideLabelContent] = useState(false);
+
+  const handelHideLableContent = (e) => {
+    setHideLabelContent(e.checked);
+    handleAttributeChange(e);
+  }
+
+  useEffect(() => {
+    setHideLabelContent(currAttribute.hideLabelContent || false);
+    if (currAttribute.hideLabelContent) {
+      currAttribute.label = "Click Here";
+    }
+    // handleAttributeChange(contentEditable ? meta.currentElement?.attributes?.label : 'Click Here')
+  }, []);
+
+
   return (
     <>
       <div className="field col-12">
         <label htmlFor="controlId" className="block">Control ID</label>
         <InputText
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
           name="placeholder"
           value={meta.currentElement.id}
           disabled
         />
       </div>
       <div className="field col-12">
-        <label htmlFor="eventId" className="block">Event ID</label>
-        <Dropdown
-          name="eventId"
-          value={meta.currentElement?.attributes?.eventId}
-          options={eventOptions || []}
-          onChange={handleAttributeChange}
-          placeholder="Select a Event"
-          style={{width:'100%'}}
+        <label className="block">Hide label Content</label>
+        <Checkbox
+          inputId="binary"
+          name="hideLabelContent"
+          checked={hideLabelContent}
+          onChange={handelHideLableContent}
         />
       </div>
       <div className="field col-12">
@@ -44,7 +61,7 @@ const AttrButton = (props) => {
           placeholder="Enter Button Label"
           onChange={handleAttributeChange}
           value={meta.currentElement?.attributes?.label}
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
         />
       </div>
       <div className="field col-12">
@@ -55,7 +72,7 @@ const AttrButton = (props) => {
           options={BUTTON_TYPES}
           onChange={handleAttributeChange}
           placeholder="Select type"
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
         />
       </div>
     </>
