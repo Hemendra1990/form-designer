@@ -11,12 +11,16 @@ const AttrListBox = (props) => {
   const [filter, setFilter] = useState(false);
   const [tooltip, setTooltip] = useState("");
   const [filterby, setFilterBy] = useState("");
+  const [optionLabel, setOptionLabel] = useState("");
+  const [optionValue, setOptionValue] = useState("");
 
   useEffect(() => {
     setDisabled(currAttribute.disabled || false);
     setMultiple(currAttribute.multiple || false);
     setFilter(currAttribute.filter || false);
     setTooltip(currAttribute.tooltip || false);
+    setOptionLabel(currAttribute.optionLabel || "");
+    setOptionValue(currAttribute.optionValue || "");
   }, []);
 
   return (
@@ -82,6 +86,30 @@ const AttrListBox = (props) => {
           name="filterby"
           onChange={(e) => {
             setFilterBy(e.target.value);
+            handleAttributeChange(e);
+          }}
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="filterby">Option Label</label>
+        <InputText
+          value={optionLabel}
+          style={{ width: "100%" }}
+          name="optionLabel"
+          onChange={(e) => {
+            setOptionLabel(e.target.value);
+            handleAttributeChange(e);
+          }}
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="filterby">Option Value</label>
+        <InputText
+          value={optionValue}
+          style={{ width: "100%" }}
+          name="optionValue"
+          onChange={(e) => {
+            setOptionValue(e.target.value);
             handleAttributeChange(e);
           }}
         />

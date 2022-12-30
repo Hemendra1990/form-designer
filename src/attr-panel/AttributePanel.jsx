@@ -95,8 +95,9 @@ const AttributePanel = (props) => {
           <AttrButtonConfig
             meta={meta}
             handleAttributeChange={handleAttributeChange}
-            eventOptions={availableEvents} />
-        )
+            eventOptions={availableEvents}
+          />
+        );
       }
       /* Render Input configuration */
       if (meta.currentElement.type === CONTROL.INPUT) {
@@ -106,7 +107,7 @@ const AttributePanel = (props) => {
             handleAttributeChange={handleAttributeChange}
             eventOptions={availableEvents}
           />
-        )
+        );
       }
       /* Render Label configuration */
       if (meta.currentElement.type === CONTROL.LABEL) {
@@ -116,7 +117,7 @@ const AttributePanel = (props) => {
             handleAttributeChange={handleAttributeChange}
             eventOptions={availableEvents}
           />
-        )
+        );
       }
       /* Render Listbox configuration */
       if (meta.currentElement.type === CONTROL.LISTBOX) {
@@ -126,19 +127,20 @@ const AttributePanel = (props) => {
             handleAttributeChange={handleAttributeChange}
             eventOptions={availableEvents}
           />
-        )
+        );
       }
       /* Render Password configuration */
       if (meta.currentElement.type === CONTROL.PASSWORD) {
-        return (<>
-          <AttrPasswordConfig
-            meta={meta}
-            handleAttributeChange={handleAttributeChange}
-            currentElement={meta.currentElement}
-            availableEvents={availableEvents}
-          />
-        </>
-        )
+        return (
+          <>
+            <AttrPasswordConfig
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              currentElement={meta.currentElement}
+              availableEvents={availableEvents}
+            />
+          </>
+        );
       }
       /* Render Radio configuration */
       if (meta.currentElement.type === CONTROL.RADIO) {
@@ -148,16 +150,15 @@ const AttributePanel = (props) => {
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
           />
-        )
+        );
       }
-
     }
     return (
       <Fragment>
         <h1>default</h1>
       </Fragment>
-    )
-  }
+    );
+  };
 
   /**
    * RULES FOR RENDERING ATTRIBUTES
@@ -360,16 +361,18 @@ const AttributePanel = (props) => {
    */
   const renderDataConnector = () => {
     if (meta || meta.currentElement) {
-
       /* Render Grid Data MApper */
-      if (meta.currentElement.type === CONTROL.GRID) {
+      if (
+        meta.currentElement.type === CONTROL.GRID ||
+        meta.currentElement.type === CONTROL.LISTBOX
+      ) {
         return (
           <AttrGridDataMapper
             meta={meta}
             handleAttributeChange={handleAttributeChange}
             updateClass={updateClass}
           />
-        )
+        );
       }
     }
   };
@@ -395,36 +398,39 @@ const AttributePanel = (props) => {
   const handelAttributeOptionChange = (e) => {
     const name = (e.currentTarget || e.target).name;
     switch (name) {
-      case 'configure':
+      case "configure":
         setShowConfigure(true);
         setShowAttributs(false);
         setShowDataMapper(false);
         setShowSidebar(true);
         break;
-      case 'attributes':
+      case "attributes":
         setShowConfigure(false);
         setShowAttributs(true);
         setShowDataMapper(false);
         setShowSidebar(true);
         break;
-      case 'dataMapper':
+      case "dataMapper":
         setShowConfigure(false);
         setShowAttributs(false);
         setShowDataMapper(true);
         setShowSidebar(true);
         break;
     }
-  }
+  };
 
   return (
     <>
       {meta.currentElement && (
         <>
           <div className="control-attr-panel">
-            <button type="button" value={true}
+            <button
+              type="button"
+              value={true}
               name="configure"
               title="Configure"
-              onClick={handelAttributeOptionChange}>
+              onClick={handelAttributeOptionChange}
+            >
               <span className="pi pi-cog"></span>
             </button>
             <button
@@ -469,17 +475,20 @@ const AttributePanel = (props) => {
           }}
         >
           <div>
-            <Button icon="pi pi-times"
+            <Button
+              icon="pi pi-times"
               className="p-button-rounded p-button-danger p-button-text"
               aria-label="Cancel"
               style={{
                 float: "right",
                 width: "30px",
                 height: "30px",
-                marginTop: "5px"
-              }} onClick={() => {
+                marginTop: "5px",
+              }}
+              onClick={() => {
                 setShowSidebar(false);
-              }} />
+              }}
+            />
           </div>
 
           <div style={{ marginTop: "25px" }}>
