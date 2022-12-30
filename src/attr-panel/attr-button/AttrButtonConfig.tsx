@@ -21,6 +21,7 @@ const AttrButtonConfig = (props: AttrButtonConfigProps) => {
                     }}
                     placeholder="Select a Event"
                     style={{ width: '100%' }}
+                    showClear={true}
                 />
             </div>
         </>

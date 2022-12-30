@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 
@@ -12,28 +11,13 @@ const AttrListBox = (props) => {
   const [filter, setFilter] = useState(false);
   const [tooltip, setTooltip] = useState("");
   const [filterby, setFilterBy] = useState("");
-  const [onChangeEvent, setOnChangeEvent] = useState("");
-  const [onFilterChange, setOnFilterChange] = useState("");
 
   useEffect(() => {
     setDisabled(currAttribute.disabled || false);
     setMultiple(currAttribute.multiple || false);
     setFilter(currAttribute.filter || false);
     setTooltip(currAttribute.tooltip || false);
-    setOnChangeEvent(currAttribute.onChangeEvent || false);
-    setOnFilterChange(currAttribute.onFilterChange || false);
   }, []);
-
-  const handleOnChangeEvent = (e) => {
-    setOnChangeEvent(e.value);
-    currAttribute.onchangeevent = e.value;
-    handleAttributeChange(e);
-  };
-  const handleFilterValueChangeEvent = (e) => {
-    setOnFilterChange(e.value);
-    currAttribute.onfiltervaluechange = e.value;
-    handleAttributeChange(e);
-  };
 
   return (
     <>
@@ -112,36 +96,6 @@ const AttrListBox = (props) => {
           onChange={(e) => {
             setTooltip(e.target.value);
             handleAttributeChange(e);
-          }}
-        />
-      </div>
-      <div className="field col-12">
-        <label htmlFor="onChangeEvent" className="block">
-          onChange
-        </label>
-        <Dropdown
-          style={{ width: "100%" }}
-          name="onchangeevent"
-          value={onChangeEvent}
-          options={eventOptions}
-          placeholder="Select a onChange Event"
-          onChange={(e) => {
-            handleOnChangeEvent(e);
-          }}
-        />
-      </div>
-      <div className="field col-12">
-        <label htmlFor="onFilterValueChange" className="block">
-          onFilterValueChange
-        </label>
-        <Dropdown
-          style={{ width: "100%" }}
-          name="onfiltervaluechange"
-          value={onFilterChange}
-          options={eventOptions}
-          placeholder="Select a onFilterChange Event"
-          onChange={(e) => {
-            handleFilterValueChangeEvent(e);
           }}
         />
       </div>
