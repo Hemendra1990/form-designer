@@ -7,11 +7,9 @@ const AttrLabel = (props) => {
   const currAttribute = currentElement.attributes;
 
   const [contentEditable, setContentEditable] = useState(false);
-  const [onClickEvent, setOnClickEvent] = useState("");
-
   useEffect(() => {
     setContentEditable(currAttribute.contentEditable || false);
-    setOnClickEvent(currAttribute.onclick || "");
+
   }, []);
 
   return (
@@ -28,20 +26,7 @@ const AttrLabel = (props) => {
           }}
         />
       </div>
-      <div className="field col-12">
-        <label className="block">On Click</label>
-        <Dropdown
-          style={{ width: "100%" }}
-          name="onclick"
-          value={onClickEvent}
-          options={eventOptions}
-          placeholder="Select a onClick Event"
-          onChange={(e) => {
-            setOnClickEvent(e.value);
-            currAttribute.onclick = e.value;
-          }}
-        />
-      </div>
+
     </Fragment>
   );
 };
