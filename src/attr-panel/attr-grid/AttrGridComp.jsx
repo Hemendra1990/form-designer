@@ -26,26 +26,6 @@ const AttrGrid = (props) => {
   return (
     <>
       <div className="field col-12">
-        <label htmlFor="datasource" className="block">
-          <b>Response to use</b>(
-          <i>
-            use like 'response.data or response.result' an array from the
-            response
-          </i>
-          )
-        </label>
-        <InputText
-          style={{ width: "100%" }}
-          name="responseToUse"
-          onChange={(e) => handleAttributeChange(e)}
-          onBlur={(e) => {
-            dataConnector.handleDatasourceChange(element);
-          }}
-          value={currAttribute?.responseToUse}
-          placeholder="response.data or response.result"
-        />
-      </div>
-      <div className="field col-12">
         <label className="block">Class</label>
         <InputText
           style={{ width: "100%" }}

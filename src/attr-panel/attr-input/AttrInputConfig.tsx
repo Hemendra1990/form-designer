@@ -19,22 +19,26 @@ const AttrInputConfig = (props: AttrInputConfigProps) => {
 
     const handleBlurChange = (e: any) => {
         setonBlur(e.value);
-        currAttribute.onblur = e.value;
+        currAttribute.onBlur = e.value;
+        handleAttributeChange(e);
     }
 
     const handleFocusChange = (e: any) => {
         setonFocus(e.value);
-        currAttribute.onfocus = e.value;
+        currAttribute.onFocus = e.value;
+        handleAttributeChange(e);
     }
 
     const handleKeyupChange = (e: any) => {
         setonKeyup(e.value);
-        currAttribute.onkeyup = e.value;
+        currAttribute.onKeyup = e.value;
+        handleAttributeChange(e);
     }
 
     const handleKeydownChange = (e: any) => {
         setonKeyDown(e.value);
-        currAttribute.onkeydown = e.value;
+        currAttribute.onKeyDown = e.value;
+        handleAttributeChange(e);
     }
 
 
@@ -44,44 +48,48 @@ const AttrInputConfig = (props: AttrInputConfigProps) => {
                 <label htmlFor="onBlur" className="block">On Blur</label>
                 <Dropdown
                     style={{ width: '100%' }}
-                    name="onblur"
-                    value={onBlur}
+                    name="onBlur"
+                    value={currAttribute.onBlur || onBlur}
                     options={eventOptions}
                     placeholder="Select a Blur Event"
                     onChange={e => { handleBlurChange(e) }}
+                    showClear={true}
                 />
             </div>
             <div className="field col-12">
                 <label htmlFor="onFocus" className="block">On Focus</label>
                 <Dropdown
                     style={{ width: '100%' }}
-                    name="onfocus"
-                    value={onFocus}
+                    name="onFocus"
+                    value={currAttribute.onFocus || onFocus}
                     options={eventOptions}
                     placeholder="Select a Focus Event"
                     onChange={e => { handleFocusChange(e) }}
+                    showClear={true}
                 />
             </div>
             <div className="field col-12">
                 <label htmlFor="onKeyup" className="block">On Keyup</label>
                 <Dropdown
                     style={{ width: '100%' }}
-                    name="onkeyup"
-                    value={onKeyup}
+                    name="onKeyup"
+                    value={currAttribute.onKeyup || onKeyup}
                     options={eventOptions}
                     placeholder="Select a onKeyup Event"
                     onChange={e => { handleKeyupChange(e) }}
+                    showClear={true}
                 />
             </div>
             <div className="field col-12">
                 <label htmlFor="onKeyDown" className="block">On KeyDown</label>
                 <Dropdown
                     style={{ width: '100%' }}
-                    name="onkeydown"
-                    value={onKeyDown}
+                    name="onKeyDown"
+                    value={currAttribute.onKeyDown || onKeyDown}
                     options={eventOptions}
                     placeholder="Select a onKeyDown Event"
                     onChange={e => { handleKeydownChange(e) }}
+                    showClear={true}
                 />
             </div>
         </>
