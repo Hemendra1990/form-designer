@@ -29,25 +29,25 @@ const HDInput = React.forwardRef((props, ref) => {
   }, []);
 
   const executeFocusEvent = () => {//TODO Shilpa will take care of it
-    if (element.attributes && element.attributes.onFocus) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onFocus, null, null);
+    if (element.attributes && element.attributes.onfocus) {
+      EventExecutor.executeEvent(props.meta, element.attributes.onfocus, null, null);
     }
   }
   const executeBlurEvent = () => {
-    if (element.attributes && element.attributes.onBlur) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onBlur, null, null);
+    if (element.attributes && element.attributes.onblur) {
+      EventExecutor.executeEvent(props.meta, element.attributes.onblur, null, null);
     }
   }
 
   const executeKeyupEvent = () => {
-    if (element.attributes && element.attributes.onKeyup) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onKeyup, null, null);
+    if (element.attributes && element.attributes.onkeyup) {
+      EventExecutor.executeEvent(props.meta, element.attributes.onkeyup, null, null);
     }
   }
 
   const executeKeyDownEvent = () => {
-    if (element.attributes && element.attributes.onKeyDown) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onKeyDown, null, null);
+    if (element.attributes && element.attributes.onkeydown) {
+      EventExecutor.executeEvent(props.meta, element.attributes.onkeydown, null, null);
     }
   }
 
