@@ -17,6 +17,14 @@ import AttrLabel from "./attr-label/AttrLabel";
 import AttrPassword from "./attr-password/AttrPassword";
 import { Button } from "primereact/button";
 import AttrButtonConfig from "./attr-button/AttrButtonConfig";
+import AttrInputConfig from "./attr-input/AttrInputConfig";
+import AttrLableConfig from "./attr-label/AttrLabelConfig";
+import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
+import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
+import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
+import AttrGridDataMapper from "./attr-grid/AttrGridDataMapper";
+import AttrTextArea from "./attr-textarea/AttrTextArea";
+import AttrContainer from "./attr-container/AttrContainer";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -72,6 +80,84 @@ const AttributePanel = (props) => {
   const openControlStyle = (e) => {
     setShowControlStyle(true);
   };
+
+  /**
+   * RULES FOR RENDERING CONFIGURATION
+   *  -Each event should have a name (As line:35) e.g: <InputText name="label" />
+   *
+   * @returns
+   */
+  const renderConfiguration = () => {
+    if (meta && meta.currentElement) {
+      /* Render Button configuration */
+      if (meta.currentElement.type === CONTROL.BUTTON) {
+        return (
+          <AttrButtonConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            eventOptions={availableEvents} />
+        )
+      }
+      /* Render Input configuration */
+      if (meta.currentElement.type === CONTROL.INPUT) {
+        return (
+          <AttrInputConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            eventOptions={availableEvents}
+          />
+        )
+      }
+      /* Render Label configuration */
+      if (meta.currentElement.type === CONTROL.LABEL) {
+        return (
+          <AttrLableConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            eventOptions={availableEvents}
+          />
+        )
+      }
+      /* Render Listbox configuration */
+      if (meta.currentElement.type === CONTROL.LISTBOX) {
+        return (
+          <AttrListboxConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            eventOptions={availableEvents}
+          />
+        )
+      }
+      /* Render Password configuration */
+      if (meta.currentElement.type === CONTROL.PASSWORD) {
+        return (<>
+          <AttrPasswordConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
+            availableEvents={availableEvents}
+          />
+        </>
+        )
+      }
+      /* Render Radio configuration */
+      if (meta.currentElement.type === CONTROL.RADIO) {
+        return (
+          <AttrRadioConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
+          />
+        )
+      }
+
+    }
+    return (
+      <Fragment>
+        <h1>default</h1>
+      </Fragment>
+    )
+  }
 
   /**
    * RULES FOR RENDERING ATTRIBUTES
@@ -130,47 +216,11 @@ const AttributePanel = (props) => {
       if (meta.currentElement.type === CONTROL.TEXTAREA) {
         return (
           <>
-            <div className="field col-12">
-              <label htmlFor="controlId">Control ID</label>
-              <InputText
-                name="placeholder"
-                value={meta.currentElement.id}
-                disabled
-              />
-            </div>
-            <div className="field col-12">
-              <label htmlFor="rows">Rows Length</label>
-              <InputNumber
-                name="rows"
-                onChange={handleAttributeChange}
-                value={currAttribute?.rows}
-              />
-            </div>
-            <div className="field col-12">
-              <label htmlFor="cols">Cols Length</label>
-              <InputNumber
-                name="cols"
-                onChange={handleAttributeChange}
-                value={currAttribute?.cols}
-              />
-            </div>
-            <div className="field col-12">
-              <label htmlFor="maxLen">Max Length</label>
-              <InputNumber
-                name="maxLength"
-                onChange={handleAttributeChange}
-                value={currAttribute?.maxLength}
-              />
-            </div>
-            <div className="field col-12">
-              <label htmlFor="placeholder">Placeholder</label>
-              <InputText
-                name="placeholder"
-                placeholder="Enter Placeholder"
-                onChange={handleAttributeChange}
-                value={currAttribute?.placeholder || ""}
-              />
-            </div>
+            <AttrTextArea
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+            />
             {classDiv}
           </>
         );
@@ -179,14 +229,11 @@ const AttributePanel = (props) => {
       if (meta.currentElement.type === CONTROL.CONTAINER) {
         return (
           <>
-            <div className="field col-12">
-              <label htmlFor="controlId">Control ID</label>
-              <InputText
-                name="placeholder"
-                value={meta.currentElement.id}
-                disabled
-              />
-            </div>
+            <AttrContainer
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+            />
             {classDiv}
           </>
         );
@@ -284,6 +331,7 @@ const AttributePanel = (props) => {
               currentElement={meta.currentElement}
               availableEvents={availableEvents}
             ></AttrPassword>
+            {classDiv}
           </Fragment>
         );
       }
@@ -304,10 +352,33 @@ const AttributePanel = (props) => {
     return <></>;
   };
 
+  /**
+   * RULES FOR RENDERING DATA SOURCE MAPPER
+   *  -Each Data Source Mapper should have a name (As line:35) e.g: <InputText name="label" />
+   *
+   * @returns
+   */
   const renderDataConnector = () => {
-    return <h1>Data Connector</h1>;
+    if (meta || meta.currentElement) {
+
+      /* Render Grid Data MApper */
+      if (meta.currentElement.type === CONTROL.GRID) {
+        return (
+          <AttrGridDataMapper
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            updateClass={updateClass}
+          />
+        )
+      }
+    }
   };
 
+  /**
+   * RULES FOR STYLING CONTROL STYLE
+   *
+   * @returns
+   */
   const getControlStyle = () => {
     if (showControlStyle) {
       return (
@@ -320,25 +391,6 @@ const AttributePanel = (props) => {
 
     return <></>;
   };
-
-  const renderConfiguration = () => {
-
-    if (meta.currentElement.type === CONTROL.BUTTON) {
-
-      return (
-        <AttrButtonConfig
-          meta={meta}
-          handleAttributeChange={handleAttributeChange}
-          eventOptions={availableEvents} />
-      )
-
-    }
-    return (
-      <Fragment>
-        <h1>default</h1>
-      </Fragment>
-    )
-  }
 
   const handelAttributeOptionChange = (e) => {
     const name = (e.currentTarget || e.target).name;

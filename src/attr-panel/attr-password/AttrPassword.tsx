@@ -24,12 +24,6 @@ const AttrPassword = (props: AttrPasswordProps) => {
   const [showIconToDisplayPassword, setShowIconToDisplayPassword] = useState<any>(null);
   const [panelFooterForPassword, setPanelFooterForPassword] = useState<any>(null);
 
-  const styleObj = {
-    width: "100%",
-  };
-
-
-
   const handleShowStrengthIndicatorChange = (e: any) => {
     setShowStrengthIndicator(e.checked);
     handleAttributeChange(e);
@@ -56,20 +50,6 @@ const AttrPassword = (props: AttrPasswordProps) => {
           name="controlId"
           value={currentElement.id}
           disabled
-        />
-      </div>
-      <div className="field col-12">
-        <label className="block">On Blur</label>
-        <Dropdown
-          name="onBlurEvent"
-          value={currAttribute.onBlurEvent}
-          options={availableEvents}
-          onChange={(e) => {
-            handleAttributeChange(e);
-          }}
-          placeholder="Select an Event"
-          style={styleObj}
-          showClear={true}
         />
       </div>
       <div className="field col-12">
