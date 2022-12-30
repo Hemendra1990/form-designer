@@ -121,6 +121,7 @@ export const MetaContextProvider = ({ children }) => {
         return jsonStringifyIgnoredList.includes(key) ? undefined : value;
       });
       console.info("Report Saved", metaJson);
+      return metaJson;
     } else {
       toastRef.current &&
         toastRef.current.show({
@@ -128,6 +129,7 @@ export const MetaContextProvider = ({ children }) => {
           summary: "Can't Save ",
           detail: "Report with no elements can't be saved.",
         });
+      return {};
     }
   };
 

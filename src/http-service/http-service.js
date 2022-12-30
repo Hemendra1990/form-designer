@@ -30,7 +30,7 @@ const httpService = {
   },
   SAVE_FORM: {
     save(data) {
-      return axios.post(`${baseURL}/form-design-resource/new/save`);
+      return axios.post(`${baseURL}/form-design-resource/new/save`, data);
     },
   },
 };
