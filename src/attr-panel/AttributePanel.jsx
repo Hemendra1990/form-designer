@@ -344,6 +344,7 @@ const AttributePanel = (props) => {
               meta={meta}
               currentElement={meta.currentElement}
               handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
               eventOptions={availableEvents}
             />
           </>

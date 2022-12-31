@@ -84,7 +84,9 @@ const HDListBox = React.forwardRef((props, parentRef) => {
         filter={element.attributes?.filter || false}
         filterBy={element.attributes?.filterby}
         tooltip={element.attributes?.tooltip}
-        listStyle={{ maxHeight: element.attributes?.maxHeight || "225px" }}
+        listStyle={{
+          maxHeight: element.attributes?.maxHeight || "225px",
+        }}
       />
       {/* multiple={element.attributes?.multiple || false} */}
     </>
