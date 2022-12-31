@@ -23,7 +23,7 @@ export class DataConnector {
       let generateColumnIds = true;
       if (element.attributes.columns) {
         const prevClms = element.attributes.columns;
-        if (prevClms[0].datasource === datasource) {
+        if (prevClms.length > 0 && prevClms[0].datasource === datasource) {
           //prev columns are using the same datasource Id, so we wont be creating the new column Ids
           DataConnector.columns = [...prevClms];
           generateColumnIds = false;
@@ -77,7 +77,7 @@ export class DataConnector {
           rows: rows,
         });
       }
-    } else {
+    } else if (element.attributes.sqldatasource !== undefined) {
       datasource = element.attributes.sqldatasource;
       if (datasource !== undefined) {
         const queryData = datasource;
@@ -113,6 +113,13 @@ export class DataConnector {
               rows: rows,
             });
           }
+        });
+      }
+    } else {
+      if (element.ref.current.setResult) {
+        element.ref.current.setResult({
+          columns: [],
+          rows: rows,
         });
       }
     }

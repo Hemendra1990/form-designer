@@ -4,13 +4,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import { CONTROL } from "../constants/Elements";
 
 const Playground = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
-  const [changePlaygroundState, setChangePlaygroundState] = useState(true); //This is required to reload the controls 
+  const [changePlaygroundState, setChangePlaygroundState] = useState(true); //This is required to reload the controls
 
-  
   const toastRef = useRef(null);
   useEffect(() => {
     meta.toastRef = toastRef;
@@ -26,28 +26,29 @@ const Playground = (props) => {
     event.preventDefault();
     event.stopPropagation();
     meta.currentElement = element;
-    
+
     updateMeta(meta);
   };
 
   /**
    * creates the element in the playground
-   * 
-   * @param {*} element 
-   * @param {*} i 
-   * @returns 
+   *
+   * @param {*} element
+   * @param {*} i
+   * @returns
    */
   const createElement = (element, i) => {
     element.attributes = element.attributes || {};
     element.attributes.children = element.attributes.children || [];
     let ref = element.ref;
 
-    if(element.reactComponent) { //Commented beacuse opening report looses current.ref
-      return React.cloneElement(element.reactComponent, {meta: meta})
+    if (element.reactComponent) {
+      //Commented beacuse opening report looses current.ref
+      return React.cloneElement(element.reactComponent, { meta: meta });
       //return element.reactComponent;
     }
 
-    if(!ref) {
+    if (!ref) {
       ref = React.createRef();
     }
     const reactComponent = React.createElement(element.component, {
@@ -67,28 +68,29 @@ const Playground = (props) => {
 
   /**
    * Updates the meta.elements to rerender the elements in the playground
-   * 
-   * @param {*} dragResult 
-   * @returns 
+   *
+   * @param {*} dragResult
+   * @returns
    */
   const onDragEnd = (dragResult) => {
     if (!dragResult.destination) return;
-    const {destination, source} = dragResult;
+    const { destination, source } = dragResult;
     let items = meta.elements;
     let destContainer = items.find(
       (itm) => itm.id === dragResult.destination.droppableId
     );
-    
+
     if (dragResult.destination.droppableId.includes("container")) {
-      //TODO recursively find the value findContainer(items, dragResult.destination.droppableId, destContainer); 
+      //TODO recursively find the value findContainer(items, dragResult.destination.droppableId, destContainer);
       /* destContainer = items.find(
         (itm) => itm.id === dragResult.destination.droppableId
       ); */
 
       //If source and destination container is Same.
-      if(destination.droppableId === source.droppableId) {
+      if (destination.droppableId === source.droppableId) {
         reorderItemsInSameContainer();
-      } else if(source.droppableId.includes("container")) { //Dragged from One Container to Another sibling Container
+      } else if (source.droppableId.includes("container")) {
+        //Dragged from One Container to Another sibling Container
         //Remove from Source Container
         reorderItemFromContainerToSiblingContainer();
       } else {
@@ -108,30 +110,40 @@ const Playground = (props) => {
           destContainer.attributes.children.push(reorderItem);
         }
       }
-    } else if(source.droppableId.includes("container") && destination.droppableId.includes("playground")) {/* If item dragged from container and dropped in Playground */
+    } else if (
+      source.droppableId.includes("container") &&
+      destination.droppableId.includes("playground")
+    ) {
+      /* If item dragged from container and dropped in Playground */
       reorderItemFromContainerToPlayground();
     } else {
       const [reorderItem] = items.splice(dragResult.source.index, 1);
       items.splice(dragResult.destination.index, 0, reorderItem);
     }
 
-    meta.elements = [...items]
+    meta.elements = [...items];
     updateMeta(meta);
 
     function reorderItemFromContainerToSiblingContainer() {
-      
-      const srcContainerChildren = meta.elementMap[source.droppableId].attributes.children;
+      const srcContainerChildren =
+        meta.elementMap[source.droppableId].attributes.children;
       const [containerChild] = srcContainerChildren.splice(source.index, 1);
       //Add to the destination container
-      destContainer.attributes.children.splice(destination.index, 0, containerChild);
-      destContainer.attributes.children = [...destContainer.attributes.children];
+      destContainer.attributes.children.splice(
+        destination.index,
+        0,
+        containerChild
+      );
+      destContainer.attributes.children = [
+        ...destContainer.attributes.children,
+      ];
     }
 
     function reorderItemFromContainerToPlayground() {
-      
       //Splice from container children
       let srcContainerId = source.droppableId;
-      let containerChildren = meta.elementMap[srcContainerId].attributes.children;
+      let containerChildren =
+        meta.elementMap[srcContainerId].attributes.children;
       const [containerChild] = containerChildren.splice(source.index, 1);
 
       items.splice(dragResult.destination.index, 0, containerChild);
@@ -143,25 +155,27 @@ const Playground = (props) => {
       const [childreOrderitem] = children.splice(dragResult.source.index, 1);
       children.splice(dragResult.destination.index, 0, childreOrderitem);
 
-      destContainer.attributes.children = [...destContainer.attributes.children];
+      destContainer.attributes.children = [
+        ...destContainer.attributes.children,
+      ];
     }
   };
 
   /**
    * Depth search for the element
-   * 
-   * @param {*} items 
-   * @param {*} droppableId 
-   * @returns 
+   *
+   * @param {*} items
+   * @param {*} droppableId
+   * @returns
    */
   function findContainer(items, droppableId, result) {
-    for(let item of items) {
-      if(item.id === droppableId) {
-        result =  item;
+    for (let item of items) {
+      if (item.id === droppableId) {
+        result = item;
         break;
       }
 
-      if(item?.attributes?.children.length > 0) {
+      if (item?.attributes?.children.length > 0) {
         findContainer(item.attributes.children, droppableId);
       }
     }
@@ -169,10 +183,10 @@ const Playground = (props) => {
 
   /**
    * deletes the element from the playground
-   * 
-   * @param {*} event 
-   * @param {*} element 
-   * @param {*} index 
+   *
+   * @param {*} event
+   * @param {*} element
+   * @param {*} index
    */
   const deleteElement = (event, element, index) => {
     meta.elements.splice(index, 1);
@@ -202,7 +216,13 @@ const Playground = (props) => {
                 >
                   {(provided, snapshot) => (
                     <div
-                      className={element?.attributes?.className || "col-4"}
+                      className={
+                        element?.attributes?.className
+                          ? element?.attributes?.className
+                          : element.type === CONTROL.GRID
+                          ? "col-12"
+                          : "col-4"
+                      }
                       onClick={(event) => updateCurrentElement(event, element)}
                     >
                       <div ref={provided.innerRef} {...provided.draggableProps}>
