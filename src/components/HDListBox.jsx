@@ -7,6 +7,8 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   const [selectedValue, setSelectedValue] = useState(null);
   const [listOptions, setListOptions] = useState([]);
 
+  const [labelValueOptions, setLabelValueOptions] = useState([]);
+
   const primeListRef = useRef(parentRef);
 
   console.log(element);
@@ -34,9 +36,15 @@ const HDListBox = React.forwardRef((props, parentRef) => {
 
   const operations = {
     setResult: (result) => {
-      console.log("HD Listbox", result);
       const rows = result.rows || [];
+      if (result.columns && result.columns.length > 0) {
+        setLabelValueOptions(result.columns);
+      }
       setListOptions(rows);
+    },
+
+    getLabelAndValueOptions() {
+      return labelValueOptions;
     },
 
     startLoader: (value) => {
@@ -46,6 +54,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
     sayHello(value) {
       alert(value);
     },
+
     primeListRef,
   };
 

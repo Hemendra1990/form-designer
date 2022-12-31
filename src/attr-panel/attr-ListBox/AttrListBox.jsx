@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
+import { Dropdown } from "primereact/dropdown";
+import { element } from "prop-types";
 
 const AttrListBox = (props) => {
   const { meta, eventOptions, updateClass, handleAttributeChange } = props;
@@ -13,15 +15,22 @@ const AttrListBox = (props) => {
   const [filterby, setFilterBy] = useState("");
   const [optionLabel, setOptionLabel] = useState("");
   const [optionValue, setOptionValue] = useState("");
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
     setDisabled(currAttribute.disabled || false);
     setMultiple(currAttribute.multiple || false);
     setFilter(currAttribute.filter || false);
-    setTooltip(currAttribute.tooltip || false);
+    setTooltip(currAttribute.tooltip || "");
     setOptionLabel(currAttribute.optionLabel || "");
     setOptionValue(currAttribute.optionValue || "");
   }, []);
+
+  const getLabelValueOptions = () => {
+    setOptions(
+      meta?.currentElement?.ref.current?.getLabelAndValueOptions() || []
+    );
+  };
 
   return (
     <>
@@ -92,26 +101,34 @@ const AttrListBox = (props) => {
       </div>
       <div className="field col-12">
         <label htmlFor="filterby">Option Label</label>
-        <InputText
+        <Dropdown
           value={optionLabel}
+          options={options}
           style={{ width: "100%" }}
           name="optionLabel"
+          onFocus={getLabelValueOptions}
           onChange={(e) => {
-            setOptionLabel(e.target.value);
+            setOptionLabel(e.value);
             handleAttributeChange(e);
           }}
+          optionLabel="header"
+          optionValue="field"
         />
       </div>
       <div className="field col-12">
         <label htmlFor="filterby">Option Value</label>
-        <InputText
+        <Dropdown
+          options={options}
           value={optionValue}
           style={{ width: "100%" }}
           name="optionValue"
           onChange={(e) => {
-            setOptionValue(e.target.value);
+            setOptionValue(e.value);
             handleAttributeChange(e);
           }}
+          onFocus={getLabelValueOptions}
+          optionLabel="header"
+          optionValue="field"
         />
       </div>
       <div className="field col-12">
