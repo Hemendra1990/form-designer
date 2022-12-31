@@ -16,6 +16,9 @@ import randomstring from "randomstring";
 import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
 import {useNavigate} from "react-router-dom";
 
+import { ListBox } from 'primereact/listbox';
+
+
 const tab = {
   id: 0,
   queryId: "",
@@ -47,7 +50,6 @@ const queryTypes = [
 ];
 
 const SQLQueryBuilder = (props) => {
-  const { setShowSQLBuilder } = props;
   const [showQueryModeler, setShowQueryModeler] = useState(true);
   const [sqlQueryTabs, setSQLQueryTabs] = useState([]);
   const [dataSources, setDataSources] = useState([]);
@@ -68,18 +70,6 @@ const SQLQueryBuilder = (props) => {
   useEffect(() => {
     fetchDataSources();
   }, []);
-
-  /*useImperativeHandle(ref, () => {
-    return {
-      openSqlQueryBuilder() {
-        setShowQueryModeler(true);
-      },
-
-      currentTab(tab) {
-        console.log("Current Tab", tab);
-      },
-    };
-  });*/
 
   const testQuery = (e) => {
     const currTab = sqlQueryTabs[tabActiveIndex - 1];
@@ -231,6 +221,8 @@ const SQLQueryBuilder = (props) => {
         <TabView activeIndex={tabActiveIndex} onTabChange={handleTabChange}>
           <TabPanel header="List">
             <p>Show List of SQLs</p>
+            <ListBox options={[]} emptymessage="No Sqls available."></ListBox>
+
           </TabPanel>
           {sqlQueryTabs.map((tab) => (
             <TabPanel key={tab.id} header={tab.name} closable>
