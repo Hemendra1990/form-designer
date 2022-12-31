@@ -22,9 +22,9 @@ import AttrLableConfig from "./attr-label/AttrLabelConfig";
 import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
 import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
-import AttrGridDataMapper from "./attr-grid/AttrGridDataMapper";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
 import AttrContainer from "./attr-container/AttrContainer";
+import AttrDataConnector from "./data-connector/AttrDataConnector";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -367,7 +367,7 @@ const AttributePanel = (props) => {
         meta.currentElement.type === CONTROL.LISTBOX
       ) {
         return (
-          <AttrGridDataMapper
+          <AttrDataConnector
             meta={meta}
             handleAttributeChange={handleAttributeChange}
             updateClass={updateClass}

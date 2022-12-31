@@ -4,13 +4,13 @@ import { TabPanel, TabView } from "primereact/tabview";
 import React, { useEffect, useState } from "react";
 import { DataConnector } from "../data-connector/DataConnector";
 
-interface AttrGridDataMapperProps {
+interface AttrDataConnectorProps {
   meta: any;
   handleAttributeChange: Function;
   updateClass: Function;
 }
 
-const AttrGridDataMapper = (props: AttrGridDataMapperProps) => {
+const AttrDataConnector = (props: AttrDataConnectorProps) => {
   const { meta, handleAttributeChange, updateClass } = props;
   const element = meta.currentElement;
   const dataConnector = new DataConnector(meta);
@@ -107,4 +107,4 @@ const AttrGridDataMapper = (props: AttrGridDataMapperProps) => {
   );
 };
 
-export default AttrGridDataMapper;
+export default AttrDataConnector;
