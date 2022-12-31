@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './IntroPage.css';
+import {Button} from "primereact/button";
 
 function IntroPage() {
     const navigate = useNavigate();
