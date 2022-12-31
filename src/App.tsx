@@ -8,6 +8,7 @@ import ErrorBoundary from "./error-handler/ErrorBoundary";
 import Homepage from "./Homepage";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import IntroPage from "./intro/IntroPage";
+import SQLQueryBuilder from "./sql-modeler/query-builder/SQLQueryBuilder";
 
 
 /* Problem with Drag n Drop : https://stackoverflow.com/questions/54982182/react-beautiful-dnd-drag-out-of-position-problem */
@@ -29,7 +30,9 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<IntroPage />} />
-                <Route path="/form-designer" element={<Homepage />} />
+                <Route path="/form-designer" element={<Homepage />}>
+                  <Route path="sql-builder" element={<SQLQueryBuilder />} />
+                </Route>
               </Routes>
             </BrowserRouter>
           </ErrorBoundary>

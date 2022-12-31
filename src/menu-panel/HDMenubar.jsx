@@ -116,10 +116,11 @@ const HDMenubar = (props) => {
           label: "SQL",
           icon: "pi pi-table",
           command: () => {
-            setShowSQLBuilder(true);
+            /*setShowSQLBuilder(true);
             setTimeout(() => {
               configureQueryBuilder(sqlQueryBuilderRef);
-            }, 0);
+            }, 0);*/
+            navigate("sql-builder")
           },
         },
         {
@@ -153,12 +154,12 @@ const HDMenubar = (props) => {
           ref={dataSourceConfigRef}
         ></DataSourceBuilder>
       )}
-      {showSQLBuilder && (
+      {/*{showSQLBuilder && (
         <SQLQueryBuilder
           setShowSQLBuilder={setShowSQLBuilder}
           ref={sqlQueryBuilderRef}
         ></SQLQueryBuilder>
-      )}
+      )}*/}
 
       {showFormSaveModal && (
         <SaveFormDesignResource

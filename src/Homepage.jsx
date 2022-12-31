@@ -4,16 +4,14 @@ import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import { useConfirmationContext } from "./context/ConfirmationDialogContext";
 import {
-  useMetaContext,
-  useToastContext,
-  useUpdateMetaContext,
-} from "./context/MetaContext";
+  useMetaContext, useToastContext, useUpdateMetaContext } from "./context/MetaContext";
 import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
 import HDMenubar from "./menu-panel/HDMenubar";
 import Playground from "./playground/Playground";
 import EventExecutor from "./service/EventExecutor";
+import { Outlet } from "react-router-dom";
 
 import Draggable from "react-draggable";
 
@@ -116,6 +114,7 @@ const Homepage = (props) => {
       >
         <EventModeler hide={onHide} />
       </Dialog>
+      <Outlet />
     </>
   );
 };

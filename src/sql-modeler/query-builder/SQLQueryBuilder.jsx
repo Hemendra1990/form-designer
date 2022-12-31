@@ -13,10 +13,8 @@ import AddSQL from "./AddSQL";
 import { v4 as uuidv4 } from "uuid";
 import httpService from "../../http-service/http-service";
 import randomstring from "randomstring";
-import {
-  useMetaContext,
-  useUpdateMetaContext,
-} from "../../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
+import {useNavigate} from "react-router-dom";
 
 const tab = {
   id: 0,
@@ -48,9 +46,9 @@ const queryTypes = [
   { label: "PROCEDURE", value: "procedure" },
 ];
 
-const SQLQueryBuilder = forwardRef((props, ref) => {
+const SQLQueryBuilder = (props) => {
   const { setShowSQLBuilder } = props;
-  const [showQueryModeler, setShowQueryModeler] = useState(false);
+  const [showQueryModeler, setShowQueryModeler] = useState(true);
   const [sqlQueryTabs, setSQLQueryTabs] = useState([]);
   const [dataSources, setDataSources] = useState([]);
   const [tabActiveIndex, setTabActiveIndex] = useState(0);
@@ -59,6 +57,7 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
 
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
+  let navigate = useNavigate();
 
   const fetchDataSources = () => {
     httpService.JNDI.list().then((res) => {
@@ -70,7 +69,7 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
     fetchDataSources();
   }, []);
 
-  useImperativeHandle(ref, () => {
+  /*useImperativeHandle(ref, () => {
     return {
       openSqlQueryBuilder() {
         setShowQueryModeler(true);
@@ -80,7 +79,7 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
         console.log("Current Tab", tab);
       },
     };
-  });
+  });*/
 
   const testQuery = (e) => {
     const currTab = sqlQueryTabs[tabActiveIndex - 1];
@@ -142,8 +141,9 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
         console.log(meta);
         setShowQueryModeler(false);
 
-        setShowSQLBuilder(false); //Menubar parent
+        //setShowSQLBuilder(false); //Menubar parent
       }
+      navigate(-1);
     });
   };
 
@@ -174,7 +174,7 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
         className="p-button-outlined p-button-danger"
         label="Cancel"
         icon="pi pi-times"
-        onClick={() => setShowQueryModeler(false)}
+        onClick={() => {setShowQueryModeler(false); navigate(-1)}}
       />
     </div>
   );
@@ -245,6 +245,6 @@ const SQLQueryBuilder = forwardRef((props, ref) => {
       </Dialog>
     </>
   );
-});
+};
 
-export default memo(SQLQueryBuilder);
+export default SQLQueryBuilder;
