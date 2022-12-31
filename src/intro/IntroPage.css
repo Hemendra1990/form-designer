@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.intro-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fbfbfe;
+    color: #5a6072;
+    height: 100vh;
+}
+
+.intro-content {
+    max-width: 500px;
+    text-align: center;
+}
+
+.intro-content img {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.intro-page h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.intro-page p {
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+.intro-page button {
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -6,6 +6,7 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import DataSourceBuilder from "../sql-modeler/DataSourceBuilder";
 import SQLQueryBuilder from "../sql-modeler/query-builder/SQLQueryBuilder";
 import SaveFormDesignResource from "./SaveFormDesignResource";
+import {useNavigate} from "react-router-dom";
 
 const HDMenubar = (props) => {
   const reportConfigRef = useRef();
@@ -28,6 +29,7 @@ const HDMenubar = (props) => {
     configureDataSource,
     configureQueryBuilder,
   } = useUpdateMetaContext();
+  let navigate = useNavigate();
   const end = (
     <p style={{ fontWeight: 400, color: "#fff" }}>
       Hemendra's Low Code Designer
@@ -39,6 +41,8 @@ const HDMenubar = (props) => {
       src="/logo-white.png"
       height="40"
       className="mr-2 mt-2 ml-4"
+      style={{cursor:'pointer'}}
+      onClick={()=> navigate("/")}
     ></img>
   );
   const meta = useMetaContext();
