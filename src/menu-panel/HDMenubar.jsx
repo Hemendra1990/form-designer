@@ -106,10 +106,11 @@ const HDMenubar = (props) => {
           label: "Data Source",
           icon: "pi pi-database",
           command: () => {
-            setShowDatasourceBuilder(true);
+            /*setShowDatasourceBuilder(true);
             setTimeout(() => {
               configureDataSource(dataSourceConfigRef);
-            }, 0);
+            }, 0);*/
+            navigate("datasource-builder");
           },
         },
         {
@@ -148,12 +149,12 @@ const HDMenubar = (props) => {
       {menuBar()}
       <ReportConfiguration ref={reportConfigRef} />
       <ApiModeler ref={apiConfigRef} />
-      {showDatasourceBuilder && (
+      {/*{showDatasourceBuilder && (
         <DataSourceBuilder
           setShowDatasourceBuilder={setShowDatasourceBuilder}
           ref={dataSourceConfigRef}
         ></DataSourceBuilder>
-      )}
+      )}*/}
       {/*{showSQLBuilder && (
         <SQLQueryBuilder
           setShowSQLBuilder={setShowSQLBuilder}
