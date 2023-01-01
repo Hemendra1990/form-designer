@@ -63,7 +63,7 @@ const ControlPanel = () => {
 
   return (
     /* This draggable is from https://www.npmjs.com/package/react-draggable */
-    <Draggable>
+    <Draggable axis="both" bounds={{bottom: 200}}>
       <div
         className="control-panel-wrapper"
         ref={wrapperRef}

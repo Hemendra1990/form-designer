@@ -100,21 +100,13 @@ const Homepage = (props) => {
         <></>
       )}
 
+      <Outlet />
+
       <div className="layout-footer align-items-center justify-content-end flex">
         <footer>
           <p className="mr-3">&copy; 2022 Hemendra Sethi</p>
         </footer>
       </div>
-      <Dialog
-        header="Event Modeler"
-        visible={displayBasic}
-        style={{ width: "95vw" }}
-        footer={renderFooter("displayBasic")}
-        onHide={() => onHide("displayBasic")}
-      >
-        <EventModeler hide={onHide} />
-      </Dialog>
-      <Outlet />
     </>
   );
 };

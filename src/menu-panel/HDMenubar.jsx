@@ -99,7 +99,8 @@ const HDMenubar = (props) => {
           label: "Events",
           icon: "pi pi-fw pi-cog",
           command: () => {
-            props.toggleEventModal();
+            /*props.toggleEventModal();*/
+            navigate("event-builder");
           },
         },
         {
