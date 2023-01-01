@@ -127,7 +127,7 @@ const HDMenubar = (props) => {
         },
         {
           label: "API",
-          icon: "",
+          icon: "fa fa-plug",
           command: () => {
             configureApi(apiConfigRef);
           },
