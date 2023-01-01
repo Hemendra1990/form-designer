@@ -27,6 +27,10 @@ const httpService = {
     getQueryResult(queryData) {
       return axios.post(`${baseURL}/query/result`, queryData);
     },
+
+    getSingleCachedQueryDetails(sessionId, queryId) {
+      return axios.get(`${baseURL}/query/cache/${sessionId}/${queryId}`);
+    }
   },
   SAVE_FORM: {
     save(data) {
