@@ -84,7 +84,7 @@ const HDMenubar = (props) => {
         },
         {
           label: "Configure",
-          icon: "pi pi-fw pi-cog",
+          icon: "fa fa-wrench",
           command: () => {
             setOpenReportConfiguration(true);
             configure(reportConfigRef);
