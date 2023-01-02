@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import { Dropdown } from "primereact/dropdown";
-import { element } from "prop-types";
+import { Dialog } from 'primereact/dialog';
+import { Button } from "primereact/button";
+
+
+// interface SelectItem {
+//   label: string;
+//   value: any;
+// }
 
 const AttrListBox = (props) => {
   const { meta, eventOptions, updateClass, handleAttributeChange } = props;
@@ -17,6 +24,45 @@ const AttrListBox = (props) => {
   const [optionLabel, setOptionLabel] = useState("");
   const [optionValue, setOptionValue] = useState("");
   const [options, setOptions] = useState([]);
+  const [staticOptionList, setStaticOptionList] = useState([{}]);
+  const [staticOptionDialog, setDisplayBasic] = useState(false);
+  const [position, setPosition] = useState('center');
+
+  const handelInputChange = (e, index) => {
+    // meta.currenteElement.attributes.config = meta.currenteElement.attributes.config || {};
+    // const config = meta.currenteElement.attributes.config;
+    console.log(currAttribute);
+    const { name, value } = e.target;
+    const list = [...staticOptionList];
+    list[index][name] = value;
+    setStaticOptionList(list);
+    console.log(staticOptionList);
+    meta.currentElement.attributes.staticOptionList = staticOptionList;
+  }
+  const handelAddclick = () => {
+    setStaticOptionList([...staticOptionList, {}])
+    onClick('staticOptionDialog')
+  }
+
+  const handelRemoveButton = index => {
+    const list = [...staticOptionList];
+    list.splice(index, 1);
+    setStaticOptionList(list)
+  }
+
+  const onClick = (name, position) => {
+    dialogFuncMap[`${name}`](true);
+
+    if (position) {
+      setPosition(position);
+    }
+  }
+  const onHide = (name) => {
+    dialogFuncMap[`${name}`](false);
+  }
+  const dialogFuncMap = {
+    'staticOptionDialog': setDisplayBasic,
+  }
 
   useEffect(() => {
     setClassName(currAttribute.className || "");
@@ -148,6 +194,57 @@ const AttrListBox = (props) => {
           }}
         />
       </div>
+      <div className="field col-12" >
+        <Button icon="pi pi-plus" label="Add Static Options " style={{ width: "100%" }} onClick={() => { onClick('staticOptionDialog') }} />
+      </div>
+      <Dialog visible={staticOptionDialog} style={{ width: '45vw' }} onHide={() => onHide('staticOptionDialog')}>
+        {
+          staticOptionList.map((x, i) => {
+            return (
+              <div style={{ marginTop: "5px" }}>
+                <div className="field col-6">
+                  <label className="block">Label</label>
+                  <InputText
+                    style={{ width: "100%" }}
+                    name="label"
+                    key={i}
+                    value={staticOptionList[i].label}
+                    placeholder="Label"
+                    onChange={(e) => {
+                      handelInputChange(e, i)
+                    }}
+                  />
+                </div>
+                <div className="field col-6" style={{ float: "right", marginTop: "-19%" }}>
+                  <label className="block">Value</label>
+                  <InputText
+                    style={{ width: "100%" }}
+                    name="value"
+                    key={i}
+                    value={staticOptionList[i].value}
+                    placeholder="Value"
+                    onChange={(e) => {
+                      handelInputChange(e, i)
+                    }}
+                  />
+                </div>
+                {staticOptionList.length - 1 === i &&
+                  <div className="field col-12" >
+
+                    <Button icon="pi pi-plus" label="Add More" style={{ width: "100%", marginTop: "-24px" }} onClick={handelAddclick} />
+                  </div>
+                }
+                {staticOptionList.length !== 1 &&
+                  <div className="field col-12" >
+                    <Button icon="pi pi-times" label="Remove" className="p-button-danger" style={{ width: "100%", marginTop: "-24px" }} onClick={() => handelRemoveButton(i)} />
+                  </div>
+                }
+              </div>
+            );
+          })
+        }
+      </Dialog>
+
       <div className="field col-12">
         <label className="block">Class</label>
         <InputText

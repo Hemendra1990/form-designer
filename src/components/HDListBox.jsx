@@ -40,7 +40,11 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       if (result.columns && result.columns.length > 0) {
         setLabelValueOptions(result.columns);
       }
+      if (rows.length <= 0) {
+        setListOptions(element.attributes.staticLabelAndValueList);
+      }
       setListOptions(rows);
+
     },
 
     getLabelAndValueOptions() {
@@ -57,6 +61,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
 
     primeListRef,
   };
+
 
   useImperativeHandle(parentRef, () => {
     return operations;
