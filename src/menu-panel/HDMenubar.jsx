@@ -62,7 +62,8 @@ const HDMenubar = (props) => {
           label: "Open",
           icon: "pi pi-fw pi-folder-open",
           command: () => {
-            openReport();
+            //openReport();
+            navigate("resources");
           },
         },
         {

@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { SaveResource } from "../model/SaveResource";
 import { useMetaContext } from "../context/MetaContext";
-import { HttpSaveFormResourceService } from "../http-service/HttpSaveFormResourceService";
+import { HttpFormResourceService } from "../http-service/HttpFormResourceService";
 import { jsonStringifyIgnoredList } from "../constants/HemendraConstants";
 import httpService from "../http-service/http-service";
 
@@ -54,7 +54,7 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
       });
     }
 
-    let formSaveHttpService = new HttpSaveFormResourceService();
+    let formSaveHttpService = new HttpFormResourceService();
     /* httpService.SAVE_FORM.save(formResourceData)
       .then((res) => {
         console.log("From Java script", res);

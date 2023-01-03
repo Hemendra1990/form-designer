@@ -11,6 +11,7 @@ import IntroPage from "./intro/IntroPage";
 import SQLQueryBuilder from "./sql-modeler/query-builder/SQLQueryBuilder";
 import DataSourceBuilder from "./sql-modeler/DataSourceBuilder";
 import EventModeler from "./events/builder/EventModeler";
+import OpenResources from "./menu-panel/OpenResources";
 
 
 /* Problem with Drag n Drop : https://stackoverflow.com/questions/54982182/react-beautiful-dnd-drag-out-of-position-problem */
@@ -36,6 +37,7 @@ const App = () => {
                   <Route path="sql-builder" element={<SQLQueryBuilder />} />
                   <Route path="datasource-builder" element={<DataSourceBuilder />} />
                   <Route path="event-builder" element={<EventModeler />} />
+                  <Route path="resources" element={<OpenResources />} />
                 </Route>
               </Routes>
             </BrowserRouter>
