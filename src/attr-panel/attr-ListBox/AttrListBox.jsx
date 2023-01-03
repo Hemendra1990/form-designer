@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import { Dropdown } from "primereact/dropdown";
-import { element } from "prop-types";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { useUpdateMetaContext } from "../../context/MetaContext";
 
 const AttrListBox = (props) => {
-  const { meta, eventOptions, updateClass, handleAttributeChange } = props;
+  const { meta, updateClass, handleAttributeChange } = props;
   const currAttribute = meta?.currentElement?.attributes;
+
+  const emptyOption = { label: "", value: "" };
+  const { updateMeta } = useUpdateMetaContext(); //This is important, unless we update the meta attributes won't automatically reflect the changes
 
   const [className, setClassName] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -17,6 +22,43 @@ const AttrListBox = (props) => {
   const [optionLabel, setOptionLabel] = useState("");
   const [optionValue, setOptionValue] = useState("");
   const [options, setOptions] = useState([]);
+  const [staticOptionList, setStaticOptionList] = useState([emptyOption]);
+  const [staticOptionDialog, setStaticOptionDialog] = useState(false);
+
+  const handelInputChange = (event, index) => {
+    const updatedStaticOptionList = staticOptionList.map((field, i) => {
+      if (i === index) {
+        const obj = {};
+        obj[event.target.name] = event.target.value;
+        return { ...field, ...obj };
+      }
+      return field;
+    });
+    setStaticOptionList(updatedStaticOptionList);
+  };
+
+  const handelAddclick = () => {
+    setStaticOptionList([...staticOptionList, {}]);
+  };
+
+  const handelRemoveButton = (index) => {
+    const list = [...staticOptionList];
+    list.splice(index, 1);
+    setStaticOptionList(list);
+  };
+
+  const onClick = () => {
+    setStaticOptionDialog(true);
+  };
+
+  const onHide = () => {
+    setStaticOptionDialog(false);
+    currAttribute.config = currAttribute.config || {};
+    currAttribute.config.staticOptionList = [...staticOptionList];
+    setTimeout(() => {
+      updateMeta(meta);
+    }, 1);
+  };
 
   useEffect(() => {
     setClassName(currAttribute.className || "");
@@ -24,9 +66,12 @@ const AttrListBox = (props) => {
     setMultiple(currAttribute.multiple || false);
     setFilter(currAttribute.filter || false);
     setTooltip(currAttribute.tooltip || "");
-    setOptionLabel(currAttribute.optionLabel || "");
-    setOptionValue(currAttribute.optionValue || "");
-  }, []);
+    setOptionLabel(currAttribute.optionLabel || undefined);
+    setOptionValue(currAttribute.optionValue || undefined);
+    setStaticOptionList(
+      currAttribute?.config?.staticOptionList || [emptyOption]
+    );
+  }, [meta.currentElement]);
 
   const getLabelValueOptions = () => {
     setOptions(
@@ -106,6 +151,7 @@ const AttrListBox = (props) => {
       <div className="field col-12">
         <label htmlFor="filterby">Option Label</label>
         <Dropdown
+          showClear={true}
           value={optionLabel}
           options={options}
           style={{ width: "100%" }}
@@ -122,6 +168,7 @@ const AttrListBox = (props) => {
       <div className="field col-12">
         <label htmlFor="filterby">Option Value</label>
         <Dropdown
+          showClear={true}
           options={options}
           value={optionValue}
           style={{ width: "100%" }}
@@ -148,6 +195,75 @@ const AttrListBox = (props) => {
           }}
         />
       </div>
+
+      <Dialog
+        header="Static Options"
+        position="center"
+        visible={staticOptionDialog}
+        style={{ width: "45vw", height: "60vh" }}
+        onHide={() => onHide()}
+      >
+        <div
+          className="grid col-12 ml-1 mr-1"
+          style={{ borderBottom: "0.4px solid #c7c2c2" }}
+        >
+          <div className="grid col-5 mt-0 align-items-center">
+            <h5>Label</h5>
+          </div>
+          <div className="grid col-5 mt-0 ml-4 align-items-center">
+            <h5>Value</h5>
+          </div>
+          <div className="col-1 ml-auto">
+            <em
+              title="Add Property"
+              onClick={handelAddclick}
+              className="pi pi-plus-circle "
+            ></em>
+          </div>
+        </div>
+        {staticOptionList.map((staticOption, index) => {
+          return (
+            <Fragment key={index}>
+              <div className="grid align-items-center mt-1">
+                <div className="col-5">
+                  <InputText
+                    style={{ width: "100%" }}
+                    name="label"
+                    key={index}
+                    value={staticOption.label}
+                    placeholder="Label"
+                    onChange={(event) => {
+                      handelInputChange(event, index);
+                    }}
+                  />
+                </div>
+                <div className="col-5">
+                  <InputText
+                    style={{ width: "100%" }}
+                    name="value"
+                    key={index}
+                    value={staticOptionList[index].value}
+                    placeholder="Value"
+                    onChange={(e) => {
+                      handelInputChange(e, index);
+                    }}
+                  />
+                </div>
+                {staticOptionList.length !== 1 && (
+                  <div className="col-2">
+                    <Button
+                      icon="pi pi-times"
+                      className="p-button-rounded p-button-danger p-button-outlined"
+                      onClick={() => handelRemoveButton(index)}
+                    />
+                  </div>
+                )}
+              </div>
+            </Fragment>
+          );
+        })}
+      </Dialog>
+
       <div className="field col-12">
         <label className="block">Class</label>
         <InputText
@@ -158,6 +274,17 @@ const AttrListBox = (props) => {
           onChange={(e) => {
             setClassName(e.target.value);
             updateClass(e);
+          }}
+        />
+      </div>
+      <div className="field col-12">
+        <Button
+          className="p-button-danger"
+          icon="pi pi-plus"
+          label="Add Static Options "
+          style={{ width: "100%" }}
+          onClick={() => {
+            onClick();
           }}
         />
       </div>

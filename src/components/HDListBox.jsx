@@ -6,9 +6,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   const { element } = props;
   const [selectedValue, setSelectedValue] = useState(null);
   const [listOptions, setListOptions] = useState([]);
-
   const [labelValueOptions, setLabelValueOptions] = useState([]);
-
   const primeListRef = useRef(parentRef);
 
   console.log(element);
@@ -18,7 +16,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       EventExecutor.executeEvent(
         props.meta,
         element.attributes.onchangeevent,
-        null,
+        { data: e.value },
         null
       );
     }
@@ -28,7 +26,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       EventExecutor.executeEvent(
         props.meta,
         element.attributes.onfiltervaluechange,
-        null,
+        { data: e.value },
         null
       );
     }
@@ -39,6 +37,9 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       const rows = result.rows || [];
       if (result.columns && result.columns.length > 0) {
         setLabelValueOptions(result.columns);
+      }
+      if (rows.length <= 0) {
+        setListOptions(element.attributes?.config?.staticOptionList || []);
       }
       setListOptions(rows);
     },
@@ -72,7 +73,11 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       <ListBox
         ref={primeListRef}
         value={selectedValue}
-        options={listOptions}
+        options={
+          listOptions.length > 0
+            ? listOptions
+            : element.attributes?.config?.staticOptionList || []
+        }
         onChange={(e) => {
           setSelectedValue(e.value);
           handleOnChangeEvent(e);
