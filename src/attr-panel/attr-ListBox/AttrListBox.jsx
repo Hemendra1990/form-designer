@@ -196,16 +196,6 @@ const AttrListBox = (props) => {
         />
       </div>
 
-      <div className="field col-12">
-        <Button
-          icon="pi pi-plus"
-          label="Add Static Options "
-          style={{ width: "100%" }}
-          onClick={() => {
-            onClick();
-          }}
-        />
-      </div>
       <Dialog
         header="Static Options"
         position="center"
@@ -284,6 +274,17 @@ const AttrListBox = (props) => {
           onChange={(e) => {
             setClassName(e.target.value);
             updateClass(e);
+          }}
+        />
+      </div>
+      <div className="field col-12">
+        <Button
+          className="p-button-danger"
+          icon="pi pi-plus"
+          label="Add Static Options "
+          style={{ width: "100%" }}
+          onClick={() => {
+            onClick();
           }}
         />
       </div>
