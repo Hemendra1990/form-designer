@@ -50,7 +50,7 @@ const ComponentConfig = [
     component: HDRadioButton,
   },
   {
-    label: "ListBox",
+    label: "Listbox",
     name: "listbox",
     component: HDListBox,
   },

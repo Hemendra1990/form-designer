@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import { Dropdown } from "primereact/dropdown";
-import { Dialog } from 'primereact/dialog';
 import { Button } from "primereact/button";
-
-
-// interface SelectItem {
-//   label: string;
-//   value: any;
-// }
+import { Dialog } from 'primereact/dialog';
 
 const AttrListBox = (props) => {
   const { meta, eventOptions, updateClass, handleAttributeChange } = props;
@@ -24,44 +18,30 @@ const AttrListBox = (props) => {
   const [optionLabel, setOptionLabel] = useState("");
   const [optionValue, setOptionValue] = useState("");
   const [options, setOptions] = useState([]);
-  const [staticOptionList, setStaticOptionList] = useState([{}]);
-  const [staticOptionDialog, setDisplayBasic] = useState(false);
-  const [position, setPosition] = useState('center');
+  const [staticOptionList, setStaticOptionList] = useState([{ label: '', value: '' }]);
+  const [staticOptionDialog, setStaticOptionDialog] = useState(false);
 
   const handelInputChange = (e, index) => {
-    // meta.currenteElement.attributes.config = meta.currenteElement.attributes.config || {};
-    // const config = meta.currenteElement.attributes.config;
-    console.log(currAttribute);
     const { name, value } = e.target;
     const list = [...staticOptionList];
     list[index][name] = value;
     setStaticOptionList(list);
-    console.log(staticOptionList);
-    meta.currentElement.attributes.staticOptionList = staticOptionList;
+    currAttribute.staticOptionList = staticOptionList || {};
   }
   const handelAddclick = () => {
     setStaticOptionList([...staticOptionList, {}])
-    onClick('staticOptionDialog')
   }
-
   const handelRemoveButton = index => {
     const list = [...staticOptionList];
     list.splice(index, 1);
-    setStaticOptionList(list)
+    setStaticOptionList(list);
+    //currAttribute.staticOptionList = staticOptionList || {};
   }
-
-  const onClick = (name, position) => {
-    dialogFuncMap[`${name}`](true);
-
-    if (position) {
-      setPosition(position);
-    }
+  const onClick = () => {
+    setStaticOptionDialog(true)
   }
-  const onHide = (name) => {
-    dialogFuncMap[`${name}`](false);
-  }
-  const dialogFuncMap = {
-    'staticOptionDialog': setDisplayBasic,
+  const onHide = () => {
+    setStaticOptionDialog(false);
   }
 
   useEffect(() => {
@@ -72,6 +52,7 @@ const AttrListBox = (props) => {
     setTooltip(currAttribute.tooltip || "");
     setOptionLabel(currAttribute.optionLabel || "");
     setOptionValue(currAttribute.optionValue || "");
+    //setStaticOptionList(currAttribute.staticOptionList || {});
   }, []);
 
   const getLabelValueOptions = () => {
@@ -194,52 +175,62 @@ const AttrListBox = (props) => {
           }}
         />
       </div>
+
       <div className="field col-12" >
-        <Button icon="pi pi-plus" label="Add Static Options " style={{ width: "100%" }} onClick={() => { onClick('staticOptionDialog') }} />
+        <Button icon="pi pi-plus" label="Add Static Options " style={{ width: "100%" }} onClick={() => { onClick() }} />
       </div>
-      <Dialog visible={staticOptionDialog} style={{ width: '45vw' }} onHide={() => onHide('staticOptionDialog')}>
+      <Dialog header="Static Options" position="center" visible={staticOptionDialog} style={{ width: '45vw', height: '60vh' }} onHide={() => onHide()}>
         {
           staticOptionList.map((x, i) => {
             return (
-              <div style={{ marginTop: "5px" }}>
-                <div className="field col-6">
-                  <label className="block">Label</label>
-                  <InputText
-                    style={{ width: "100%" }}
-                    name="label"
-                    key={i}
-                    value={staticOptionList[i].label}
-                    placeholder="Label"
-                    onChange={(e) => {
-                      handelInputChange(e, i)
-                    }}
-                  />
-                </div>
-                <div className="field col-6" style={{ float: "right", marginTop: "-19%" }}>
-                  <label className="block">Value</label>
-                  <InputText
-                    style={{ width: "100%" }}
-                    name="value"
-                    key={i}
-                    value={staticOptionList[i].value}
-                    placeholder="Value"
-                    onChange={(e) => {
-                      handelInputChange(e, i)
-                    }}
-                  />
-                </div>
-                {staticOptionList.length - 1 === i &&
-                  <div className="field col-12" >
-
-                    <Button icon="pi pi-plus" label="Add More" style={{ width: "100%", marginTop: "-24px" }} onClick={handelAddclick} />
+              <Fragment key={i}>
+                {i === 0 && <div className="grid col-12 ml-1 mr-1" style={{ borderBottom: "0.4px solid #c7c2c2" }} >
+                  <div className="grid col-5 mt-0 align-items-center" >
+                    <h5>Label</h5>
                   </div>
-                }
-                {staticOptionList.length !== 1 &&
-                  <div className="field col-12" >
-                    <Button icon="pi pi-times" label="Remove" className="p-button-danger" style={{ width: "100%", marginTop: "-24px" }} onClick={() => handelRemoveButton(i)} />
+                  <div className="grid col-5 mt-0 ml-4 align-items-center">
+                    <h5>Value</h5>
                   </div>
-                }
-              </div>
+                  <div className="col-1 ml-auto">
+                    <em
+                      title="Add Property"
+                      onClick={handelAddclick}
+                      className="pi pi-plus-circle "
+                    ></em>
+                  </div>
+                </div>}
+                <div className="grid align-items-center mt-1">
+                  <div className="col-5">
+                    <InputText
+                      style={{ width: "100%" }}
+                      name="label"
+                      key={i}
+                      value={staticOptionList[i].label}
+                      placeholder="Label"
+                      onChange={(e) => {
+                        handelInputChange(e, i)
+                      }}
+                    />
+                  </div>
+                  <div className="col-5">
+                    <InputText
+                      style={{ width: "100%" }}
+                      name="value"
+                      key={i}
+                      value={staticOptionList[i].value}
+                      placeholder="Value"
+                      onChange={(e) => {
+                        handelInputChange(e, i)
+                      }}
+                    />
+                  </div>
+                  {staticOptionList.length !== 1 &&
+                    <div className="col-2" >
+                      <Button icon="pi pi-times" className="p-button-rounded p-button-danger p-button-outlined" onClick={() => handelRemoveButton(i)} />
+                    </div>
+                  }
+                </div>
+              </Fragment>
             );
           })
         }
