@@ -2,6 +2,11 @@ import React, { Fragment, memo, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import { SaveResource } from "../model/SaveResource";
+import { useMetaContext } from "../context/MetaContext";
+import { HttpSaveFormResourceService } from "../http-service/HttpSaveFormResourceService";
+import { jsonStringifyIgnoredList } from "../constants/HemendraConstants";
+import httpService from "../http-service/http-service";
 
 interface SaveFormProp {
   setShowFormSaveModal: Function;
@@ -10,10 +15,61 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
   const [showModal, setShowModal] = useState(true);
   const [resourceName, setResourceName] = useState("");
   const [resourceDescription, setResourceDescription] = useState("");
+  const meta = useMetaContext();
 
   const handleSave = () => {
-    setShowModal(false);
-    props.setShowFormSaveModal(false);
+    let formResourceData = new SaveResource();
+    if (resourceName === undefined || resourceName == "") {
+      alert("Blank Report cannot be saved!!");
+      return;
+    }
+
+    const metaJson = JSON.stringify(meta, (key, value) => {
+      return jsonStringifyIgnoredList.includes(key) ? undefined : value;
+    });
+
+    const tempMeta = JSON.parse(metaJson);
+
+    formResourceData.resourceName = resourceName;
+    formResourceData.comment = "Some comment";
+    formResourceData.description = resourceDescription;
+    formResourceData.json.elements = tempMeta.elements;
+    formResourceData.json.sqlList = meta.sqlList;
+    formResourceData.json.apiList = meta.apiList;
+    formResourceData.json.apiList = meta.apiList;
+    formResourceData.json.events = meta.events;
+    formResourceData.json.configuration = meta.configuration;
+    formResourceData.json.version = "v1.0";
+    formResourceData.images = []; //TODO: need to be added later
+    formResourceData.assetIds = []; //TODO: need to be added later
+    formResourceData.sessionId = meta.sessionId;
+    if (
+      formResourceData.json.sqlList !== undefined &&
+      formResourceData.json.sqlList.length > 0
+    ) {
+      formResourceData.json.sqlList.forEach((data) => {
+        if (data.extraParam.searchFilters != undefined) {
+          data.extraParam.searchFilters = {};
+        }
+      });
+    }
+
+    let formSaveHttpService = new HttpSaveFormResourceService();
+    /* httpService.SAVE_FORM.save(formResourceData)
+      .then((res) => {
+        console.log("From Java script", res);
+      })
+      .catch((err) => console.error(err)); */
+    formSaveHttpService
+      .save(formResourceData)
+      .then((res) => {
+        console.log(res);
+        setShowModal(false);
+        props.setShowFormSaveModal(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleCancel = () => {
