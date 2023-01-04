@@ -101,13 +101,16 @@ export const MetaContextProvider = ({ children }) => {
   /**
    * Load existing report
    */
-  const openReport = () => {
-    const report = JSON.parse(existingReport);
+  const openReport = (reportData) => {
+    const {sessionId, json } = reportData
+    //const report = JSON.parse(json);
+    const  report = json;
     initializeComponent(report.elements);
     setMeta((prevValue) => {
       return {
         ...report,
         toastRef: prevValue.toastRef,
+        sessionId: sessionId,
       };
     });
   };
