@@ -34,15 +34,14 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
     formResourceData.comment = "Some comment";
     formResourceData.description = resourceDescription;
     formResourceData.json.elements = tempMeta.elements;
-    formResourceData.json.sqlList = meta.sqlList;
-    formResourceData.json.apiList = meta.apiList;
-    formResourceData.json.apiList = meta.apiList;
-    formResourceData.json.events = meta.events;
-    formResourceData.json.configuration = meta.configuration;
+    formResourceData.json.sqlList = tempMeta.sqlList;
+    formResourceData.json.apiList = tempMeta.apiList;
+    formResourceData.json.events = tempMeta.events;
+    formResourceData.json.configuration = tempMeta.configuration;
     formResourceData.json.version = "v1.0";
     formResourceData.images = []; //TODO: need to be added later
     formResourceData.assetIds = []; //TODO: need to be added later
-    formResourceData.sessionId = meta.sessionId;
+    formResourceData.sessionId = tempMeta.sessionId;
     if (
       formResourceData.json.sqlList !== undefined &&
       formResourceData.json.sqlList.length > 0
