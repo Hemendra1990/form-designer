@@ -69,7 +69,7 @@ export class DataConnector {
         });
       }
       if (element.ref.current.setResult) {
-        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX) {
+        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX || element.type === CONTROL.DROPDOWN) {
           element.ref.current.startLoader(true);
         }
         element.ref.current.setResult({

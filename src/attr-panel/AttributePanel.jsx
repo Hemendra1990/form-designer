@@ -24,6 +24,8 @@ import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
 import AttrContainer from "./attr-container/AttrContainer";
+import AttrDropDown from "./attr-dropdown/AttrDropDown";
+import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
 
 const AttributePanel = (props) => {
@@ -32,7 +34,7 @@ const AttributePanel = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showDataConnectorSidebar, setShowDataConnectorSidebar] =
+  
     useState(false);
   const [showControlStyle, setShowControlStyle] = useState(false);
 
@@ -149,6 +151,17 @@ const AttributePanel = (props) => {
             meta={meta}
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
+          />
+        );
+      }
+      /* Render DropDown configuration */
+      if (meta.currentElement.type === CONTROL.DROPDOWN) {
+        return (
+          <AttrDropDownConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
+            eventOptions={availableEvents}
           />
         );
       }
@@ -350,6 +363,20 @@ const AttributePanel = (props) => {
           </>
         );
       }
+      /* Render DropDown attributes */
+      if (meta.currentElement.type === CONTROL.DROPDOWN) {
+        return (
+          <>
+            <AttrDropDown
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+              eventOptions={availableEvents}
+            />
+          </>
+        );
+      }
     }
     return <></>;
   };
@@ -365,7 +392,8 @@ const AttributePanel = (props) => {
       /* Render Grid Data MApper */
       if (
         meta.currentElement.type === CONTROL.GRID ||
-        meta.currentElement.type === CONTROL.LISTBOX
+        meta.currentElement.type === CONTROL.LISTBOX ||
+        meta.currentElement.type === CONTROL.DROPDOWN
       ) {
         return (
           <AttrDataConnector
