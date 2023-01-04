@@ -61,6 +61,7 @@ const AttrListBox = (props) => {
   };
 
   useEffect(() => {
+      getLabelValueOptions();
     setClassName(currAttribute.className || "");
     setDisabled(currAttribute.disabled || false);
     setMultiple(currAttribute.multiple || false);

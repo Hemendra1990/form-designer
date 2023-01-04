@@ -111,7 +111,7 @@ const AttrDropDownConfig = (props: AttrDropDownConfigProps) => {
             </div>
             <div className="field col-12">
                 <label htmlFor="onContextMenuEvent" className="block">
-                    On ContextMenu
+                    On Context Menu
                 </label>
                 <Dropdown
                     style={{ width: "100%" }}
