@@ -16,7 +16,7 @@ export class DataConnector {
    *
    * @param {This is for testing} e
    */
-  async handleDatasourceChange(element) {
+  async handleDatasourceChange(element, meta={}) {
     let rows = [];
     let datasource = element.attributes.datasource;
     if (datasource !== undefined) {
@@ -81,6 +81,7 @@ export class DataConnector {
       datasource = element.attributes.sqldatasource;
       if (datasource !== undefined) {
         const queryData = datasource;
+        queryData.sessionId = meta.sessionId;
         if (
           element.type === CONTROL.GRID &&
           element.ref &&

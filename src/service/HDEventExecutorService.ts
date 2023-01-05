@@ -137,7 +137,7 @@ export class HDEventExecutorService {
             const element = meta.elementMap[refElementId];
             const promise = new Promise<void>((resolve, reject) => {
                 try {
-                    dataConnector.handleDatasourceChange(element);
+                    dataConnector.handleDatasourceChange(element, meta);
                     resolve();
                 } catch (e) {
                     reject(e);
