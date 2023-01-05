@@ -1,4 +1,5 @@
 import { EventExecutorService } from "./EventExecutorService";
+import {HDEventExecutor} from "./HDEventExecutor";
 
 const startExecution = function (
   meta,
@@ -122,9 +123,11 @@ class EventExecutor {
   }
 
   static async executeEvent(meta, eventId, data) {
+    const hdEventExecutor = new HDEventExecutor(this.modalContext, this.confirmContext, this.toastContext);
+    hdEventExecutor.executeEvent(meta, eventId, data);
     //get the event detail from the eventId, we will do it later
     //Initially I am trying with Script Event
-    if (meta.editMode === true) {
+    /*if (meta.editMode === true) {
       //not sure why
       console.info("Event cannot be executed on edit mode.");
       return;
@@ -176,10 +179,10 @@ class EventExecutor {
 
       //test
 
-      /* eventNodeIds.forEach((nodeId) => {
+      /!* eventNodeIds.forEach((nodeId) => {
                 const eventNode = nodes.find(node => node.id === nodeId);
                 EventExecutorService.execute(meta, eventNode, this.modalContext, this.confirmContext);
-            }) */
+            }) *!/
     } else if (
       eventToExecute &&
       eventToExecute.bucket &&
@@ -193,7 +196,7 @@ class EventExecutor {
         this.confirmContext,
         this.toastContext
       );
-    }
+    }*/
   }
 }
 

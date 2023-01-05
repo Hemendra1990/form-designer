@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import { Handle } from "reactflow";
 import { Card } from "primereact/card";
 import TargetHandle from "./model/TargetHandle";
+import {CONFIRMATION_TYPE} from "../service/EventConstant";
 
 const ConfirmationAlert = (props) => {
   const { data, isConnectable, meta, setMeta } = props;
@@ -22,14 +23,14 @@ const ConfirmationAlert = (props) => {
         <Handle
           type="source"
           position="right"
-          id="Yes"
+          id={CONFIRMATION_TYPE.YES}
           style={{ top: 10, background: "#555" }}
           isConnectable={isConnectable}
         />
         <Handle
           type="source"
           position="right"
-          id="No"
+          id={CONFIRMATION_TYPE.NO}
           style={{ bottom: 10, top: "auto", background: "#555" }}
           isConnectable={isConnectable}
         />
