@@ -6,7 +6,7 @@ import { useMetaContext } from "../context/MetaContext";
 import TargetHandle from "./model/TargetHandle";
 
 //This list will grow in future as we will be adding different components
-const candidateRefreshElemnts = ["grid", "combobox", "autocomplete"];
+const candidateRefreshElemnts = ["grid", "combobox", "autocomplete", "dropdown", "listbox"];
 
 const RefreshElements = (props) => {
   const meta = useMetaContext();

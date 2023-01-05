@@ -33,7 +33,7 @@ const AttrDataConnector = (props: AttrDataConnectorProps) => {
     if (selectedDs !== undefined) {
       selectedDs.extraParam.controlIds.push(element.id);
     }
-    dataConnector.handleDatasourceChange(element);
+    dataConnector.handleDatasourceChange(element, meta);
   };
 
   return (
