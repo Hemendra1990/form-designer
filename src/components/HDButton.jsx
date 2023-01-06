@@ -24,6 +24,7 @@ const HDButton = React.forwardRef((props, ref) => {
   }));
 
   useEffect(() => {
+    updateMeta(meta);
     //Apply style if the element already has
     if (element.style) {
       const elementStyle = addElementStyle(

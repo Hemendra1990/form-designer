@@ -13,9 +13,9 @@ export class ControlStyleModel {
   ];
 
   static TEXT_AREA = [
-    { label: "Textarea", value: ".p-fluid .p-inputtext" },
-    { label: "Textarea Input", value: ".p-inputtext.p-filled" },
-    { label: "Placeholder", value: "::placeholder" },
+    { label: "Textarea", value: ".p-fluid .p-inputtext", key: "Textarea" },
+    { label: "Textarea Input", value: ".p-inputtextarea.p-inputtext.p-filled", key: "TextareaInput" },
+    { label: "Placeholder", value: "::placeholder", key: "Placeholder" },
   ];
 
   static LABEL = [{ label: "Label", value: ".p-float-label" }];
