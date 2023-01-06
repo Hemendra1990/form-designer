@@ -10,7 +10,7 @@ const HDButton = React.forwardRef((props, ref) => {
   const element = props.element;
   const { actions, modals } = useModalContext();
   const { updateMeta } = useUpdateMetaContext();
-  const { meta } = useMetaContext();
+  const meta = useMetaContext();
   const [controlStyle, setControlStyle] = useState();
 
   useImperativeHandle(ref, () => ({
