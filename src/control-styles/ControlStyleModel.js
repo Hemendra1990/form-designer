@@ -13,9 +13,9 @@ export class ControlStyleModel {
   ];
 
   static TEXT_AREA = [
-    { label: "Textarea", value: ".p-fluid.p-inputtext", key: "Textarea" },
-    { label: "Textarea Input", value: ".p-inputtextarea.p-inputtext.p-filled", key: "TextareaInput" },
-    { label: "Placeholder", value: "::placeholder", key: "Placeholder" },
+    { label: "Textarea", value: ".p-fluid.p-inputtext", key: "textarea" },
+    { label: "Textarea Input", value: ".p-inputtextarea.p-inputtext.p-filled", key: "textareaInput" },
+    { label: "Placeholder", value: "::placeholder", key: "placeholder" },
   ];
 
   static LABEL = [{ label: "Label", value: ".p-float-label", key: "label" }];
@@ -76,11 +76,11 @@ export class ControlStyleModel {
   ];
 
   static LISTBOX = [
-    { label: "Listbox", value: ".p-listbox", key: "listbox" },
-    { label: "Listbox Header", value: ".common-header", key: "listboxHeader" },
-    { label: "Listbox Container ", value: ".p-listbox-list-wrapper", key: "listboxContainer" },
-    { label: "Listbox list Text", value: ".p-listbox-list", key: "listboxListText" },
-    { label: "An item in the Listbox", value: ".p-listbox-item", key: "listboxItem" },
+    { label: "Label", value: ".p-listbox", key: "listbox" },
+    { label: "Header", value: ".common-header", key: "listboxHeader" },
+    { label: "Container ", value: ".p-listbox-list-wrapper", key: "listboxContainer" },
+    { label: "Text", value: ".p-listbox-list", key: "listboxListText" },
+    { label: "List item", value: ".p-listbox-item", key: "listboxItem" },
   ];
 
   static INPUTTEXT = [
@@ -88,21 +88,21 @@ export class ControlStyleModel {
   ];
 
   static INPUTNUMBER = [
-    { label: "Input Number", value: ".p-inputtext", key: "inputNumber" },
-    { label: "Inputnumber stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
-    { label: "Inputnumber horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
-    { label: "Inputnumber vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },
-    { label: "Input number element", value: ".p-inputnumber-input", key: "inputNumberElement" },
-    { label: "Input number button element", value: ".p-inputnumber-button", key: "inputButtonElement" },
+    { label: "Label", value: ".p-inputtext", key: "inputNumber" },
+    { label: "stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
+    { label: "horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
+    { label: "vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },
+    { label: "element", value: ".p-inputnumber-input", key: "inputNumberElement" },
+    { label: "button element", value: ".p-inputnumber-button", key: "inputButtonElement" },
     { label: "Increment button", value: ".p-inputnumber-button-up", key: "inputIncrementButton" },
     { label: "Decrement button", value: ".p-inputnumber-button-down", key: "inputDecrementButton" },
-    { label: "Input Number Button icon", value: ".p-inputnumber-button-icon", key: "inputNumberButtonIcon" }
+    { label: "Button icon", value: ".p-inputnumber-button-icon", key: "inputNumberButtonIcon" }
   ];
 
   static DROPDOWN = [
     { label: "Dropdown", value: ".p-dropdown", key: "dropdown" },
     { label: "Label", value: ".p-dropdown-label", key: "dropdownLabel" },
-    { label: "Trigger", value: ".p-dropdown-trigger", key: "dropdowntrigger" },
+    { label: "Trigger", value: ".p-dropdown-trigger", key: "dropdownTrigger" },
     { label: "Dropdown panel", value: ".p-dropdown-panel", key: "dropdownPanel" },
     { label: "Items wrapper", value: ".p-dropdown-items-wrapper", key: "itemsWrapper" },
     { label: "Items", value: ".p-dropdown-items", key: "dropdownItems" },
@@ -134,8 +134,8 @@ export class ControlStyleModel {
   ];
 
   static RADIO = [
-    { label: "Label", value: ".p-radiobutton-label", key: "radioLabel" },
-    { label: "Text", value: ".field-checkbox, .field-radiobutton ", key: "containerElement" },
+    //  { label: "Label", value: ".p-radiobutton-label", key: "radioLabel" },
+    { label: "Label", value: ".field-checkbox, .field-radiobutton ", key: "containerElement" },
     { label: "Radio buttons", value: ".p-radiobutton-box", key: "containerIcon" },
     { label: "Icon element", value: ".p-radiobutton-icon", key: "containerIconElement" },
     { label: "Active Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
