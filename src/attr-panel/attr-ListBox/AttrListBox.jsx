@@ -61,7 +61,7 @@ const AttrListBox = (props) => {
   };
 
   useEffect(() => {
-      getLabelValueOptions();
+    getLabelValueOptions();
     setClassName(currAttribute.className || "");
     setDisabled(currAttribute.disabled || false);
     setMultiple(currAttribute.multiple || false);
@@ -91,6 +91,18 @@ const AttrListBox = (props) => {
           style={{ width: "100%" }}
           value={meta.currentElement.id}
           disabled
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="maxLen" className="block">
+          Listbox Header
+        </label>
+        <InputText
+          style={{ width: '100%' }}
+          name="listboxLabel"
+          placeholder="Edit the Default Header"
+          onChange={handleAttributeChange}
+          value={currAttribute?.listboxLabel || ""}
         />
       </div>
       <div className="field-checkbox">

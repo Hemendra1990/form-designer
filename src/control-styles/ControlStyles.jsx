@@ -27,8 +27,8 @@ import "./ControlStyles.css";
   }
  
  #button-JRzr3Cab.p-button {
-	color: green;
-	background-color: #fafaca;
+  color: green;
+  background-color: #fafaca;
 } 
 
 #button-JRzr3Cab .p-button-label { 
@@ -213,7 +213,7 @@ const ControlStyles = (props) => {
         <Button
           label="Cancel"
           icon="pi pi-times"
-          onClick={() => {}}
+          onClick={() => { }}
           className="p-button-text"
         />
         <Button
@@ -280,9 +280,9 @@ const ControlStyles = (props) => {
                   dropdownAriaLabel="Select Style Template"
                   autoHighlight={true}
                   dropdown={true}
-                  onSelect={(e) => {}}
-                  onClear={(e) => {}}
-                  onHide={(e) => {}}
+                  onSelect={(e) => { }}
+                  onClear={(e) => { }}
+                  onHide={(e) => { }}
                   placeholder="Select style template"
                   emptyMessage="No templates present"
                 />
@@ -328,12 +328,15 @@ const ControlStyles = (props) => {
                     id={field.name}
                     value={field.value}
                     onChange={(e) => {
+                      console.log(e, field)
                       field.onChange(e.value);
                       setStyleClassChanged(false);
                       setTimeout(() => {
                         setStyleClassChanged(true);
                       }, 10);
                     }}
+
+                    optionValue={'key'}
                     options={styleClasses}
                     filter={true}
                     style={{ width: "15rem" }}
@@ -400,7 +403,7 @@ const ControlStyles = (props) => {
                       console.log("----", fld);
                       return (
                         fld.selectedStyleClass ===
-                          getValues().selectedStyleClass &&
+                        getValues().selectedStyleClass &&
                         fld.selectedState === getValues().selectedState
                       );
                     })
@@ -474,17 +477,27 @@ export function addElementStyle(
   setShowControlStyle
 ) {
   const { cssprops } = formValues;
+  console.log(meta);
+  let getStyleAttributes;
+  let elementRef = element.ref.current;
+  if (elementRef && elementRef.getStyleAttributes) {
+    getStyleAttributes = elementRef.getStyleAttributes;
+  } else if (meta.currentElement && meta.currentElement.ref.current && meta.currentElement.ref.current.getStyleAttributes) {
+    getStyleAttributes = meta.currentElement.ref.current.getStyleAttributes;
+  }
 
+  const elementStyleJson = getStyleAttributes();
   if (cssprops && cssprops.length > 0) {
     let ans = "";
 
     let elementStyle = "";
     cssprops.forEach(({ selectedState, selectedStyleClass }) => {
       ans = `#${element.id}`;
-      const classStr = selectedStyleClass.substring(
-        1,
-        selectedStyleClass.length
-      );
+      const classStr = selectedStyleClass
+      // .substring(
+      //   1,
+      //   selectedStyleClass.length
+      // );
       const stateStr =
         selectedState.charAt(0) === "."
           ? selectedState.substring(1, selectedState.length)
@@ -495,11 +508,11 @@ export function addElementStyle(
           return `${className}:${classValue}`;
         })
         .join(";");
-
+      const classname = elementStyleJson.find(f => f.key === selectedStyleClass).value;
       if (selectedState === "default") {
-        ans += ` ${selectedStyleClass} { ${result}} `;
+        ans += ` ${classname} { ${result}} `;
       } else {
-        ans += ` ${selectedStyleClass}:${selectedState} { ${result}} `;
+        ans += ` ${classname}:${selectedState} { ${result}} `;
       }
 
       elementStyle += ans;

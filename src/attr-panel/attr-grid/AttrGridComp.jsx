@@ -36,6 +36,18 @@ const AttrGrid = (props) => {
         />
       </div>
       <div className="field col-12">
+        <label htmlFor="maxLen" className="block">
+          Grid Header
+        </label>
+        <InputText
+          style={{ width: '100%' }}
+          name="gridLabel"
+          placeholder="Edit the Default Header"
+          onChange={handleAttributeChange}
+          value={currAttribute?.gridLabel || ""}
+        />
+      </div>
+      <div className="field col-12">
         <Button
           label="Edit Grid Options"
           className="p-button-danger"

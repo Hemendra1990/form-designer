@@ -10,7 +10,7 @@ const HDButton = React.forwardRef((props, ref) => {
   const element = props.element;
   const { actions, modals } = useModalContext();
   const { updateMeta } = useUpdateMetaContext();
-  const { meta } = useMetaContext();
+  const meta = useMetaContext();
   const [controlStyle, setControlStyle] = useState();
 
   useImperativeHandle(ref, () => ({
@@ -24,6 +24,7 @@ const HDButton = React.forwardRef((props, ref) => {
   }));
 
   useEffect(() => {
+    updateMeta(meta);
     //Apply style if the element already has
     if (element.style) {
       const elementStyle = addElementStyle(
