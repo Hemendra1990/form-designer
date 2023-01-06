@@ -1,26 +1,32 @@
-*{
-    margin: 0; 
+* {
+    margin: 0;
 }
+
 body {
     left: 0;
     right: 0;
     overflow-x: hidden;
 }
+
 .draggable {
     top: auto !important;
     left: auto !important;
-  }
+}
+
 .edit-mode {
     padding: 10px;
     border: 1px solid rgb(212 212 212)
 }
+
 .preview-mode {
     padding: 10px;
 }
+
 .playground {
     /* background: url('./assets/tiny-checkers.png'); */
-    background-color: hsl(0,0%,96.5%);
+    background-color: hsl(0, 0%, 96.5%);
 }
+
 .playground-preview {
     background: unset;
     margin: 0.5rem !important;
@@ -42,9 +48,10 @@ body {
     box-shadow: 1px 2px 3px 1px rgb(0 0 0 / 30%);
 }
 
-.control-attr-panel > button {
+.control-attr-panel>button {
     font-size: 20px;
 }
+
 .control-attr-panel button:focus {
     box-shadow: -2px 2px 5px #fc894d;
     border: 1px solid #fc894d;
@@ -55,14 +62,14 @@ body {
     border: none;
     transition: 0.3s ease;
 }
-.control-attr-panel button:hover, .control-attr-panel button:focus {
+
+.control-attr-panel button:hover,
+.control-attr-panel button:focus {
     cursor: pointer;
     background-color: rgb(238, 238, 238);
 }
 
-.control-panel {
-    
-}
+.control-panel {}
 
 .control-panel-preview {
     display: none;
@@ -72,7 +79,7 @@ body {
     border: 1px dashed;
     height: 5vh;
     width: 10vw;
-    
+
 }
 
 .menubar {
@@ -83,7 +90,7 @@ body {
     /* background: #24292f; */
 }
 
-.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-text {
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link .p-menuitem-text {
     color: #e7ecf0;
 }
 
@@ -133,10 +140,31 @@ body {
     background: #24292f;
     height: 40px;
 }
+
 .layout-footer p {
     color: #e7ecf0;
 }
 
 .p-sidebar-right {
     margin: -24px;
+}
+
+.common-header {
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: sans-serif;
+    background: hsl(202, 42%, 38%);
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid black;
+    border-bottom: 0px;
+    color: #fcf9f9;
+}
+
+.p-datatable-emptymessage>td {
+    text-align: center !important;
+    border-width: 0px !important;
+    background: #F6F6F6;
 }

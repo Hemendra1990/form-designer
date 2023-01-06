@@ -1,6 +1,9 @@
 import React, { useEffect, useImperativeHandle, useState, useRef } from "react";
 import { ListBox } from "primereact/listbox";
 import EventExecutor from "../service/EventExecutor";
+import { ControlStyleModel } from "../control-styles/ControlStyleModel";
+import { addElementStyle } from "../control-styles/ControlStyles";
+import { useMetaContext } from "../context/MetaContext";
 
 const HDListBox = React.forwardRef((props, parentRef) => {
   const { element } = props;
@@ -8,6 +11,8 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const primeListRef = useRef(parentRef);
+  const [controlStyle, setControlStyle] = useState();
+  const { meta } = useMetaContext();
 
   console.log(element);
 
@@ -36,7 +41,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
     setResult: (result) => {
       const rows = result.rows || [];
       if (result.columns && result.columns.length > 0) {
-        setLabelValueOptions(result.columns);
+        setLabelValueOptions(result.columns || []);
       }
       if (rows.length <= 0) {
         setListOptions(element.attributes?.config?.staticOptionList || []);
@@ -56,6 +61,13 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       alert(value);
     },
 
+    getStyleAttributes: () => {
+      return ControlStyleModel.getListboxStyle();
+    },
+
+    addStyle(style = "") {
+      setControlStyle(style);
+    },
     primeListRef,
   };
 
@@ -66,33 +78,47 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   useEffect(() => {
     element.attributes = element.attributes || {};
     element.attributes.multiple = false;
+    //Apply style if the element already has
+    if (element.style) {
+      const elementStyle = addElementStyle(
+        element.style,
+        element,
+        meta,
+        setControlStyle
+      );
+      setControlStyle(elementStyle);
+    }
   }, []);
 
   return (
     <>
-      <ListBox
-        ref={primeListRef}
-        value={selectedValue}
-        options={
-          listOptions.length > 0
-            ? listOptions
-            : element.attributes?.config?.staticOptionList || []
-        }
-        onChange={(e) => {
-          setSelectedValue(e.value);
-          handleOnChangeEvent(e);
-          handleFilterValueChangeEvent(e);
-        }}
-        optionValue={element.attributes.optionValue || "value"}
-        optionLabel={element.attributes.optionLabel || "label"}
-        disabled={element.attributes?.disabled || false}
-        filter={element.attributes?.filter || false}
-        filterBy={element.attributes?.filterby}
-        tooltip={element.attributes?.tooltip}
-        listStyle={{
-          maxHeight: element.attributes?.maxHeight || "225px",
-        }}
-      />
+      <style>{controlStyle}</style>
+      <div id={element.id}>
+        <h6 className="common-header">{element?.attributes?.listboxLabel || "Default Header"}</h6>
+        <ListBox
+          ref={primeListRef}
+          value={selectedValue}
+          options={
+            listOptions.length > 0
+              ? listOptions
+              : element.attributes?.config?.staticOptionList || []
+          }
+          onChange={(e) => {
+            setSelectedValue(e.value);
+            handleOnChangeEvent(e);
+            handleFilterValueChangeEvent(e);
+          }}
+          optionValue={element.attributes.optionValue || "value"}
+          optionLabel={element.attributes.optionLabel || "label"}
+          disabled={element.attributes?.disabled || false}
+          filter={element.attributes?.filter || false}
+          filterBy={element.attributes?.filterby}
+          tooltip={element.attributes?.tooltip}
+          listStyle={{
+            maxHeight: element.attributes?.maxHeight || "225px",
+          }}
+        />
+      </div>
       {/* multiple={element.attributes?.multiple || false} */}
     </>
   );

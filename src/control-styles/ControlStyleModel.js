@@ -22,12 +22,18 @@ export class ControlStyleModel {
 
   static GRID = [
     { label: "Grid Container", value: ".treeTableWrapper", key: "gridContainer" },
-    { label: "Table Header", value: ".p-treetable-thead", key: "tableHeader" },
+    { label: "Table Header", value: ".common-header", key: "tableHeader" },
+    { label: "Grid Column Header", value: ".p-datatable .p-datatable-thead > tr > th", key: "gridColumn" },
+    {
+      label: "Grid Body container",
+      value: ".p-datatable .p-datatable-tbody > tr", key: "gridBodyContainer"
+    },
     {
       label: "Header Cell",
       value: ".p-treetable.p-component .p-treetable-thead tr th",
       key: "headerCell"
     },
+
     {
       label: "Header First Cell",
       value: ".p-treetable.p-component .p-treetable-thead tr th:first-child",
@@ -82,7 +88,7 @@ export class ControlStyleModel {
   ];
 
   static INPUTNUMBER = [
-    { label: "Input Number", value: ".p-inputnumber", key: "inputNumber" },
+    { label: "Input Number", value: ".p-inputtext", key: "inputNumber" },
     { label: "Inputnumber stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
     { label: "Inputnumber horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
     { label: "Inputnumber vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },

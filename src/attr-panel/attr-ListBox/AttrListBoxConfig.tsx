@@ -16,11 +16,13 @@ const AttrListboxConfig = (props: AttrListboxConfigProps) => {
 
     const handelOnchangeEvent = (e: any) => {
         setOnChangeEvent(e.target.value);
+        currentAttribute.onChangeEvent = e.target.value;
         handleAttributeChange(e);
     }
 
     const handelOnFilterChange = (e: any) => {
         setOnFilterChange(e.target.value);
+        currentAttribute.onFilterChange = e.value;
         handleAttributeChange(e);
 
     }
@@ -34,7 +36,7 @@ const AttrListboxConfig = (props: AttrListboxConfigProps) => {
                 <Dropdown
                     style={{ width: "100%" }}
                     name="onchangeevent"
-                    value={onChangeEvent}
+                    value={currentAttribute.onChangeEvent || onChangeEvent}
                     options={eventOptions}
                     placeholder="Select a onChange Event"
                     onChange={handelOnchangeEvent}
@@ -47,7 +49,7 @@ const AttrListboxConfig = (props: AttrListboxConfigProps) => {
                 <Dropdown
                     style={{ width: "100%" }}
                     name="onfiltervaluechange"
-                    value={onFilterChange}
+                    value={currentAttribute.onFilterChange || onFilterChange}
                     options={eventOptions}
                     placeholder="Select a onFilterChange Event"
                     onChange={handelOnFilterChange}

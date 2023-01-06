@@ -16,6 +16,8 @@ import { StringToJSX } from "../../utils/StringToJSX";
 import { evaluateCellTemplate } from "../../utils/Utils";
 import ColumnTextEditor from "./editors/ColumnTextEditor";
 import ColumnDropdownEditor from "./editors/ColumnDropdownEditor";
+import { addElementStyle } from "../../control-styles/ControlStyles";
+import { ControlStyleModel } from "../../control-styles/ControlStyleModel";
 
 const MyTestFun = new Function(
   "row",
@@ -40,6 +42,7 @@ const HDGrid = forwardRef((props, ref) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [controlStyle, setControlStyle] = useState();
   const { updateMeta } = useUpdateMetaContext();
   const meta = useMetaContext();
   const gridColRef = useRef();
@@ -57,6 +60,12 @@ const HDGrid = forwardRef((props, ref) => {
 
     startLoader(value) {
       setLoading(value);
+    },
+    getStyleAttributes: () => {
+      return ControlStyleModel.getGridStyle();
+    },
+    addStyle(style = "") {
+      setControlStyle(style);
     },
     primeGridRef: gridRef,
   }));
@@ -159,6 +168,16 @@ const HDGrid = forwardRef((props, ref) => {
   useEffect(() => {
     updateMeta(meta);
     applyGridOptions();
+    //Apply style if the element already has
+    if (element.style) {
+      const elementStyle = addElementStyle(
+        element.style,
+        element,
+        meta,
+        setControlStyle
+      );
+      setControlStyle(elementStyle);
+    }
   }, [columns]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onCellEditComplete = (e) => {
@@ -183,33 +202,37 @@ const HDGrid = forwardRef((props, ref) => {
   });
 
   return (
-    <div refreshgrid={refreshgrid.toString()}>
-      <DataTable
-        ref={gridRef}
-        value={rows}
-        showGridlines={dataTableProps?.showGridlines}
-        resizableColumns={dataTableProps?.resizableColumns}
-        paginator={dataTableProps?.paginator}
-        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        rows={5}
-        reorderableColumns={dataTableProps?.reorderableColumns}
-        responsiveLayout="scroll"
-        loading={loading}
-        emptyMessage="No data to display"
-        style={{ width: "100%" }}
-        tableStyle={{
-          minHeight: "20rem",
-        }}
-        stripedRows={true}
-        scrollHeight="290px"
-        scrollDirection="both"
-        columnResizeMode="absolute"
-        editMode={dataTableProps?.editMode}
-      >
-        {gridColumns}
-      </DataTable>
-    </div>
+    <>
+      <style>{controlStyle}</style>
+      <div id={element.id} refreshgrid={refreshgrid.toString()}>
+        <h6 className="common-header">{element?.attributes?.gridLabel || "Default Header"}</h6>
+        <DataTable
+          ref={gridRef}
+          value={rows}
+          showGridlines={dataTableProps?.showGridlines}
+          resizableColumns={dataTableProps?.resizableColumns}
+          paginator={dataTableProps?.paginator}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          rows={5}
+          reorderableColumns={dataTableProps?.reorderableColumns}
+          responsiveLayout="scroll"
+          loading={loading}
+          emptyMessage="No data to display"
+          style={{ width: "100%" }}
+          tableStyle={{
+            minHeight: "20rem",
+          }}
+          stripedRows={true}
+          scrollHeight="290px"
+          scrollDirection="both"
+          columnResizeMode="absolute"
+          editMode={dataTableProps?.editMode}
+        >
+          {gridColumns}
+        </DataTable>
+      </div>
+    </>
   );
 });
 
