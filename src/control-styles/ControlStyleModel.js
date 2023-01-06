@@ -89,27 +89,23 @@ export class ControlStyleModel {
 
   static INPUTNUMBER = [
     { label: "Label", value: ".p-inputtext", key: "inputNumber" },
-    { label: "stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
-    { label: "horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
-    { label: "vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },
-    { label: "element", value: ".p-inputnumber-input", key: "inputNumberElement" },
-    { label: "button element", value: ".p-inputnumber-button", key: "inputButtonElement" },
+    { label: "Stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
+    { label: "Horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
+    { label: "Vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },
+    { label: "Element", value: ".p-inputnumber-input", key: "inputNumberElement" },
+    { label: "Button element", value: ".p-inputnumber-button", key: "inputButtonElement" },
     { label: "Increment button", value: ".p-inputnumber-button-up", key: "inputIncrementButton" },
     { label: "Decrement button", value: ".p-inputnumber-button-down", key: "inputDecrementButton" },
     { label: "Button icon", value: ".p-inputnumber-button-icon", key: "inputNumberButtonIcon" }
   ];
 
   static DROPDOWN = [
-    { label: "Dropdown", value: ".p-dropdown", key: "dropdown" },
-    { label: "Label", value: ".p-dropdown-label", key: "dropdownLabel" },
+    { label: "Placeholder", value: ".p-dropdown-label", key: "dropdownLabel" },
+    { label: "Container", value: ".p-dropdown", key: "dropdown" },
     { label: "Trigger", value: ".p-dropdown-trigger", key: "dropdownTrigger" },
-    { label: "Dropdown panel", value: ".p-dropdown-panel", key: "dropdownPanel" },
-    { label: "Items wrapper", value: ".p-dropdown-items-wrapper", key: "itemsWrapper" },
-    { label: "Items", value: ".p-dropdown-items", key: "dropdownItems" },
-    { label: "Item", value: ".p-dropdown-item", key: "dropDownItem" },
-    { label: "Filter container", value: ".p-dropdown-filter-container", key: "filterContainer" },
-    { label: "Filter", value: ".p-dropdown-filter", key: "dropDownFilter" },
-    { label: "Dropdown open", value: ".p-dropdown-open", key: "dropdownOpen" }
+    { label: "Wrapper items", value: ".p-dropdown-panel,.p-dropdown-items,.p-dropdown-item", key: "itemsWrapper" },
+    { label: "Filter container", value: ".p-dropdown-panel,.p-dropdown-header,.p-dropdown-filter", key: "filterContainer" },
+    //{ label: "Dropdown open", value: ".p-dropdown-open", key: "dropdownOpen" }
   ];
 
   static FIELDSET = [
@@ -120,10 +116,10 @@ export class ControlStyleModel {
   ];
 
   static PASSWORD = [
-    { label: "Password", value: ".p-inputtext", key: "password" },
-    { label: "Input Element", value: ".p-password-input", key: "passwordInput" },
-    { label: "Meter element of password strength", value: ".p-password-meter", key: "passwordStrength" },
-    { label: "Text to display strength", value: ".p-password-info", key: "passwordTextStrength" },
+    { label: "Content", value: ".p-inputtext,.p-password-input", key: "passwordContent" },
+    { label: "Container", value: ".p-password .p-component .p-inputwrapper .p-inputwrapper-filled", key: "passwordBox" },
+    { label: "Strength meter Popup", value: ".p-password,.p-password-panel", key: "passwordTextStrength" },
+    { label: "Eye icon", value: ".p-input-icon-right > i:last-of-type, .p-input-icon-right > svg:last-of-type, .p-input-icon-right > .p-input-suffix", key: "passwordEyeIcon" },
   ];
 
   static PANEL = [
@@ -136,9 +132,8 @@ export class ControlStyleModel {
   static RADIO = [
     //  { label: "Label", value: ".p-radiobutton-label", key: "radioLabel" },
     { label: "Label", value: ".field-checkbox, .field-radiobutton ", key: "containerElement" },
-    { label: "Radio buttons", value: ".p-radiobutton-box", key: "containerIcon" },
-    { label: "Icon element", value: ".p-radiobutton-icon", key: "containerIconElement" },
-    { label: "Active Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
+    { label: "Button", value: ".p-radiobutton-box", key: "containerIcon" },
+    { label: "Selected Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
   ];
 
   static getTextareaStyle() {

@@ -1,17 +1,17 @@
-import React, {useEffect, useState, Fragment} from "react";
-import {Checkbox} from 'primereact/checkbox';
-import {Dropdown} from 'primereact/dropdown';
-import {InputText} from "primereact/inputtext";
-import {Button} from 'primereact/button';
-import {Dialog} from 'primereact/dialog';
-import {useUpdateMetaContext} from "../../context/MetaContext";
+import React, { useEffect, useState, Fragment } from "react";
+import { Checkbox } from 'primereact/checkbox';
+import { Dropdown } from 'primereact/dropdown';
+import { InputText } from "primereact/inputtext";
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { useUpdateMetaContext } from "../../context/MetaContext";
 
 const AttrDropDown = (props) => {
-    const {meta, updateClass, handleAttributeChange} = props;
+    const { meta, updateClass, handleAttributeChange } = props;
     const currAttribute = meta?.currentElement?.attributes;
 
-    const emptyOption = {label: "", value: ""};
-    const {updateMeta} = useUpdateMetaContext();
+    const emptyOption = { label: "", value: "" };
+    const { updateMeta } = useUpdateMetaContext();
 
     const [className, setClassName] = useState("");
     const [disabled, setDisabled] = useState(false);
@@ -31,7 +31,7 @@ const AttrDropDown = (props) => {
             if (i === index) {
                 const obj = {};
                 obj[event.target.name] = event.target.value;
-                return {...field, ...obj};
+                return { ...field, ...obj };
             }
             return field;
         });
@@ -73,7 +73,7 @@ const AttrDropDown = (props) => {
         setOptionValue(currAttribute?.optionValue || null);
         setPlaceholder(currAttribute?.placeholder || "");
         setShowClear(currAttribute?.showClear || false);
-    });
+    }, []);
 
 
     const getLabelValueOptions = () => {
@@ -92,7 +92,7 @@ const AttrDropDown = (props) => {
                 </label>
                 <InputText
                     name="controlId"
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     value={meta.currentElement.id}
                     disabled
                 />
@@ -144,7 +144,7 @@ const AttrDropDown = (props) => {
                     <label htmlFor="filterby">Filter By</label>
                     <InputText
                         value={filterby}
-                        style={{width: "100%"}}
+                        style={{ width: "100%" }}
                         name="filterby"
                         onChange={(e) => {
                             setFilterBy(e.target.value);
@@ -158,7 +158,7 @@ const AttrDropDown = (props) => {
                 <Dropdown
                     value={optionLabel}
                     options={options}
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     name="optionLabel"
                     onFocus={getLabelValueOptions}
                     onChange={(e) => {
@@ -174,7 +174,7 @@ const AttrDropDown = (props) => {
                 <Dropdown
                     options={options}
                     value={optionValue}
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     name="optionValue"
                     onChange={(e) => {
                         setOptionValue(e.value);
@@ -190,9 +190,9 @@ const AttrDropDown = (props) => {
                 <label htmlFor="tooltip">Tooltip</label>
                 <InputText
                     name="tooltip"
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     value={tooltip}
-                    tooltipOptions={{position: "right", mouseTrack: true}}
+                    tooltipOptions={{ position: "right", mouseTrack: true }}
                     onChange={(e) => {
                         setTooltip(e.target.value);
                         handleAttributeChange(e);
@@ -203,7 +203,7 @@ const AttrDropDown = (props) => {
                 <label htmlFor="tooltip">Placeholder</label>
                 <InputText
                     name="placeholder"
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     value={placeholder}
                     onChange={(e) => {
                         setPlaceholder(e.target.value);
@@ -215,12 +215,12 @@ const AttrDropDown = (props) => {
                 header="Static Options"
                 position="center"
                 visible={staticOptionDialog}
-                style={{width: "45vw", height: "60vh"}}
+                style={{ width: "45vw", height: "60vh" }}
                 onHide={() => onHide()}
             >
                 <div
                     className="grid col-12 ml-1 mr-1"
-                    style={{borderBottom: "0.4px solid #c7c2c2"}}
+                    style={{ borderBottom: "0.4px solid #c7c2c2" }}
                 >
                     <div className="grid col-5 mt-0 align-items-center">
                         <h5>Label</h5>
@@ -242,7 +242,7 @@ const AttrDropDown = (props) => {
                             <div className="grid align-items-center mt-1">
                                 <div className="col-5">
                                     <InputText
-                                        style={{width: "100%"}}
+                                        style={{ width: "100%" }}
                                         name="label"
                                         key={index}
                                         value={staticOption.label}
@@ -254,7 +254,7 @@ const AttrDropDown = (props) => {
                                 </div>
                                 <div className="col-5">
                                     <InputText
-                                        style={{width: "100%"}}
+                                        style={{ width: "100%" }}
                                         name="value"
                                         key={index}
                                         value={staticOptionList[index].value}
@@ -282,7 +282,7 @@ const AttrDropDown = (props) => {
             <div className="field col-12">
                 <label className="block">Class</label>
                 <InputText
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     name="className"
                     placeholder="col-12 md:col-6 lg:col-3"
                     value={className}
@@ -297,7 +297,7 @@ const AttrDropDown = (props) => {
                     className="p-button-danger"
                     icon="pi pi-plus"
                     label="Add Static Options"
-                    style={{width: "100%"}}
+                    style={{ width: "100%" }}
                     onClick={() => {
                         onClick();
                     }}
