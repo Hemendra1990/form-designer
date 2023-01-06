@@ -1,6 +1,5 @@
 import React, {
   forwardRef,
-  Fragment,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -9,7 +8,9 @@ import React, {
 import { Password } from "primereact/password";
 import { Divider } from 'primereact/divider';
 import EventExecutor from "../service/EventExecutor";
-import { useUpdateMetaContext } from "../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import { ControlStyleModel } from "../control-styles/ControlStyleModel";
+import { addElementStyle } from "../control-styles/ControlStyles";
 
 /* type PasswordProps = {
   element: any;
@@ -20,6 +21,8 @@ const HDPassword = forwardRef((props, ref) => {
   const { element, meta } = props;
   const [passwordValue, setPasswordValue] = useState();
   const passwordRef = useRef(ref);
+  //const { } = useMetaContext();
+  const [controlStyle, setControlStyle] = useState();
 
   const footer = (
     <React.Fragment>
@@ -69,6 +72,12 @@ const HDPassword = forwardRef((props, ref) => {
       setValue(passwordVal) {
         setPasswordValue(passwordVal);
       },
+      getStyleAttributes: () => {
+        return ControlStyleModel.getPasswordStyle();
+      },
+      addStyle(style = "") {
+        setControlStyle(style);
+      },
     };
   });
 
@@ -76,21 +85,34 @@ const HDPassword = forwardRef((props, ref) => {
     checkShowStrengthIndicatorValue();
     checkPanelFooterForPasswordValue();
     updateMeta(meta); //This is necesary, put in all the components... we need to update the meta.elementMap so need to call this method after the input is rendered
+    //Apply style if the element already has
+    if (element.style) {
+      const elementStyle = addElementStyle(
+        element.style,
+        element,
+        meta,
+        setControlStyle
+      );
+      setControlStyle(elementStyle);
+    }
   }, []);
 
   return (
-    <Fragment>
-      <Password
-        ref={passwordRef}
-        value={passwordValue}
-        onChange={handlePasswordChangeVal}
-        feedback={element.attributes?.showStrengthIndicator}
-        onBlur={handleOnBlurEvent}
-        placeholder={element.attributes?.placeholder}
-        toggleMask={element.attributes?.showIconToDisplayPassword}
-        footer={checkPanelFooterForPasswordValue}
-      />
-    </Fragment>
+    <>
+      <style>{controlStyle}</style>
+      <div id={element.id}>
+        <Password
+          ref={passwordRef}
+          value={passwordValue}
+          onChange={handlePasswordChangeVal}
+          feedback={element.attributes?.showStrengthIndicator}
+          onBlur={handleOnBlurEvent}
+          placeholder={element.attributes?.placeholder}
+          toggleMask={element.attributes?.showIconToDisplayPassword}
+          footer={checkPanelFooterForPasswordValue}
+        />
+      </div>
+    </>
   );
 });
 

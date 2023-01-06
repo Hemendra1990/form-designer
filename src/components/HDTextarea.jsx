@@ -11,7 +11,7 @@ const HDTextarea = React.forwardRef((props, ref) => {
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState('');
   const { updateMeta } = useUpdateMetaContext();
-  const PrimeTextAreaRef = useRef(ref);
+  const primeTextAreaRef = useRef(ref);
   useImperativeHandle(ref, () => ({
     updateValue: (value) => {
       setValue(value);
@@ -57,7 +57,7 @@ const HDTextarea = React.forwardRef((props, ref) => {
       <div id={props.name}>
 
         <InputTextarea
-          ref={PrimeTextAreaRef}
+          ref={primeTextAreaRef}
           maxLength={element?.attributes?.maxLength}
           rows={element?.attributes?.rows}
           cols={element?.attributes?.cols}

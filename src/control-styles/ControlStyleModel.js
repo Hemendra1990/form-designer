@@ -95,22 +95,44 @@ export class ControlStyleModel {
 
   static DROPDOWN = [
     { label: "Dropdown", value: ".p-dropdown", key: "dropdown" },
-    { label: "Label", value: ".p-dropdown-label", key: "label" },
-    { label: "Trigger", value: ".p-dropdown-trigger", key: "trigger" },
+    { label: "Label", value: ".p-dropdown-label", key: "dropdownLabel" },
+    { label: "Trigger", value: ".p-dropdown-trigger", key: "dropdowntrigger" },
     { label: "Dropdown panel", value: ".p-dropdown-panel", key: "dropdownPanel" },
     { label: "Items wrapper", value: ".p-dropdown-items-wrapper", key: "itemsWrapper" },
-    { label: "Items", value: ".p-dropdown-items", key: "items" },
-    { label: "Item", value: ".p-dropdown-item", key: "Item" },
+    { label: "Items", value: ".p-dropdown-items", key: "dropdownItems" },
+    { label: "Item", value: ".p-dropdown-item", key: "dropDownItem" },
     { label: "Filter container", value: ".p-dropdown-filter-container", key: "filterContainer" },
-    { label: "Filter", value: ".p-dropdown-filter", key: "filter" },
+    { label: "Filter", value: ".p-dropdown-filter", key: "dropDownFilter" },
     { label: "Dropdown open", value: ".p-dropdown-open", key: "dropdownOpen" }
   ];
 
   static FIELDSET = [
     { label: "Fieldset", value: ".p-fieldset", key: "fieldset" },
-    { label: "Toggleable", value: ".p-fieldset-toggleable", key: "toggleable" },
+    { label: "Toggleable", value: ".p-fieldset-toggleable", key: "fieldToggleable" },
     { label: "Legend", value: ".p-fieldset-legend", key: "legend" },
-    { label: "Content", value: ".p-fieldset-content", key: "content" },
+    { label: "Content", value: ".p-fieldset-content", key: "fieldsetContent" },
+  ];
+
+  static PASSWORD = [
+    { label: "Password", value: ".p-inputtext", key: "password" },
+    { label: "Input Element", value: ".p-password-input", key: "passwordInput" },
+    { label: "Meter element of password strength", value: ".p-password-meter", key: "passwordStrength" },
+    { label: "Text to display strength", value: ".p-password-info", key: "passwordTextStrength" },
+  ];
+
+  static PANEL = [
+    { label: "Header", value: ".p-panel-header", key: "panelHeader" },
+    { label: "Title", value: ".p-panel-title", key: "panelTitle" },
+    { label: "Toggle icon", value: ".p-panel-titlebar-toggler", key: "passwordPanelToggle" },
+    { label: "Content", value: ".p-panel-content", key: "panelContent" },
+  ];
+
+  static RADIO = [
+    { label: "Label", value: ".p-radiobutton-label", key: "radioLabel" },
+    { label: "Text", value: ".field-checkbox, .field-radiobutton ", key: "containerElement" },
+    { label: "Radio buttons", value: ".p-radiobutton-box", key: "containerIcon" },
+    { label: "Icon element", value: ".p-radiobutton-icon", key: "containerIconElement" },
+    { label: "Active Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
   ];
 
   static getTextareaStyle() {
@@ -146,5 +168,17 @@ export class ControlStyleModel {
 
   static getFieldsetStyle() {
     return JSON.parse(JSON.stringify(ControlStyleModel.FIELDSET));
+  }
+
+  static getPasswordStyle() {
+    return JSON.parse(JSON.stringify(ControlStyleModel.PASSWORD));
+  }
+
+  static getPanelStyle() {
+    return JSON.parse(JSON.stringify(ControlStyleModel.PANEL));
+  }
+
+  static getRadioStyle() {
+    return JSON.parse(JSON.stringify(ControlStyleModel.RADIO));
   }
 }
