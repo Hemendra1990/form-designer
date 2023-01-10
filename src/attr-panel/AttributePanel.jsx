@@ -27,6 +27,8 @@ import AttrContainer from "./attr-container/AttrContainer";
 import AttrDropDown from "./attr-dropdown/AttrDropDown";
 import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
+import AttrDatePicker from "./attr-datepicker/AttrDatePicker";
+import AttrDatePickerConfig from "./attr-datepicker/AttrDatePickerConfig";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -34,8 +36,8 @@ const AttributePanel = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const [showSidebar, setShowSidebar] = useState(false);
-  
-    useState(false);
+
+  useState(false);
   const [showControlStyle, setShowControlStyle] = useState(false);
 
   const [classNameValue, setClassNameValue] = useState(
@@ -158,6 +160,17 @@ const AttributePanel = (props) => {
       if (meta.currentElement.type === CONTROL.DROPDOWN) {
         return (
           <AttrDropDownConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
+            eventOptions={availableEvents}
+          />
+        );
+      }
+      /* Render DropDown configuration */
+      if (meta.currentElement.type === CONTROL.DATEPICKER) {
+        return (
+          <AttrDatePickerConfig
             meta={meta}
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
@@ -377,6 +390,19 @@ const AttributePanel = (props) => {
           </>
         );
       }
+      /* Render DatePicker */
+      if (meta.currentElement.type === CONTROL.DATEPICKER) {
+        return (
+          <>
+            <AttrDatePicker
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              eventOptions={availableEvents}
+            />
+            {classDiv}
+          </>
+        );
+      }
     }
     return <></>;
   };
@@ -393,7 +419,8 @@ const AttributePanel = (props) => {
       if (
         meta.currentElement.type === CONTROL.GRID ||
         meta.currentElement.type === CONTROL.LISTBOX ||
-        meta.currentElement.type === CONTROL.DROPDOWN
+        meta.currentElement.type === CONTROL.DROPDOWN ||
+        meta.currentElement.type === CONTROL.DATEPICKER
       ) {
         return (
           <AttrDataConnector

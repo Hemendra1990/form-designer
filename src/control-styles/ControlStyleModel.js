@@ -135,6 +135,11 @@ export class ControlStyleModel {
     { label: "Button", value: ".p-radiobutton-box", key: "containerIcon" },
     { label: "Selected Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
   ];
+  static DATEPICKER = [
+    { label: "Calendar", value: ".p-calendar", key: "pCalendar" },
+    { label: "Input Field", value: ".p-inputtext", key: "inputText" },
+    { label: "Date Picker", value: ".p-datepicker", key: "datePicker" }
+  ]
 
   static getTextareaStyle() {
     return JSON.parse(JSON.stringify(ControlStyleModel.TEXT_AREA));
@@ -181,5 +186,8 @@ export class ControlStyleModel {
 
   static getRadioStyle() {
     return JSON.parse(JSON.stringify(ControlStyleModel.RADIO));
+  }
+  static getDatePickerStyle() {
+    return JSON.parse(JSON.stringify(ControlStyleModel.DATEPICKER))
   }
 }
