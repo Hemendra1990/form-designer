@@ -13,10 +13,9 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
-  const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState();
 
-  const primeDropdownRef = useRef(parentRef);
+  const getPrimeDropdownRef = useRef(parentRef);
 
   useEffect(() => {
     updateMeta(meta);
@@ -66,22 +65,22 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
     },
 
     updateValue: (value) => {
-      setValue(value);
+      setSelectedValue(value);
     },
 
     getActualRef: () => {
-      return { ...parentRef};
+      return { ...parentRef };
     },
 
     getStyleAttributes: () => {
       return ControlStyleModel.getDropdownStyle();
     },
-    
+
     addStyle(style = "") {
       setControlStyle(style);
     },
-  
-    primeDropdownRef,
+
+    getPrimeDropdownRef,
   }
 
   useImperativeHandle(parentRef, () => {
@@ -124,7 +123,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <Dropdown
-          ref={primeDropdownRef}
+          ref={getPrimeDropdownRef}
           value={selectedValue}
           options={
             listOptions.length > 0

@@ -27,6 +27,8 @@ import AttrContainer from "./attr-container/AttrContainer";
 import AttrDropDown from "./attr-dropdown/AttrDropDown";
 import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
+import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
+import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -34,8 +36,8 @@ const AttributePanel = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const [showSidebar, setShowSidebar] = useState(false);
-  
-    useState(false);
+
+  useState(false);
   const [showControlStyle, setShowControlStyle] = useState(false);
 
   const [classNameValue, setClassNameValue] = useState(
@@ -161,6 +163,16 @@ const AttributePanel = (props) => {
             meta={meta}
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
+            eventOptions={availableEvents}
+          />
+        );
+      }
+      /* Render MultiSelect configuration */
+      if (meta.currentElement.type === CONTROL.MULTISELECT) {
+        return (
+          <AttrMultiSelectConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
             eventOptions={availableEvents}
           />
         );
@@ -377,6 +389,20 @@ const AttributePanel = (props) => {
           </>
         );
       }
+      /* Render Multiselect attributes */
+      if (meta.currentElement.type === CONTROL.MULTISELECT) {
+        return (
+          <>
+            <AttrMultiSelect
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+              eventOptions={availableEvents}
+            />
+          </>
+        );
+      }
     }
     return <></>;
   };
@@ -393,7 +419,8 @@ const AttributePanel = (props) => {
       if (
         meta.currentElement.type === CONTROL.GRID ||
         meta.currentElement.type === CONTROL.LISTBOX ||
-        meta.currentElement.type === CONTROL.DROPDOWN
+        meta.currentElement.type === CONTROL.DROPDOWN ||
+        meta.currentElement.type === CONTROL.MULTISELECT
       ) {
         return (
           <AttrDataConnector
