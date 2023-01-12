@@ -266,7 +266,7 @@ const AttrMultiSelect = (props) => {
                                         style={{ width: "100%" }}
                                         name="label"
                                         key={index}
-                                        value={staticOption.label}
+                                        value={staticOption.label || ""}
                                         placeholder="Label"
                                         onChange={(event) => {
                                             handelInputChange(event, index);
@@ -278,7 +278,7 @@ const AttrMultiSelect = (props) => {
                                         style={{ width: "100%" }}
                                         name="value"
                                         key={index}
-                                        value={staticOptionList[index].value}
+                                        value={staticOptionList[index].value || ""}
                                         placeholder="Value"
                                         onChange={(e) => {
                                             handelInputChange(e, index);
