@@ -1,4 +1,5 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from "primereact/inputtext";
@@ -6,13 +7,12 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { useUpdateMetaContext } from "../../context/MetaContext";
 
-const AttrDropDown = (props) => {
+const AttrMultiSelect = (props) => {
     const { meta, updateClass, handleAttributeChange } = props;
     const currAttribute = meta?.currentElement?.attributes;
 
     const emptyOption = { label: "", value: "" };
     const { updateMeta } = useUpdateMetaContext();
-
     const [className, setClassName] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [filter, setFilter] = useState(false);
@@ -24,6 +24,7 @@ const AttrDropDown = (props) => {
     const [staticOptionList, setStaticOptionList] = useState([emptyOption]);
     const [staticOptionDialog, setStaticOptionDialog] = useState(false);
     const [placeholder, setPlaceholder] = useState("");
+    const [filterPlaceholder, setFilterPlaceholder] = useState("");
     const [showClear, setShowClear] = useState(false);
 
     const handelInputChange = (event, index) => {
@@ -68,11 +69,11 @@ const AttrDropDown = (props) => {
         setDisabled(currAttribute.disabled || false);
         setFilter(currAttribute.filter || false);
         setTooltip(currAttribute.tooltip || "");
-
         setOptionLabel(currAttribute?.optionLabel || null);
         setOptionValue(currAttribute?.optionValue || null);
         setPlaceholder(currAttribute?.placeholder || "");
         setShowClear(currAttribute?.showClear || false);
+        setFilterPlaceholder(currAttribute?.filterPlaceholder || "")
     }, []);
 
 
@@ -142,12 +143,30 @@ const AttrDropDown = (props) => {
             {filter && (
                 <div className="field col-12">
                     <label htmlFor="filterby">Filter By</label>
-                    <InputText
+                    <MultiSelect
+                        name="filterBy"
                         value={filterby}
+                        options={options}
                         style={{ width: "100%" }}
-                        name="filterby"
+                        onFocus={getLabelValueOptions}
                         onChange={(e) => {
-                            setFilterBy(e.target.value);
+                            setFilterBy(e.value);
+                            handleAttributeChange(e);
+                        }}
+                        optionLabel="header"
+                        optionValue="field"
+                    />
+                </div>
+            )}
+            {filter && (
+                <div className="field col-12">
+                    <label htmlFor="filterPlaceholder">Filter Placeholder</label>
+                    <InputText
+                        name="filterPlaceholder"
+                        style={{ width: "100%" }}
+                        value={filterPlaceholder}
+                        onChange={(e) => {
+                            setFilterPlaceholder(e.target.value);
                             handleAttributeChange(e);
                         }}
                     />
@@ -309,4 +328,4 @@ const AttrDropDown = (props) => {
     );
 };
 
-export default AttrDropDown;
+export default AttrMultiSelect;

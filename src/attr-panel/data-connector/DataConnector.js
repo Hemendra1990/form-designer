@@ -16,7 +16,7 @@ export class DataConnector {
    *
    * @param {This is for testing} e
    */
-  async handleDatasourceChange(element, meta={}) {
+  async handleDatasourceChange(element, meta = {}) {
     let rows = [];
     let datasource = element.attributes.datasource;
     if (datasource !== undefined) {
@@ -69,7 +69,7 @@ export class DataConnector {
         });
       }
       if (element.ref.current.setResult) {
-        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX || element.type === CONTROL.DROPDOWN) {
+        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX || element.type === CONTROL.DROPDOWN || element.type === CONTROL.MULTISELECT) {
           element.ref.current.startLoader(true);
         }
         element.ref.current.setResult({
