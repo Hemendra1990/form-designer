@@ -10,7 +10,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   const [selectedValue, setSelectedValue] = useState(null);
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);
-  const primeListRef = useRef(parentRef);
+  const getPrimeListRef = useRef(parentRef);
   const [controlStyle, setControlStyle] = useState();
   const { meta } = useMetaContext();
 
@@ -68,7 +68,13 @@ const HDListBox = React.forwardRef((props, parentRef) => {
     addStyle(style = "") {
       setControlStyle(style);
     },
-    primeListRef,
+    getListBoxValue() {
+      return selectedValue
+    },
+    setListBoxValue(value) {
+      setSelectedValue(value);
+    },
+    getPrimeListRef,
   };
 
   useImperativeHandle(parentRef, () => {
@@ -96,7 +102,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       <div id={element.id}>
         <h6 className="common-header">{element?.attributes?.listboxLabel || "Default Header"}</h6>
         <ListBox
-          ref={primeListRef}
+          ref={getPrimeListRef}
           value={selectedValue}
           options={
             listOptions.length > 0

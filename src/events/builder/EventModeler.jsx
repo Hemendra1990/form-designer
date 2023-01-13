@@ -19,8 +19,8 @@ import { EVENTS, NODE_TYPES } from "../model/EventModel";
 import "./EventModeler.css";
 import { Dropdown } from "primereact/dropdown";
 import { useMetaContext, useToastContext, useUpdateMetaContext } from "../../context/MetaContext";
-import {Dialog} from "primereact/dialog";
-import {useNavigate} from "react-router-dom";
+import { Dialog } from "primereact/dialog";
+import { useNavigate } from "react-router-dom";
 
 const initialNodes = [
   /* {
@@ -112,37 +112,40 @@ const EventModeler = (props) => {
 
   const saveEvent = (eventData) => {
 
-    if(nodes && nodes.length === 0) {
-      toastRef.current.show({severity: 'warn', summary: 'Warning', detail: 'No new event created as no action is choosen.'});
+    if (nodes && nodes.length === 0) {
+      toastRef.current.show({ severity: 'warn', summary: 'Warning', detail: 'No new event created as no action is choosen.' });
       props.hide();
       return;
     }
 
-    if(eventName){
+    if (eventName) {
       const event = {
         id: eventId,
         name: eventName,
         bucket: { nodes, edges }
       };
-  
+
       const existingEventId = meta.events.find((ev) => ev.id === eventId);
       let eventBuckets = [];
       if (existingEventId) {
         eventBuckets = meta.events.map((pEvent) => {
-          pEvent.bucket = { nodes, edges };
-          return pEvent;
+          if (pEvent.id === eventId) {
+            pEvent.bucket = { nodes, edges };
+            return pEvent;
+          } else
+            return pEvent;
         });
       } else {
         eventBuckets = [...meta.events, event];
       }
-  
+
       meta.events = [...eventBuckets];
       updateMeta(meta);
-  
+
       //props.hide();
       navigate(-1);
     } else {
-      toastRef.current.show({severity: 'error', summary: 'Error', detail: 'Event Can\'t be saved without a name.'});
+      toastRef.current.show({ severity: 'error', summary: 'Error', detail: 'Event Can\'t be saved without a name.' });
     }
 
   }
@@ -168,79 +171,79 @@ const EventModeler = (props) => {
   }, []);
 
   return (
-      <Dialog header="Event Modeler" style={{ width: "95vw" }} visible={true} onHide={()=> {navigate(-1);}}>
-        <div>
-          <OverlayPanel ref={op} style={{ width: "400px" }}>
-            <DataTable
-                value={EVENTS}
-                selectionMode="single"
-                paginator
-                rows={4}
-                onSelectionChange={onActionSelection}
-            >
-              <Column field="name" header="Action Name" sortable />
-            </DataTable>
-          </OverlayPanel>
+    <Dialog header="Event Modeler" style={{ width: "95vw" }} visible={true} onHide={() => { navigate(-1); }}>
+      <div>
+        <OverlayPanel ref={op} style={{ width: "400px" }}>
+          <DataTable
+            value={EVENTS}
+            selectionMode="single"
+            paginator
+            rows={4}
+            onSelectionChange={onActionSelection}
+          >
+            <Column field="name" header="Action Name" sortable />
+          </DataTable>
+        </OverlayPanel>
 
-          <div className="flex">
-            <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
-              <Dropdown
-                  className="mr-2"
-                  options={meta.events}
-                  optionLabel="name"
-                  optionValue="id"
-                  value={selectedEvent} onChange={onEventSelection} />
-              <InputText
-                  placeholder="Event Id"
-                  value={eventId}
-                  disabled
-              ></InputText>
-              <InputText
-                  className="ml-2"
-                  placeholder="Event Name"
-                  value={eventName}
-                  onChange={handleEventNameChange}
-              ></InputText>
-            </div>
-            <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
-              <Button label="Add Action" onClick={addNewActionNode} />
-              <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
-            </div>
+        <div className="flex">
+          <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
+            <Dropdown
+              className="mr-2"
+              options={meta.events}
+              optionLabel="name"
+              optionValue="id"
+              value={selectedEvent} onChange={onEventSelection} />
+            <InputText
+              placeholder="Event Id"
+              value={eventId}
+              disabled
+            ></InputText>
+            <InputText
+              className="ml-2"
+              placeholder="Event Name"
+              value={eventName}
+              onChange={handleEventNameChange}
+            ></InputText>
           </div>
-
-          <div className="grid">
-            <div className="col" style={{ height: '60vh' }}>
-              <ReactFlow
-                  nodes={nodes}
-                  edges={edges}
-                  onNodesChange={onNodesChange}
-                  onEdgesChange={onEdgesChange}
-                  onConnect={onConnect}
-                  nodeTypes={nodeTypes}
-                  snapToGrid={true}
-                  snapGrid={snapGrid}
-                  style={{ background: bgColor }}
-                  connectionLineStyle={connectionLineStyle}
-              >
-                <MiniMap
-                    nodeStrokeColor={(n) => {
-                      if (n.type === "alert") return "#0041d0";
-                      if (n.type === "confirmation") return bgColor;
-                      if (n.type === "script") return "#ff0072";
-                    }}
-                    nodeColor={(n) => {
-                      if (n.type === "confirmation") return bgColor;
-                      return "#fff";
-                    }}
-                />
-                <Controls />
-                <Background />
-              </ReactFlow>
-            </div>
+          <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
+            <Button label="Add Action" onClick={addNewActionNode} />
+            <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
           </div>
         </div>
 
-      </Dialog>
+        <div className="grid">
+          <div className="col" style={{ height: '60vh' }}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              nodeTypes={nodeTypes}
+              snapToGrid={true}
+              snapGrid={snapGrid}
+              style={{ background: bgColor }}
+              connectionLineStyle={connectionLineStyle}
+            >
+              <MiniMap
+                nodeStrokeColor={(n) => {
+                  if (n.type === "alert") return "#0041d0";
+                  if (n.type === "confirmation") return bgColor;
+                  if (n.type === "script") return "#ff0072";
+                }}
+                nodeColor={(n) => {
+                  if (n.type === "confirmation") return bgColor;
+                  return "#fff";
+                }}
+              />
+              <Controls />
+              <Background />
+            </ReactFlow>
+          </div>
+        </div>
+      </div>
+
+    </Dialog>
 
   );
 };

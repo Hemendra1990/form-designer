@@ -131,10 +131,16 @@ export class ControlStyleModel {
 
   static RADIO = [
     //  { label: "Label", value: ".p-radiobutton-label", key: "radioLabel" },
-    { label: "Label", value: ".field-checkbox, .field-radiobutton ", key: "containerElement" },
+    { label: "Label", value: ".field-radiobutton ", key: "containerElement" },
     { label: "Button", value: ".p-radiobutton-box", key: "containerIcon" },
     { label: "Selected Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
   ];
+
+  static AUTOCOMPLETE = [
+    { label: "Autocomplete", value: ".p-autocomplete-input", key: "autocompleteBody" },
+    { label: "Suggestion container", value: ".p-autocomplete-panel .p-autocomplete-items", key: "suggestionContainer" },
+    //{ label: "Suggestion item", value: " .p-autocomplete-item", key: "suggestionItem" }
+  ]
 
   static getTextareaStyle() {
     return JSON.parse(JSON.stringify(ControlStyleModel.TEXT_AREA));
@@ -181,5 +187,9 @@ export class ControlStyleModel {
 
   static getRadioStyle() {
     return JSON.parse(JSON.stringify(ControlStyleModel.RADIO));
+  }
+
+  static getAutoCompleteStyle() {
+    return JSON.parse(JSON.stringify(ControlStyleModel.AUTOCOMPLETE));
   }
 }

@@ -1,36 +1,144 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { RadioButton } from "primereact/radiobutton";
 import { useImperativeHandle } from "react";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import EventExecutor from "../service/EventExecutor";
-import { InputNumber } from "primereact/inputnumber";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
 
-const HDRadioButton = React.forwardRef((props, ref) => {
+const HDRadioButton = React.forwardRef((props, parentRef) => {
+
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const { element } = props;
-  const [controlStyle, setControlStyle] = useState();
-  const [value, setValue] = useState(element.value || "");
 
-  useImperativeHandle(ref, () => ({
+  const emptyOption = [{ name: 'Male', id: 'm' }, { name: 'Female', id: 'f' }];
+
+  const getPrimeRadioRef = useRef(parentRef);
+
+  const [controlStyle, setControlStyle] = useState();
+  const [selectedValue, setSelectedValue] = useState([emptyOption]);
+  const [columnOption, setColumnOption] = useState([emptyOption]);
+  const [radioButtonList, setRadioButtonList] = useState([emptyOption]);
+  const [checkEmptyList, setCheckEmptyList] = useState(false);
+
+
+
+  const handleOnChangeEvent = (e) => {
+    if (meta && element.attributes.onChange) {
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onChange,
+        { data: e.value },
+        null
+      );
+    }
+  };
+
+  useImperativeHandle(parentRef, () => ({
+
+    setResult: (result) => {
+      const rows = result.rows || [];
+      if (result.columns && result.columns.length > 0) {
+        setColumnOption(result.columns || []);
+      }
+      if (rows.length <= 0) {
+        setRadioButtonList(element.attributes?.config?.staticOptionList || []);
+      }
+      else {
+        setRadioButtonList(rows);
+        setCheckEmptyList(true);
+      }
+
+    },
+
+    getColumnList() {
+      return columnOption
+    },
+
     sayHello() {
       alert("Hello Imperative handle");
     },
-    updateValue(value) {
-      setValue(value);
-    },
+
     getStyleAttributes: () => {
       return ControlStyleModel.getRadioStyle();
     },
+
     addStyle(style = "") {
       setControlStyle(style);
     },
+
+    setRadioButtonValue(value) {
+      setSelectedValue(value);
+    },
+
+    getRadioButtonValue() {
+      return selectedValue;
+    },
+
+    getDisableRadioButton() {
+      if (element.attributes && element.attributes.disabled !== undefined) {
+        return element.attributes.disabled;
+      }
+    },
+
+    setDisableRadioButton(value) {
+      return element.attributes.disabled = value;
+    },
+
+    getRequiredRadioButton() {
+      if (element.attributes && element.attributes.required !== undefined) {
+        return element.attributes.required;
+      }
+    },
+
+    setRequiredRadioButton(value) {
+      return element.attributes.required = value;
+    },
+
+    getPrimeRadioRef
   }));
+
+  const renderOptionList = () => {
+    let result = [];
+    if (checkEmptyList) {
+      result = radioButtonList;
+    } else {
+      result = element?.attributes?.config?.staticOptionList || emptyOption;
+    }
+    return (<>
+      {result.map((item) => {
+        return (
+          <div key={item.id} className="field-radiobutton">
+            <RadioButton
+              ref={getPrimeRadioRef}
+              inputId={item.id}
+              key={item.id}
+              name="selectedValue"
+              value={item}
+              onChange={(e) => {
+                setSelectedValue(e.value);
+                handleOnChangeEvent(e);
+              }}
+              tooltip={element.attributes.tooltip || ""}
+              checked={selectedValue.id === item.id}
+              disabled={element?.attributes?.disabled || false}
+              required={element?.attributes?.required || false}
+            />
+            <label htmlFor={item.key}>{item.name}</label>
+          </div>
+        );
+      })}
+    </>)
+  }
 
   useEffect(() => {
     updateMeta(meta);
+    setSelectedValue(element?.attributes?.selectedValue || [emptyOption]);
+    // setColumnOption(element?.attributes?.columnOption || [emptyOption]);
+    // setRadioButtonList(element?.attributes?.radioButtonList || [emptyOption]);
+    // setCheckEmptyList(element.attributes.checkEmptyList)
+
     //Apply style if the element already has
     if (element.style) {
       const elementStyle = addElementStyle(
@@ -43,82 +151,11 @@ const HDRadioButton = React.forwardRef((props, ref) => {
     }
   }, []);
 
-  const executeFocusEvent = () => {
-    if (element.attributes && element.attributes.onfocus) {
-      EventExecutor.executeEvent(
-        props.meta,
-        element.attributes.onfocus,
-        null,
-        null
-      );
-    }
-  };
-  const executeBlurEvent = () => {
-    if (element.attributes && element.attributes.onblur) {
-      EventExecutor.executeEvent(
-        props.meta,
-        element.attributes.onblur,
-        null,
-        null
-      );
-    }
-  };
-
-  const executeKeyupEvent = () => {
-    if (element.attributes && element.attributes.onkeyup) {
-      EventExecutor.executeEvent(
-        props.meta,
-        element.attributes.onkeyup,
-        null,
-        null
-      );
-    }
-  };
-
-  const executeKeyDownEvent = () => {
-    if (element.attributes && element.attributes.onkeydown) {
-      EventExecutor.executeEvent(
-        props.meta,
-        element.attributes.onkeydown,
-        null,
-        null
-      );
-    }
-  };
-
-  const handleBlur = (e) => {
-    element.value = value;
-  };
-
-  /**Below are the sample code for radio button copied from primeng */
-  const categories = [
-    { name: "Accounting", key: "A" },
-    { name: "Marketing", key: "M" },
-    { name: "Production", key: "P" },
-    { name: "Research", key: "R" },
-  ];
-
-  const [selectedCategory, setSelectedCategory] = useState(categories[1]);
-
   return (
     <>
       <style>{controlStyle}</style>
-      <div id={element.id}>
-        {categories.map((category) => {
-          return (
-            <div key={category.key} className="field-radiobutton">
-              <RadioButton
-                inputId={category.key}
-                name="category"
-                value={category}
-                onChange={(e) => setSelectedCategory(e.value)}
-                checked={selectedCategory.key === category.key}
-                disabled={category.key === "R"}
-              />
-              <label htmlFor={category.key}>{category.name}</label>
-            </div>
-          );
-        })}
+      <div id={element.id} style={{ overflow: "auto", height: `${element.attributes.heightSize || 10}vh` }}>
+        {renderOptionList()}
       </div>
     </>
   );

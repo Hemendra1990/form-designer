@@ -10,7 +10,7 @@ import { UserService } from "../components/grid/UserService";
 import AttrGrid from "./attr-grid/AttrGridComp";
 import AttrInput from "./attr-input/AttrInput";
 import AttrRadio from "./attr-radio/AttrRadio";
-import AttrListBox from "./attr-ListBox/AttrListBox";
+import AttrListBox from "./attr-listbox/AttrListBox";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
@@ -19,7 +19,7 @@ import { Button } from "primereact/button";
 import AttrButtonConfig from "./attr-button/AttrButtonConfig";
 import AttrInputConfig from "./attr-input/AttrInputConfig";
 import AttrLableConfig from "./attr-label/AttrLabelConfig";
-import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
+import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
 import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
@@ -27,6 +27,8 @@ import AttrContainer from "./attr-container/AttrContainer";
 import AttrDropDown from "./attr-dropdown/AttrDropDown";
 import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
+import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
+import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -34,8 +36,8 @@ const AttributePanel = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const [showSidebar, setShowSidebar] = useState(false);
-  
-    useState(false);
+
+  useState(false);
   const [showControlStyle, setShowControlStyle] = useState(false);
 
   const [classNameValue, setClassNameValue] = useState(
@@ -149,6 +151,7 @@ const AttributePanel = (props) => {
         return (
           <AttrRadioConfig
             meta={meta}
+            eventOptions={availableEvents}
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
           />
@@ -162,6 +165,17 @@ const AttributePanel = (props) => {
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
             eventOptions={availableEvents}
+          />
+        );
+      }
+      /* Render DropDown configuration */
+      if (meta.currentElement.type === CONTROL.AUTOCOMPLETE) {
+        return (
+          <AttrAutoCompleteConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
+            availableEvents={availableEvents}
           />
         );
       }
@@ -314,9 +328,10 @@ const AttributePanel = (props) => {
             <AttrRadio
               meta={meta}
               handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
               eventOptions={availableEvents}
             />
-            {classDiv}
+
           </>
         );
       }
@@ -377,7 +392,23 @@ const AttributePanel = (props) => {
           </>
         );
       }
+
+      /* Render Auto complete attributes */
+      if (meta.currentElement.type === CONTROL.AUTOCOMPLETE) {
+        return (
+          <>
+            <AttrAutoComplete
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              currentElement={meta.currentElement}
+              availableEvents={availableEvents}
+            />
+            {classDiv}
+          </>
+        );
+      }
     }
+
     return <></>;
   };
 
@@ -393,7 +424,9 @@ const AttributePanel = (props) => {
       if (
         meta.currentElement.type === CONTROL.GRID ||
         meta.currentElement.type === CONTROL.LISTBOX ||
-        meta.currentElement.type === CONTROL.DROPDOWN
+        meta.currentElement.type === CONTROL.DROPDOWN ||
+        meta.currentElement.type === CONTROL.RADIO ||
+        meta.currentElement.type === CONTROL.AUTOCOMPLETE
       ) {
         return (
           <AttrDataConnector
