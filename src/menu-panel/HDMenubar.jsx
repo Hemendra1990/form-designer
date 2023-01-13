@@ -3,16 +3,12 @@ import React, { memo, useRef, useState } from "react";
 import ApiModeler from "../api-modeler/ApiModeler";
 import ReportConfiguration from "../configuration/ReportConfiguration";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
-import DataSourceBuilder from "../sql-modeler/DataSourceBuilder";
-import SQLQueryBuilder from "../sql-modeler/query-builder/SQLQueryBuilder";
 import SaveFormDesignResource from "./SaveFormDesignResource";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HDMenubar = (props) => {
   const reportConfigRef = useRef();
   const apiConfigRef = useRef();
-  const dataSourceConfigRef = useRef();
-  const sqlQueryBuilderRef = useRef();
 
   const [showDatasourceBuilder, setShowDatasourceBuilder] = useState(false);
   const [showSQLBuilder, setShowSQLBuilder] = useState(false);
@@ -30,19 +26,14 @@ const HDMenubar = (props) => {
     configureQueryBuilder,
   } = useUpdateMetaContext();
   let navigate = useNavigate();
-  const end = (
-    <p style={{ fontWeight: 400, color: "#fff" }}>
-      Hemendra's Low Code Designer
-    </p>
-  );
   const start = (
     <img
       alt="logo"
       src="/logo-white.png"
       height="40"
       className="mr-2 mt-2 ml-4"
-      style={{cursor:'pointer'}}
-      onClick={()=> navigate("/")}
+      style={{ cursor: "pointer" }}
+      onClick={() => navigate("/")}
     ></img>
   );
   const meta = useMetaContext();
@@ -123,7 +114,7 @@ const HDMenubar = (props) => {
             setTimeout(() => {
               configureQueryBuilder(sqlQueryBuilderRef);
             }, 0);*/
-            navigate("sql-builder")
+            navigate("sql-builder");
           },
         },
         {
@@ -138,7 +129,6 @@ const HDMenubar = (props) => {
   ];
 
   const menuBar = () => {
-    console.log(meta);
     if (meta.editMode) {
       return <Menubar model={menuItems} start={start} />;
     } else {
@@ -151,18 +141,6 @@ const HDMenubar = (props) => {
       {menuBar()}
       <ReportConfiguration ref={reportConfigRef} />
       <ApiModeler ref={apiConfigRef} />
-      {/*{showDatasourceBuilder && (
-        <DataSourceBuilder
-          setShowDatasourceBuilder={setShowDatasourceBuilder}
-          ref={dataSourceConfigRef}
-        ></DataSourceBuilder>
-      )}*/}
-      {/*{showSQLBuilder && (
-        <SQLQueryBuilder
-          setShowSQLBuilder={setShowSQLBuilder}
-          ref={sqlQueryBuilderRef}
-        ></SQLQueryBuilder>
-      )}*/}
 
       {showFormSaveModal && (
         <SaveFormDesignResource

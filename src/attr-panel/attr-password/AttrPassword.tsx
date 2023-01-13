@@ -1,4 +1,3 @@
-import { Dropdown } from "primereact/dropdown";
 import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
 import React, { Fragment, memo, useEffect, useState } from "react";
@@ -38,6 +37,12 @@ const AttrPassword = (props: AttrPasswordProps) => {
     setPanelFooterForPassword(e.checked)
     handleAttributeChange(e);
   }
+
+  useEffect(() => {
+    setShowStrengthIndicator(currAttribute?.showStrengthIndicator || "");
+    setShowIconToDisplayPassword(currAttribute?.showIconToDisplayPassword || "");
+    setPanelFooterForPassword(currAttribute?.panelFooterForPassword || "");
+  }, [meta.currentElement]);
 
   return (
     <>

@@ -103,7 +103,7 @@ export class ControlStyleModel {
     { label: "Placeholder", value: ".p-dropdown-label", key: "dropdownLabel" },
     { label: "Container", value: ".p-dropdown", key: "dropdown" },
     { label: "Trigger", value: ".p-dropdown-trigger", key: "dropdownTrigger" },
-    { label: "Wrapper items", value: ".p-dropdown-panel,.p-dropdown-items,.p-dropdown-item", key: "itemsWrapper" },
+    // { label: "Wrapper items", value: ".p-dropdown-items,.p-dropdown-item", key: "itemsWrapper" },
     { label: "Filter container", value: ".p-dropdown-panel,.p-dropdown-header,.p-dropdown-filter", key: "filterContainer" },
     //{ label: "Dropdown open", value: ".p-dropdown-open", key: "dropdownOpen" }
   ];
@@ -134,6 +134,15 @@ export class ControlStyleModel {
     { label: "Label", value: ".field-checkbox, .field-radiobutton ", key: "containerElement" },
     { label: "Button", value: ".p-radiobutton-box", key: "containerIcon" },
     { label: "Selected Button", value: ".p-radiobutton .p-radiobutton-box.p-highlight", key: "activeButton" }
+  ];
+
+  static MULTISELECT = [
+    { label: "Selected value", value: ".p-multiselect-label-container", key: "multiSelectLabel" },
+    { label: "Multiselect Input Wrapper", value: ".p-multiselect", key: "multiSelectElement" },
+    { label: "Dropdown Button", value: ".p-multiselect-trigger", key: "multiSelectDropdownButton" },
+    //{ label: "Filter", value: ".p-inputtext,.p-multiselect-filter", key: "multiSelectFilterContainer" },
+    //{ label: "Overlay panel", value: ".p-multiselect-items-wrapper", key: "multiSelectOverlayPanel" },
+    { label: "Options", value: ".p-multiselect-panel,.p-multiselect-items", key: "multiSelectPanelItems" },
   ];
 
   static getTextareaStyle() {
@@ -181,5 +190,9 @@ export class ControlStyleModel {
 
   static getRadioStyle() {
     return JSON.parse(JSON.stringify(ControlStyleModel.RADIO));
+  }
+
+  static getMultiSelectStyle() {
+    return JSON.parse(JSON.stringify(ControlStyleModel.MULTISELECT));
   }
 }

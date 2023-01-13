@@ -1,7 +1,6 @@
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from 'primereact/dropdown';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
 const AttrInput = (props) => {
@@ -14,6 +13,9 @@ const AttrInput = (props) => {
     setDefaultValue(e.value);
     handleAttributeChange(e);
   }
+  useEffect(() => {
+    setDefaultValue(currAttribute?.defaultValue || "")
+  }, [meta.currentElement]);
 
   return (
     <>
@@ -52,7 +54,7 @@ const AttrInput = (props) => {
           style={{ width: '100%' }}
           name="defaultValue"
           placeholder="Enter Default value"
-          value={currAttribute?.defaultValue}
+          value={defaultValue}
           onChange={handelDefaltValue}
         />
       </div>

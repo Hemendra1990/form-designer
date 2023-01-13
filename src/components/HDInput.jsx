@@ -88,11 +88,11 @@ const HDInput = React.forwardRef((props, ref) => {
           name={props.name}
           id={props.name}
           value={value || element?.attributes?.defaultValue}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={(e) => executeBlurEvent()}
-          onFocus={(e) => executeFocusEvent()}
-          onKeyUp={(e) => executeKeyupEvent()}
-          onKeyDown={(e) => executeKeyDownEvent()}
+          onChange={(e) => { setValue(e.target.value) }}
+          onBlur={(e) => { executeBlurEvent() }}
+          onFocus={(e) => { executeFocusEvent() }}
+          onKeyUp={(e) => { executeKeyupEvent() }}
+          onKeyDown={(e) => { executeKeyDownEvent() }}
         />
       </div>
     </>
