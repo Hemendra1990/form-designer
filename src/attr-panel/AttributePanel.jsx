@@ -10,7 +10,7 @@ import { UserService } from "../components/grid/UserService";
 import AttrGrid from "./attr-grid/AttrGridComp";
 import AttrInput from "./attr-input/AttrInput";
 import AttrRadio from "./attr-radio/AttrRadio";
-import AttrListBox from "./attr-listbox/AttrListBox";
+import AttrListBox from "./attr-ListBox/AttrListBox";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
@@ -19,7 +19,7 @@ import { Button } from "primereact/button";
 import AttrButtonConfig from "./attr-button/AttrButtonConfig";
 import AttrInputConfig from "./attr-input/AttrInputConfig";
 import AttrLableConfig from "./attr-label/AttrLabelConfig";
-import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
+import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
 import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
@@ -29,6 +29,8 @@ import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
 import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
+import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
+import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -176,6 +178,17 @@ const AttributePanel = (props) => {
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
             availableEvents={availableEvents}
+          />
+        );
+      }
+
+      /* Render MultiSelect configuration */
+      if (meta.currentElement.type === CONTROL.MULTISELECT) {
+        return (
+          <AttrMultiSelectConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            eventOptions={availableEvents}
           />
         );
       }
@@ -331,7 +344,6 @@ const AttributePanel = (props) => {
               updateClass={updateClass}
               eventOptions={availableEvents}
             />
-
           </>
         );
       }
@@ -407,6 +419,20 @@ const AttributePanel = (props) => {
           </>
         );
       }
+      /* Render Multiselect attributes */
+      if (meta.currentElement.type === CONTROL.MULTISELECT) {
+        return (
+          <>
+            <AttrMultiSelect
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+              eventOptions={availableEvents}
+            />
+          </>
+        );
+      }
     }
 
     return <></>;
@@ -426,7 +452,8 @@ const AttributePanel = (props) => {
         meta.currentElement.type === CONTROL.LISTBOX ||
         meta.currentElement.type === CONTROL.DROPDOWN ||
         meta.currentElement.type === CONTROL.RADIO ||
-        meta.currentElement.type === CONTROL.AUTOCOMPLETE
+        meta.currentElement.type === CONTROL.AUTOCOMPLETE ||
+        meta.currentElement.type === CONTROL.MULTISELECT
       ) {
         return (
           <AttrDataConnector

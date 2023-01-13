@@ -93,18 +93,6 @@ const AttrListBox = (props) => {
           disabled
         />
       </div>
-      <div className="field col-12">
-        <label htmlFor="maxLen" className="block">
-          Listbox Header
-        </label>
-        <InputText
-          style={{ width: '100%' }}
-          name="listboxLabel"
-          placeholder="Edit the Default Header"
-          onChange={handleAttributeChange}
-          value={currAttribute?.listboxLabel || ""}
-        />
-      </div>
       <div className="field-checkbox">
         <Checkbox
           name="disabled"
@@ -243,7 +231,7 @@ const AttrListBox = (props) => {
                     style={{ width: "100%" }}
                     name="label"
                     key={index}
-                    value={staticOption.label}
+                    value={staticOption.label || ""}
                     placeholder="Label"
                     onChange={(event) => {
                       handelInputChange(event, index);
@@ -255,7 +243,7 @@ const AttrListBox = (props) => {
                     style={{ width: "100%" }}
                     name="value"
                     key={index}
-                    value={staticOptionList[index].value}
+                    value={staticOptionList[index].value || ""}
                     placeholder="Value"
                     onChange={(e) => {
                       handelInputChange(e, index);

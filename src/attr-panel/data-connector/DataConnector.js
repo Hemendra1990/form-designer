@@ -69,9 +69,19 @@ export class DataConnector {
         });
       }
       if (element.ref.current.setResult) {
-        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX || element.type === CONTROL.DROPDOWN || element.type === CONTROL.RADIO) {
-          element.ref.current.startLoader && element.ref.current.startLoader(true);
+        switch (element.type) {
+          case CONTROL.GRID:
+          case CONTROL.LISTBOX:
+          case CONTROL.DROPDOWN:
+          case CONTROL.RADIO:
+          case CONTROL.MULTISELECT:
+            element.ref.current.startLoader &&
+              element.ref.current.startLoader(true);
+            break;
+          default:
+            break;
         }
+
         element.ref.current.setResult({
           columns: DataConnector.columns,
           rows: rows,

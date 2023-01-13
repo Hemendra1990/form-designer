@@ -100,7 +100,6 @@ const HDListBox = React.forwardRef((props, parentRef) => {
     <>
       <style>{controlStyle}</style>
       <div id={element.id}>
-        <h6 className="common-header">{element?.attributes?.listboxLabel || "Default Header"}</h6>
         <ListBox
           ref={getPrimeListRef}
           value={selectedValue}
