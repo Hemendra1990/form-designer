@@ -10,22 +10,22 @@ const AttrMultiSelectConfig = (props: AttrMultiSelectConfigProps) => {
 
     const { meta, handleAttributeChange, eventOptions } = props;
     const currentAttribute = meta?.currentElement?.attributes
-    const [onBlur, setonBlur] = useState("");
-    const [onFocus, setonFocus] = useState("");
+    // const [onBlur, setonBlur] = useState("");
+    // const [onFocus, setonFocus] = useState("");
     const [onChangeEvent, setOnChangeEvent] = useState("");
     const [onFilterEvent, setOnFilterEvent] = useState("");
 
-    const handleBlurChange = (e: any) => {
-        setonBlur(e.value);
-        currentAttribute.onBlur = e.value;
-        handleAttributeChange(e);
-    }
+    // const handleBlurChange = (e: any) => {
+    //     setonBlur(e.value);
+    //     currentAttribute.onBlur = e.value;
+    //     handleAttributeChange(e);
+    // }
 
-    const handleFocusChange = (e: any) => {
-        setonFocus(e.value);
-        currentAttribute.onFocus = e.value;
-        handleAttributeChange(e);
-    }
+    // const handleFocusChange = (e: any) => {
+    //     setonFocus(e.value);
+    //     currentAttribute.onFocus = e.value;
+    //     handleAttributeChange(e);
+    // }
 
     const handelOnchangeEvent = (e: any) => {
         setOnChangeEvent(e.value);
@@ -41,7 +41,7 @@ const AttrMultiSelectConfig = (props: AttrMultiSelectConfigProps) => {
 
     return (
         <>
-            <div className="field col-12">
+            {/* <div className="field col-12">
                 <label htmlFor="onBlur" className="block">On Blur</label>
                 <Dropdown
                     style={{ width: '100%' }}
@@ -64,7 +64,7 @@ const AttrMultiSelectConfig = (props: AttrMultiSelectConfigProps) => {
                     onChange={e => { handleFocusChange(e) }}
                     showClear={true}
                 />
-            </div>
+            </div> */}
             <div className="field col-12">
                 <label htmlFor="onChangeEvent" className="block">
                     On Change

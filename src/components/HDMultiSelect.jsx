@@ -26,16 +26,16 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
             EventExecutor.executeEvent(props.meta, element.attributes.onFilterEvent, { data: event.value }, null);
         }
     }
-    const executeFocusEvent = (event) => {
-        if (element.attributes && element.attributes.onFocus) {
-            EventExecutor.executeEvent(props.meta, element.attributes.onFocus, { data: event.value }, null);
-        }
-    }
-    const executeBlurEvent = (event) => {
-        if (element.attributes && element.attributes.onBlur) {
-            EventExecutor.executeEvent(props.meta, element.attributes.onBlur, { data: event.value }, null);
-        }
-    }
+    // const executeFocusEvent = (event) => {
+    //     if (element.attributes && element.attributes.onFocus) {
+    //         EventExecutor.executeEvent(props.meta, element.attributes.onFocus, { data: event.value }, null);
+    //     }
+    // }
+    // const executeBlurEvent = (event) => {
+    //     if (element.attributes && element.attributes.onBlur) {
+    //         EventExecutor.executeEvent(props.meta, element.attributes.onBlur, { data: event.value }, null);
+    //     }
+    // }
 
     const operations = {
         setResult: (result) => {
@@ -89,6 +89,9 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
 
     useEffect(() => {
         updateMeta(meta);
+        setSelectedValue(element.attributes?.selectedValue || "");
+        setLabelValueOptions(element.attributes?.labelValueOptions || []);
+        setMultiSelectOptions(element.attributes?.multiSelectOptions || []);
         if (element.style) {
             setTimeout(() => {
                 const elementStyle = addElementStyle(
@@ -115,9 +118,9 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
                             : element.attributes?.config?.staticOptionList || []
                     }
                     onChange={(e) => { setSelectedValue(e.value); executeOnChangeEvent(e); }}
-                    onBlur={(e) => executeBlurEvent(e)}
-                    onFocus={(e) => executeFocusEvent(e)}
-                    onFilter={(e) => executeOnFilterEvent(e)}
+                    // onBlur={(e) => { executeBlurEvent(e) }}
+                    //  onFocus={(e) => { executeFocusEvent(e) }}
+                    onFilter={(e) => { executeOnFilterEvent(e) }}
                     placeholder={element.attributes?.placeholder || "Select Your Options"}
                     disabled={element.attributes?.disabled || false}
                     filter={element.attributes?.filter || false}
@@ -125,10 +128,12 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
                     optionValue={element.attributes.optionValue || "value"}
                     optionLabel={element.attributes.optionLabel || "label"}
                     showClear={element.attributes?.showClear || false}
+                    showSelectAll={element.attributes?.showSelectAll || false}
                     tooltip={element.attributes?.tooltip}
                     filterPlaceholder={element.attributes?.filterPlaceholder || "Enter Your Filter Option"}
-                    emptyFilterMessage={"No Records Found"}
+                    emptyFilterMessage={element.attributes?.emptyFilterMessage || "No Records Found"}
                     resetFilterOnHide={element.attributes?.resetFilterOnHide || true}
+                    display={element.attributes?.display || "label"}
                     maxSelectedLabels={element.attributes?.maxSelectedLabels || 3}
                 />
             </div>

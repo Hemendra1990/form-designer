@@ -10,8 +10,11 @@ import { useUpdateMetaContext } from "../../context/MetaContext";
 const AttrMultiSelect = (props) => {
     const { meta, updateClass, handleAttributeChange } = props;
     const currAttribute = meta?.currentElement?.attributes;
-
     const emptyOption = { label: "", value: "" };
+    const displayOption = [
+        { label: 'Comma', value: 'comma' },
+        { label: 'Chip', value: 'chip' }];
+
     const { updateMeta } = useUpdateMetaContext();
     const [className, setClassName] = useState("");
     const [disabled, setDisabled] = useState(false);
@@ -26,6 +29,10 @@ const AttrMultiSelect = (props) => {
     const [placeholder, setPlaceholder] = useState("");
     const [filterPlaceholder, setFilterPlaceholder] = useState("");
     const [showClear, setShowClear] = useState(false);
+    const [showFilterBy, setShowFilterBy] = useState(true);
+    const [showSelectAll, setShowSelectAll] = useState(false);
+    const [emptyFilterMessage, setemptyFilterMessage] = useState("");
+    const [display, setDisplay] = useState([]);
 
     const handelInputChange = (event, index) => {
         const updatedStaticOptionList = staticOptionList.map((field, i) => {
@@ -51,6 +58,7 @@ const AttrMultiSelect = (props) => {
 
     const onClick = () => {
         setStaticOptionDialog(true);
+        setShowFilterBy(false);
     };
 
     const onHide = () => {
@@ -73,8 +81,12 @@ const AttrMultiSelect = (props) => {
         setOptionValue(currAttribute?.optionValue || null);
         setPlaceholder(currAttribute?.placeholder || "");
         setShowClear(currAttribute?.showClear || false);
-        setFilterPlaceholder(currAttribute?.filterPlaceholder || "")
-    }, []);
+        setFilterBy(currAttribute?.filterby || "");
+        setFilterPlaceholder(currAttribute?.filterPlaceholder || "");
+        setShowSelectAll(currAttribute?.showSelectAll || false);
+        setemptyFilterMessage(currAttribute?.emptyFilterMessage || "");
+        setDisplay(currAttribute?.display || []);
+    }, [meta.currentElement]);
 
 
     const getLabelValueOptions = () => {
@@ -122,8 +134,22 @@ const AttrMultiSelect = (props) => {
                         handleAttributeChange(e);
                     }}
                 />
-                <label htmlFor="disabled" className="p-checkbox-label">
-                    Show Clear Icon
+                <label htmlFor="showClear" className="p-checkbox-label">
+                    Show Clear Button
+                </label>
+            </div>
+            <div className="field-checkbox">
+                <Checkbox
+                    name="showSelectAll"
+                    inputId="binary"
+                    checked={showSelectAll}
+                    onChange={(e) => {
+                        setShowSelectAll(e.checked);
+                        handleAttributeChange(e);
+                    }}
+                />
+                <label htmlFor="showSelectAll" className="p-checkbox-label">
+                    Select All Checkbox
                 </label>
             </div>
             <div className="field-checkbox">
@@ -140,7 +166,7 @@ const AttrMultiSelect = (props) => {
                     Filter
                 </label>
             </div>
-            {filter && (
+            {filter && showFilterBy && (
                 <div className="field col-12">
                     <label htmlFor="filterby">Filter By</label>
                     <MultiSelect
@@ -155,6 +181,8 @@ const AttrMultiSelect = (props) => {
                         }}
                         optionLabel="header"
                         optionValue="field"
+                        showClear={true}
+                        showSelectAll={false}
                     />
                 </div>
             )}
@@ -165,6 +193,7 @@ const AttrMultiSelect = (props) => {
                         name="filterPlaceholder"
                         style={{ width: "100%" }}
                         value={filterPlaceholder}
+                        placeholder="Enter Your Filter Option "
                         onChange={(e) => {
                             setFilterPlaceholder(e.target.value);
                             handleAttributeChange(e);
@@ -172,13 +201,42 @@ const AttrMultiSelect = (props) => {
                     />
                 </div>
             )}
+            {filter && (
+                <div className="field col-12">
+                    <label htmlFor="emptyFilterMessage">Empty Filter Message</label>
+                    <InputText
+                        name="emptyFilterMessage"
+                        style={{ width: "100%" }}
+                        value={emptyFilterMessage}
+                        placeholder="Enter Your Message"
+                        onChange={(e) => {
+                            setemptyFilterMessage(e.target.value);
+                            handleAttributeChange(e);
+                        }}
+                    />
+                </div>
+            )}
+            <div className="field col-12">
+                <label htmlFor="display">Display</label>
+                <Dropdown
+                    name="display"
+                    value={display}
+                    options={displayOption}
+                    style={{ width: "100%" }}
+                    onChange={(e) => {
+                        setDisplay(e.value);
+                        handleAttributeChange(e);
+                    }}
+                    optionLabel="label"
+                />
+            </div>
             <div className="field col-12">
                 <label htmlFor="optionLabel">Option Label</label>
                 <Dropdown
+                    name="optionLabel"
                     value={optionLabel}
                     options={options}
                     style={{ width: "100%" }}
-                    name="optionLabel"
                     onFocus={getLabelValueOptions}
                     onChange={(e) => {
                         setOptionLabel(e.value);
@@ -192,10 +250,10 @@ const AttrMultiSelect = (props) => {
             <div className="field col-12">
                 <label htmlFor="optionValue">Option Value</label>
                 <Dropdown
+                    name="optionValue"
                     options={options}
                     value={optionValue}
                     style={{ width: "100%" }}
-                    name="optionValue"
                     onChange={(e) => {
                         setOptionValue(e.value);
                         handleAttributeChange(e);
@@ -226,6 +284,7 @@ const AttrMultiSelect = (props) => {
                     name="placeholder"
                     style={{ width: "100%" }}
                     value={placeholder}
+                    placeholder="Enter Placeholder"
                     onChange={(e) => {
                         setPlaceholder(e.target.value);
                         handleAttributeChange(e);

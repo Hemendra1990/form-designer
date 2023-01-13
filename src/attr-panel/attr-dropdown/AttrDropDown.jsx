@@ -68,12 +68,11 @@ const AttrDropDown = (props) => {
         setDisabled(currAttribute.disabled || false);
         setFilter(currAttribute.filter || false);
         setTooltip(currAttribute.tooltip || "");
-
         setOptionLabel(currAttribute?.optionLabel || null);
         setOptionValue(currAttribute?.optionValue || null);
         setPlaceholder(currAttribute?.placeholder || "");
         setShowClear(currAttribute?.showClear || false);
-    }, []);
+    }, [meta.currentElement]);
 
 
     const getLabelValueOptions = () => {

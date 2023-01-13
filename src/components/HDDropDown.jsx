@@ -19,6 +19,9 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
 
   useEffect(() => {
     updateMeta(meta);
+    setSelectedValue(element.attributes?.selectedValue || "");
+    setLabelValueOptions(element.attributes?.labelValueOptions || []);
+    setListOptions(element.attributes?.listOptions || []);
     //Apply style if the element already has
     if (element.style) {
       setTimeout(() => {
@@ -131,12 +134,12 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
               : element.attributes?.config?.staticOptionList || []
           }
           placeholder={element.attributes?.placeholder || "Please Select an Option"}
-          onBlur={(e) => executeBlurEvent(e)}
-          onFocus={(e) => executeFocusEvent(e)}
+          onBlur={(e) => { executeBlurEvent(e) }}
+          onFocus={(e) => { executeFocusEvent(e) }}
           onChange={(e) => { setSelectedValue(e.value); executeOnChangeEvent(e); }}
-          onMouseDown={(e) => executeOnMouseDownEvent(e)}
-          onContextMenu={(e) => executeOnContextMenuEvent(e)}
-          onFilter={(e) => executeOnFilterEvent(e)}
+          onMouseDown={(e) => { executeOnMouseDownEvent(e) }}
+          onContextMenu={(e) => { executeOnContextMenuEvent(e) }}
+          onFilter={(e) => { executeOnFilterEvent(e) }}
           disabled={element.attributes?.disabled || false}
           filter={element.attributes?.filter || false}
           filterBy={element.attributes?.filterby}

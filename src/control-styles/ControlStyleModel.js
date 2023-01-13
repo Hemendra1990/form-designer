@@ -137,12 +137,12 @@ export class ControlStyleModel {
   ];
 
   static MULTISELECT = [
-    { label: "Label", value: ".p-multiselect-label-container", key: "multiSelectLabel" },
-    { label: "Container", value: ".p-multiselect", key: "multiSelectElement" },
-    { label: "Dropdown button", value: ".p-multiselect-trigger", key: "multiSelectDropdownButton" },
-    { label: "Filter", value: ".p-inputtext,.p-multiselect-filter", key: "multiSelectFilterContainer" },
+    { label: "Selected value", value: ".p-multiselect-label-container", key: "multiSelectLabel" },
+    { label: "Multiselect Input Wrapper", value: ".p-multiselect", key: "multiSelectElement" },
+    { label: "Dropdown Button", value: ".p-multiselect-trigger", key: "multiSelectDropdownButton" },
+    //{ label: "Filter", value: ".p-inputtext,.p-multiselect-filter", key: "multiSelectFilterContainer" },
     //{ label: "Overlay panel", value: ".p-multiselect-items-wrapper", key: "multiSelectOverlayPanel" },
-    { label: "Panel Items", value: ".p-multiselect-panel,.p-multiselect-items", key: "multiSelectPanelItems" },
+    { label: "Options", value: ".p-multiselect-panel,.p-multiselect-items", key: "multiSelectPanelItems" },
   ];
 
   static getTextareaStyle() {
