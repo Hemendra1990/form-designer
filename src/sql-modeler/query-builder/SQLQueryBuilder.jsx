@@ -169,6 +169,20 @@ const SQLQueryBuilder = (props) => {
     });
   };
 
+  const updateTabName = (tab) => {
+    console.log(tab);
+    setEditSQLQueryTabs((prevTabs) => {
+      prevTabs.map((t) => {
+        if (t.id === tab.id) {
+          t.name = tab.name;
+          return t;
+        }
+        return t;
+      });
+      return [...prevTabs];
+    });
+  };
+
   const footer = (
     <div>
       <Button
@@ -340,6 +354,7 @@ const SQLQueryBuilder = (props) => {
                 tab={tab}
                 dataSources={dataSources}
                 queryTypes={queryTypes}
+                updateTabName={updateTabName}
               ></AddSQL>
             </TabPanel>
           ))}
