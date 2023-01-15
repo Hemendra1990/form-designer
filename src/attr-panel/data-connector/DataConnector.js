@@ -109,7 +109,7 @@ export class DataConnector {
             return {
               field: rh.name,
               header: rh.name,
-              id: createElementId("column-", 7),
+              id: rh.name,
               datasource: datasource.datasourceName,
             };
           });
