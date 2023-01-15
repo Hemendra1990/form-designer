@@ -21,7 +21,8 @@
 
 .control-panel-content {
     overflow-y: scroll;
-    max-height: 200px;
+    min-height: 300px;
+    max-height: 300px;
 }
 
 .no-select {

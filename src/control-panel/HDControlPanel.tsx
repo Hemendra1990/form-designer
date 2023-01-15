@@ -6,6 +6,8 @@ import { SelectItem } from "../model/SelectItem";
 import { FilterService } from "primereact/api";
 
 import "./ControlPanel.css";
+import { useDrag } from "react-dnd";
+import { ItemType } from "../model/ItemType";
 
 interface ControlItemProp {
   index: number;
@@ -33,11 +35,21 @@ function HDControlPanel() {
     setItems(filteredItems);
   };
 
-  const handleElementClick = () => {};
-
   const ControlItem = ({ index, controlItem }: ControlItemProp) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
+      type: ItemType.HD_ELEMENT, //"hdElement"
+      item: { index, controlItem },
+      end: (item, monitor) => {
+        const dropResult = monitor.getDropResult();
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+        handlerId: monitor.getHandlerId(),
+      }),
+    }));
+
     return (
-      <li className="p-listbox-item draggable no-select">
+      <li ref={drag} className="p-listbox-item draggable no-select">
         {controlItem.label}{" "}
       </li>
     );
@@ -48,7 +60,7 @@ function HDControlPanel() {
       <div
         className="control-panel-wrapper"
         ref={wrapperRef}
-        style={{ zIndex: "1000" }}
+        style={{ zIndex: "1000", left: "85vw", bottom: 0 }}
       >
         <header ref={headerRef}>
           <i style={{ color: "#5b5252" }} className="fa fa-bars"></i>
