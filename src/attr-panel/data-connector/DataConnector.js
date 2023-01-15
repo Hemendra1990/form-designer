@@ -20,6 +20,7 @@ export class DataConnector {
     let rows = [];
     let datasource = element.attributes.datasource;
     if (datasource !== undefined) {
+      //This is for API
       let generateColumnIds = true;
       if (element.attributes.columns) {
         const prevClms = element.attributes.columns;
@@ -69,7 +70,12 @@ export class DataConnector {
         });
       }
       if (element.ref.current.setResult) {
-        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX || element.type === CONTROL.DROPDOWN || element.type === CONTROL.MULTISELECT) {
+        if (
+          element.type == CONTROL.GRID ||
+          element.type === CONTROL.LISTBOX ||
+          element.type === CONTROL.DROPDOWN ||
+          element.type === CONTROL.MULTISELECT
+        ) {
           element.ref.current.startLoader(true);
         }
         element.ref.current.setResult({
@@ -78,6 +84,7 @@ export class DataConnector {
         });
       }
     } else if (element.attributes.sqldatasource !== undefined) {
+      //For SQL Datasource
       datasource = element.attributes.sqldatasource;
       if (datasource !== undefined) {
         const queryData = datasource;
@@ -89,6 +96,10 @@ export class DataConnector {
         ) {
           element.ref.current.startLoader(true);
         }
+        queryData.sqlVariables = {
+          ...queryData.sqlVariables,
+          ...meta.sqlVariables,
+        };
         httpService.QUERY.getQueryResult(queryData).then((res) => {
           console.log("Fetching Query result", res.data);
           rows = [...res.data.rows];
