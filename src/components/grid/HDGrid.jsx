@@ -223,8 +223,8 @@ const HDGrid = forwardRef((props, ref) => {
             minHeight: "20rem",
           }}
           stripedRows={true}
+          scrollable
           scrollHeight="290px"
-          scrollDirection="both"
           columnResizeMode="absolute"
           editMode={dataTableProps?.editMode}
         >
