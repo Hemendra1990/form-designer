@@ -73,7 +73,7 @@ const SQLQueryBuilder = (props) => {
       sqlVariables: {},
       extraParam: {
         controlIds: [],
-        paginationInfo: "1-25",
+        paginationInfo: "0-25",
         placeHolders: {},
       },
       query: currTab.query,
@@ -98,10 +98,10 @@ const SQLQueryBuilder = (props) => {
   const testDmlQuery = (currTab) => {
     const testQueryData = {
       usedPlaceHolderList: [],
-      sqlVariables: {},
+      sqlVariables: { code: "Closed" },
       extraParam: {
         controlIds: [],
-        paginationInfo: "1-25",
+        paginationInfo: "0-25",
         placeHolders: {},
       },
       query: currTab.query,
@@ -145,10 +145,12 @@ const SQLQueryBuilder = (props) => {
       if (res.data.status) {
         //Save the query in the meta.sqlList
         const saveQueryData = {
-          sqlvariables: {},
+          sqlVariables: {
+            code: "Closed",
+          },
           extraParam: {
             controlIds: [],
-            paginationInfo: "1-25",
+            paginationInfo: "0-25",
             placeHolders: {},
           },
           type: currTab.type,
