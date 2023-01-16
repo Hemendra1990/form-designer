@@ -41,10 +41,18 @@ const HDPassword = forwardRef((props, ref) => {
     setPasswordValue(event.target.value);
   };
 
-  const handleOnBlurEvent = () => {
-    const onBlurEvent = element.attributes?.onBlurEvent;
-    if (onBlurEvent) {
-      EventExecutor.executeEvent(meta, onBlurEvent, null);
+  const handleOnBlurEvent = (event) => {
+    if (element.attributes && element.attributes.onBlurEvent) {
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onBlurEvent,
+        { data: event.value },
+        null
+      );
     }
   };
 

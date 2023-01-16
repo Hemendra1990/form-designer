@@ -22,14 +22,16 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
   const [radioButtonList, setRadioButtonList] = useState([emptyOption]);
   const [checkEmptyList, setCheckEmptyList] = useState(false);
 
-
-
-  const handleOnChangeEvent = (e) => {
-    if (meta && element.attributes.onChange) {
+  const handleOnChangeEvent = (event) => {
+    if (element.attributes && element.attributes.onChange) {
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
       EventExecutor.executeEvent(
         props.meta,
         element.attributes.onChange,
-        { data: e.value },
+        { data: event.value },
         null
       );
     }
