@@ -102,9 +102,9 @@ export const MetaContextProvider = ({ children }) => {
    * Load existing report
    */
   const openReport = (reportData) => {
-    const {sessionId, json } = reportData
+    const { sessionId, json } = reportData;
     //const report = JSON.parse(json);
-    const  report = json;
+    const report = json;
     initializeComponent(report.elements);
     setMeta((prevValue) => {
       return {
@@ -172,7 +172,11 @@ export const MetaContextProvider = ({ children }) => {
   function createElementMap(elements, elementMap) {
     elements.forEach((elm) => {
       elementMap[elm.name] = elm;
-      if (elm.attributes && elm.attributes.children.length > 0) {
+      if (
+        elm.attributes &&
+        elm.attributes.children &&
+        elm.attributes.children.length > 0
+      ) {
         createElementMap(elm.attributes.children, elementMap);
       }
     });

@@ -13,6 +13,8 @@ import HDLabel from "../components/HDLabel";
 import HDPassword from "../components/HDPassword";
 import HDDropDown from "../components/HDDropDown";
 import HDToogleButton from "../components/HDToggleButton";
+import HDAutoComplete from "../components/HDAutoComplete";
+import HDMultiSelect from "../components/HDMultiSelect";
 
 const ComponentConfig = [
   {
@@ -81,7 +83,7 @@ const ComponentConfig = [
     component: HDPassword,
   },
   {
-    label: "ButtonToggle",
+    label: "Toggle Button",
     name: "buttontoggle",
     component: HDToogleButton,
   },
@@ -89,6 +91,16 @@ const ComponentConfig = [
     label: "Dropdown",
     name: "dropdown",
     component: HDDropDown,
+  },
+  {
+    label: "Auto Complete",
+    name: "autocomplete",
+    component: HDAutoComplete,
+  },
+  {
+    label: "Multiselect",
+    name: "multiselect",
+    component: HDMultiSelect,
   },
 ];
 export default ComponentConfig;
@@ -109,6 +121,8 @@ const CONTROL = {
   PASSWORD: "password",
   TOOGLEBUTTON: "buttontoggle",
   DROPDOWN: "dropdown",
+  AUTOCOMPLETE: "autocomplete",
+  MULTISELECT: "multiselect",
 };
 
 const CONTROL_ITEMS = () => {

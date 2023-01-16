@@ -16,10 +16,11 @@ export class DataConnector {
    *
    * @param {This is for testing} e
    */
-  async handleDatasourceChange(element, meta={}) {
+  async handleDatasourceChange(element, meta = {}) {
     let rows = [];
     let datasource = element.attributes.datasource;
     if (datasource !== undefined) {
+      //This is for API
       let generateColumnIds = true;
       if (element.attributes.columns) {
         const prevClms = element.attributes.columns;
@@ -69,15 +70,26 @@ export class DataConnector {
         });
       }
       if (element.ref.current.setResult) {
-        if (element.type == CONTROL.GRID || element.type === CONTROL.LISTBOX || element.type === CONTROL.DROPDOWN) {
-          element.ref.current.startLoader(true);
+        switch (element.type) {
+          case CONTROL.GRID:
+          case CONTROL.LISTBOX:
+          case CONTROL.DROPDOWN:
+          case CONTROL.RADIO:
+          case CONTROL.MULTISELECT:
+            element.ref.current.startLoader &&
+              element.ref.current.startLoader(true);
+            break;
+          default:
+            break;
         }
+
         element.ref.current.setResult({
           columns: DataConnector.columns,
           rows: rows,
         });
       }
     } else if (element.attributes.sqldatasource !== undefined) {
+      //For SQL Datasource
       datasource = element.attributes.sqldatasource;
       if (datasource !== undefined) {
         const queryData = datasource;
@@ -89,6 +101,10 @@ export class DataConnector {
         ) {
           element.ref.current.startLoader(true);
         }
+        queryData.sqlVariables = {
+          ...queryData.sqlVariables,
+          ...meta.sqlVariables,
+        };
         httpService.QUERY.getQueryResult(queryData).then((res) => {
           console.log("Fetching Query result", res.data);
           rows = [...res.data.rows];
@@ -98,7 +114,7 @@ export class DataConnector {
             return {
               field: rh.name,
               header: rh.name,
-              id: createElementId("column-", 7),
+              id: rh.name,
               datasource: datasource.datasourceName,
             };
           });

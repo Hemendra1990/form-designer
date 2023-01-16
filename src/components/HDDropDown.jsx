@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useState, useRef, useEffect } from "react";
-import { Dropdown } from 'primereact/dropdown';
-import EventExecutor from '../service/EventExecutor';
+import { Dropdown } from "primereact/dropdown";
+import EventExecutor from "../service/EventExecutor";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
@@ -8,18 +8,20 @@ import { addElementStyle } from "../control-styles/ControlStyles";
 const HDDropDown = React.forwardRef((props, parentRef) => {
   const { element } = props;
   const meta = useMetaContext();
-  const { updateMeta } = useUpdateMetaContext()
+  const { updateMeta } = useUpdateMetaContext();
 
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
-  const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState();
 
-  const primeDropdownRef = useRef(parentRef);
+  const getPrimeDropdownRef = useRef(parentRef);
 
   useEffect(() => {
     updateMeta(meta);
+    setSelectedValue(element.attributes?.selectedValue || "");
+    setLabelValueOptions(element.attributes?.labelValueOptions || []);
+    setListOptions(element.attributes?.listOptions || []);
     //Apply style if the element already has
     if (element.style) {
       setTimeout(() => {
@@ -66,23 +68,23 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
     },
 
     updateValue: (value) => {
-      setValue(value);
+      setSelectedValue(value);
     },
 
     getActualRef: () => {
-      return { ...parentRef};
+      return { ...parentRef };
     },
 
     getStyleAttributes: () => {
       return ControlStyleModel.getDropdownStyle();
     },
-    
+
     addStyle(style = "") {
       setControlStyle(style);
     },
-  
-    primeDropdownRef,
-  }
+
+    getPrimeDropdownRef,
+  };
 
   useImperativeHandle(parentRef, () => {
     return operations;
@@ -90,54 +92,103 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
 
   const executeOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onChangeEvent) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onChangeEvent, { data: event.value }, null);
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onChangeEvent,
+        { data: event.value },
+        null
+      );
     }
-  }
+  };
   const executeOnMouseDownEvent = (event) => {
     if (element.attributes && element.attributes.onMouseDownEvent) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onMouseDownEvent, { data: event.value }, null);
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onMouseDownEvent,
+        { data: event.value },
+        null
+      );
     }
-  }
+  };
   const executeOnContextMenuEvent = (event) => {
     if (element.attributes && element.attributes.onContextMenuEvent) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onContextMenuEvent, { data: event.value }, null);
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onContextMenuEvent,
+        { data: event.value },
+        null
+      );
     }
-  }
+  };
   const executeOnFilterEvent = (event) => {
     if (element.attributes && element.attributes.onFilterEvent) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onFilterEvent, { data: event.value }, null);
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onFilterEvent,
+        { data: event.value },
+        null
+      );
     }
-  }
+  };
   const executeFocusEvent = (event) => {
     if (element.attributes && element.attributes.onFocus) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onFocus, { data: event.value }, null);
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onFocus,
+        { data: event.value },
+        null
+      );
     }
-  }
+  };
   const executeBlurEvent = (event) => {
     if (element.attributes && element.attributes.onBlur) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onBlur, { data: event.value }, null);
+      EventExecutor.executeEvent(
+        props.meta,
+        element.attributes.onBlur,
+        { data: event.value },
+        null
+      );
     }
-  }
+  };
 
   return (
     <>
       <style>{controlStyle}</style>
       <div id={element.id}>
         <Dropdown
-          ref={primeDropdownRef}
+          ref={getPrimeDropdownRef}
           value={selectedValue}
           options={
             listOptions.length > 0
               ? listOptions
               : element.attributes?.config?.staticOptionList || []
           }
-          placeholder={element.attributes?.placeholder || "Please Select an Option"}
-          onBlur={(e) => executeBlurEvent(e)}
-          onFocus={(e) => executeFocusEvent(e)}
-          onChange={(e) => { setSelectedValue(e.value); executeOnChangeEvent(e); }}
-          onMouseDown={(e) => executeOnMouseDownEvent(e)}
-          onContextMenu={(e) => executeOnContextMenuEvent(e)}
-          onFilter={(e) => executeOnFilterEvent(e)}
+          placeholder={
+            element.attributes?.placeholder || "Please Select an Option"
+          }
+          onBlur={(e) => {
+            executeBlurEvent(e);
+          }}
+          onFocus={(e) => {
+            executeFocusEvent(e);
+          }}
+          onChange={(e) => {
+            setSelectedValue(e.value);
+            executeOnChangeEvent(e);
+          }}
+          onMouseDown={(e) => {
+            executeOnMouseDownEvent(e);
+          }}
+          onContextMenu={(e) => {
+            executeOnContextMenuEvent(e);
+          }}
+          onFilter={(e) => {
+            executeOnFilterEvent(e);
+          }}
           disabled={element.attributes?.disabled || false}
           filter={element.attributes?.filter || false}
           filterBy={element.attributes?.filterby}
@@ -148,6 +199,6 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
         />
       </div>
     </>
-  )
+  );
 });
-export default (HDDropDown);
+export default HDDropDown;

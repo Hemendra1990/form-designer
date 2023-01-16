@@ -30,7 +30,11 @@ const httpService = {
 
     getSingleCachedQueryDetails(sessionId, queryId) {
       return axios.get(`${baseURL}/query/cache/${sessionId}/${queryId}`);
-    }
+    },
+
+    validateQueries(queryParams) {
+      return axios.post(`${baseURL}/query/validate/queries`, queryParams);
+    },
   },
   SAVE_FORM: {
     save(data) {

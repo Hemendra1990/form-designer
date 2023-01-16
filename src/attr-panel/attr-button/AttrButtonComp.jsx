@@ -18,8 +18,8 @@ const AttrButton = (props) => {
   const { eventOptions, handleAttributeChange } = props;
 
   const currAttribute = meta?.currentElement?.attributes;
-  const [hideLabelContent, setHideLabelContent] = useState(false);
 
+  const [hideLabelContent, setHideLabelContent] = useState(false);
   const [icon, setIcon] = useState("");
 
   const handelHideLableContent = (e) => {
@@ -34,11 +34,12 @@ const AttrButton = (props) => {
 
   useEffect(() => {
     setHideLabelContent(currAttribute.hideLabelContent || false);
+    setIcon(currAttribute?.icon || "")
     if (currAttribute.hideLabelContent) {
       currAttribute.label = "";
     }
     // handleAttributeChange(contentEditable ? meta.currentElement?.attributes?.label : 'Click Here')
-  }, []);
+  }, [meta.currentElement]);
 
 
 
@@ -58,6 +59,7 @@ const AttrButton = (props) => {
         <Checkbox
           inputId="binary"
           name="hideLabelContent"
+          value={meta.currentElement?.attributes?.hideLabelContent}
           checked={hideLabelContent}
           onChange={handelHideLableContent}
         />

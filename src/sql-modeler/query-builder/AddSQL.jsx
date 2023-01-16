@@ -5,7 +5,7 @@ import { SelectButton } from "primereact/selectbutton";
 import { InputTextarea } from "primereact/inputtextarea";
 
 const AddSQL = (props) => {
-  const { tab, dataSources, queryTypes } = props;
+  const { tab, dataSources, queryTypes, updateTabName } = props;
 
   const [name, setName] = useState(tab.name || "");
   const [selectedDataSource, setSelectedDataSource] = useState(
@@ -17,6 +17,7 @@ const AddSQL = (props) => {
   const handleNameChange = (e) => {
     setName(e.target.value);
     tab.name = e.target.value;
+    updateTabName(tab);
   };
 
   const handleDSChange = (e) => {

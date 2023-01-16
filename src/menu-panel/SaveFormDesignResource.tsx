@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { SaveResource } from "../model/SaveResource";
-import { useMetaContext } from "../context/MetaContext";
+import { useMetaContext, useToastContext } from "../context/MetaContext";
 import { HttpFormResourceService } from "../http-service/HttpFormResourceService";
 import { jsonStringifyIgnoredList } from "../constants/HemendraConstants";
 import httpService from "../http-service/http-service";
@@ -16,6 +16,7 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
   const [resourceName, setResourceName] = useState("");
   const [resourceDescription, setResourceDescription] = useState("");
   const meta = useMetaContext();
+  const { toastRef } = useToastContext();
 
   const handleSave = () => {
     let formResourceData = new SaveResource();
@@ -65,6 +66,11 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
         console.log(res);
         setShowModal(false);
         props.setShowFormSaveModal(false);
+        toastRef.current.show({
+          severity: "success",
+          summary: "Form Successfully Saved.",
+          detail: "",
+        });
       })
       .catch((err) => {
         console.error(err);

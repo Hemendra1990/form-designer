@@ -205,7 +205,6 @@ const HDGrid = forwardRef((props, ref) => {
     <>
       <style>{controlStyle}</style>
       <div id={element.id} refreshgrid={refreshgrid.toString()}>
-        <h6 className="common-header">{element?.attributes?.gridLabel || "Default Header"}</h6>
         <DataTable
           ref={gridRef}
           value={rows}
@@ -224,8 +223,8 @@ const HDGrid = forwardRef((props, ref) => {
             minHeight: "20rem",
           }}
           stripedRows={true}
+          scrollable
           scrollHeight="290px"
-          scrollDirection="both"
           columnResizeMode="absolute"
           editMode={dataTableProps?.editMode}
         >

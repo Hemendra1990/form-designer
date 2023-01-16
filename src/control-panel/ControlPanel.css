@@ -19,6 +19,41 @@
     user-select: none;
 }
 
+.control-panel-content {
+    overflow-y: scroll;
+    min-height: 300px;
+    max-height: 300px;
+}
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+
 .p-listbox-filter {
     height: 35px;
+}
+
+.control-item-container {
+    display: flex;
+    flex-direction: column;
+    z-index: 70111;
+    border: 1px solid #cdcdcd;
+}
+
+.control-item {
+    background-color: #f9f9fb;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+
+}
+
+.p-listbox-item.draggable {
+    cursor: grab;
 }

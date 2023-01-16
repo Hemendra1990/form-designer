@@ -29,6 +29,10 @@ import AttrNumeric from "./attr-numeric/AttrNumeric";
 import AttrNumericConfig from "./attr-numeric/AttrNumericConfig";
 import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
+import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
+import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
+import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
+import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -36,8 +40,8 @@ const AttributePanel = (props) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   const [showSidebar, setShowSidebar] = useState(false);
-  
-    useState(false);
+
+  useState(false);
   const [showControlStyle, setShowControlStyle] = useState(false);
 
   const [classNameValue, setClassNameValue] = useState(
@@ -162,6 +166,7 @@ const AttributePanel = (props) => {
         return (
           <AttrRadioConfig
             meta={meta}
+            eventOptions={availableEvents}
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
           />
@@ -174,6 +179,28 @@ const AttributePanel = (props) => {
             meta={meta}
             handleAttributeChange={handleAttributeChange}
             currentElement={meta.currentElement}
+            eventOptions={availableEvents}
+          />
+        );
+      }
+      /* Render DropDown configuration */
+      if (meta.currentElement.type === CONTROL.AUTOCOMPLETE) {
+        return (
+          <AttrAutoCompleteConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
+            availableEvents={availableEvents}
+          />
+        );
+      }
+
+      /* Render MultiSelect configuration */
+      if (meta.currentElement.type === CONTROL.MULTISELECT) {
+        return (
+          <AttrMultiSelectConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
             eventOptions={availableEvents}
           />
         );
@@ -316,9 +343,9 @@ const AttributePanel = (props) => {
             <AttrRadio
               meta={meta}
               handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
               eventOptions={availableEvents}
             />
-            {classDiv}
           </>
         );
       }
@@ -379,7 +406,37 @@ const AttributePanel = (props) => {
           </>
         );
       }
+
+      /* Render Auto complete attributes */
+      if (meta.currentElement.type === CONTROL.AUTOCOMPLETE) {
+        return (
+          <>
+            <AttrAutoComplete
+              meta={meta}
+              handleAttributeChange={handleAttributeChange}
+              currentElement={meta.currentElement}
+              availableEvents={availableEvents}
+            />
+            {classDiv}
+          </>
+        );
+      }
+      /* Render Multiselect attributes */
+      if (meta.currentElement.type === CONTROL.MULTISELECT) {
+        return (
+          <>
+            <AttrMultiSelect
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+              eventOptions={availableEvents}
+            />
+          </>
+        );
+      }
     }
+
     return <></>;
   };
 
@@ -395,7 +452,10 @@ const AttributePanel = (props) => {
       if (
         meta.currentElement.type === CONTROL.GRID ||
         meta.currentElement.type === CONTROL.LISTBOX ||
-        meta.currentElement.type === CONTROL.DROPDOWN
+        meta.currentElement.type === CONTROL.DROPDOWN ||
+        meta.currentElement.type === CONTROL.RADIO ||
+        meta.currentElement.type === CONTROL.AUTOCOMPLETE ||
+        meta.currentElement.type === CONTROL.MULTISELECT
       ) {
         return (
           <AttrDataConnector
