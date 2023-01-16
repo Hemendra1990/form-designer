@@ -10,7 +10,6 @@ import { UserService } from "../components/grid/UserService";
 import AttrGrid from "./attr-grid/AttrGridComp";
 import AttrInput from "./attr-input/AttrInput";
 import AttrRadio from "./attr-radio/AttrRadio";
-import AttrListBox from "./attr-listbox/AttrListBox";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
@@ -19,18 +18,21 @@ import { Button } from "primereact/button";
 import AttrButtonConfig from "./attr-button/AttrButtonConfig";
 import AttrInputConfig from "./attr-input/AttrInputConfig";
 import AttrLableConfig from "./attr-label/AttrLabelConfig";
-import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
 import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
 import AttrContainer from "./attr-container/AttrContainer";
 import AttrDropDown from "./attr-dropdown/AttrDropDown";
+import AttrNumeric from "./attr-numeric/AttrNumeric";
+import AttrNumericConfig from "./attr-numeric/AttrNumericConfig";
 import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
 import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
 import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
+import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
+import AttrListBox from "./attr-ListBox/AttrListBox";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -131,6 +133,17 @@ const AttributePanel = (props) => {
           <AttrListboxConfig
             meta={meta}
             handleAttributeChange={handleAttributeChange}
+            eventOptions={availableEvents}
+          />
+        );
+      }
+      /* Render Numeric configuration */
+      if (meta.currentElement.type === CONTROL.NUMERIC) {
+        return (
+          <AttrNumericConfig
+            meta={meta}
+            handleAttributeChange={handleAttributeChange}
+            currentElement={meta.currentElement}
             eventOptions={availableEvents}
           />
         );
@@ -313,24 +326,13 @@ const AttributePanel = (props) => {
       if (meta.currentElement.type === CONTROL.NUMERIC) {
         return (
           <>
-            <div className="field col-12">
-              <label htmlFor="controlId">Control ID</label>
-              <InputText
-                name="placeholder"
-                value={meta.currentElement.id}
-                disabled
-              />
-            </div>
-            <div className="field col-12">
-              <label htmlFor="maxLen">Max Length</label>
-              <InputNumber
-                style={{ width: "100%" }}
-                name="maxLength"
-                inputId="maxLen"
-                onChange={handleAttributeChange}
-                value={currAttribute?.maxLength}
-              />
-            </div>
+            <AttrNumeric
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              eventOptions={availableEvents}
+            />
+            {classDiv}
           </>
         );
       }

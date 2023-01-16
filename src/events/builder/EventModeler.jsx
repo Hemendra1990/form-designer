@@ -5,6 +5,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { createElementId } from "../../utils/Utils";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+
 import ReactFlow, {
   addEdge,
   Background,
@@ -110,7 +111,7 @@ const EventModeler = (props) => {
     });
   };
 
-  const updateEvent = (eventInfo, nodeId) => {};
+  const updateEvent = (eventInfo, nodeId) => { };
 
   const saveEvent = (eventData) => {
     if (nodes && nodes.length === 0) {
@@ -177,8 +178,7 @@ const EventModeler = (props) => {
   }, []);
 
   return (
-    <Dialog
-      header="Event Handler"
+    <Dialog header="Event Modeler"
       style={{ width: "95vw" }}
       visible={true}
       onHide={() => {
@@ -205,9 +205,7 @@ const EventModeler = (props) => {
               options={meta.events}
               optionLabel="name"
               optionValue="id"
-              value={selectedEvent}
-              onChange={onEventSelection}
-            />
+              value={selectedEvent} onChange={onEventSelection} />
             <InputText
               placeholder="Event Id"
               value={eventId}
@@ -220,19 +218,15 @@ const EventModeler = (props) => {
               onChange={handleEventNameChange}
             ></InputText>
           </div>
+
           <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
             <Button label="Add Action" onClick={addNewActionNode} />
-            <Button
-              style={{ marginLeft: "5px" }}
-              className="p-button-danger"
-              label="Save Event"
-              onClick={saveEvent}
-            />
+            <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
           </div>
         </div>
 
         <div className="grid">
-          <div className="col" style={{ height: "60vh" }}>
+          <div className="col" style={{ height: '60vh' }}>
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -259,6 +253,7 @@ const EventModeler = (props) => {
               <Controls />
               <Background />
             </ReactFlow>
+            Info : Backspace for delete action
           </div>
         </div>
       </div>
