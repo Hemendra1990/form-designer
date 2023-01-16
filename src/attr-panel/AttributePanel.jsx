@@ -10,7 +10,6 @@ import { UserService } from "../components/grid/UserService";
 import AttrGrid from "./attr-grid/AttrGridComp";
 import AttrInput from "./attr-input/AttrInput";
 import AttrRadio from "./attr-radio/AttrRadio";
-import AttrListBox from "./attr-listbox/AttrListBox";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
@@ -19,7 +18,6 @@ import { Button } from "primereact/button";
 import AttrButtonConfig from "./attr-button/AttrButtonConfig";
 import AttrInputConfig from "./attr-input/AttrInputConfig";
 import AttrLableConfig from "./attr-label/AttrLabelConfig";
-import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
 import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
@@ -33,6 +31,8 @@ import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
 import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
+import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
+import AttrListBox from "./attr-ListBox/AttrListBox";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
