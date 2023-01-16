@@ -11,8 +11,8 @@ const CURRENCY_TYPES = [
 ];
 
 const AttrNumeric = (props) => {
-    
-    const mode = [{ name: 'Decimal ', key: 'decimal' },  { name: ' Currency', key: 'currency' }];
+
+    const mode = [{ name: 'Decimal ', key: 'decimal' }, { name: ' Currency', key: 'currency' }];
 
     const { meta, handleAttributeChange } = props;
     const currAttribute = meta?.currentElement?.attributes;
@@ -25,6 +25,7 @@ const AttrNumeric = (props) => {
     const [currencyValue, setCurrencyValue] = useState("");
     const [selectedmode, setSelectedmode] = useState({});
     const [currencyCode, setCurrencyCode] = useState("");
+    const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
     const handelNumericValue = (e) => {
         setNumericValue(e.value);
@@ -40,6 +41,7 @@ const AttrNumeric = (props) => {
         setCurrencyValue(currAttribute?.currencyValue || "");
         setSelectedmode(currAttribute?.selectedmode || "");
         setCurrencyCode(currAttribute?.currencyCode || "");
+        setControlName(currAttribute?.name || meta.currentElement.id);
     }, [meta.currentElement]);
 
     return (
@@ -51,6 +53,20 @@ const AttrNumeric = (props) => {
                     name="placeholder"
                     value={meta.currentElement.id}
                     disabled
+                />
+            </div>
+            <div className="field col-12">
+                <label htmlFor="controlName" className="block">
+                    Name
+                </label>
+                <InputText
+                    name="name"
+                    style={{ width: "100%" }}
+                    value={controlName}
+                    onChange={(e) => {
+                        setControlName(e.target.value);
+                        handleAttributeChange(e);
+                    }}
                 />
             </div>
             <div className="field col-12">
