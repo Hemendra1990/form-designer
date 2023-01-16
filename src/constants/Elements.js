@@ -83,7 +83,7 @@ const ComponentConfig = [
     component: HDPassword,
   },
   {
-    label: "ButtonToggle",
+    label: "Toggle Button",
     name: "buttontoggle",
     component: HDToogleButton,
   },

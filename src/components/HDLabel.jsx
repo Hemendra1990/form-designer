@@ -71,20 +71,22 @@ const HDLabel = forwardRef((props, ref) => {
   const renderLabel = () => {
     if (visible) {
       return (
-        <div id={element.id}>
+        <>
           <style>{controlStyle}</style>
-          <div
-            key={divRefreshKey}
-            ref={labelRef}
-            disabled={disabled}
-            contentEditable={element.attributes.contentEditable}
-            className="p-float-label"
-            spellCheck={false}
-            onClick={handleClick}
-            onBlur={handleChange}
-            dangerouslySetInnerHTML={{ __html: labelHTML }}
-          ></div>
-        </div>
+          <div id={element.id}>
+            <div
+              key={divRefreshKey}
+              ref={labelRef}
+              disabled={disabled}
+              contentEditable={element.attributes.contentEditable}
+              className="p-float-label"
+              spellCheck={false}
+              onClick={handleClick}
+              onBlur={handleChange}
+              dangerouslySetInnerHTML={{ __html: labelHTML }}
+            ></div>
+          </div>
+        </>
       );
     }
     return <></>;

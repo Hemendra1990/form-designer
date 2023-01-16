@@ -1,18 +1,19 @@
 import React from "react";
 import "./App.css";
-import "primeflex/primeflex.css"
+import "primeflex/primeflex.css";
 import ConfirmationContextProvider from "./context/ConfirmationDialogContext";
 import { MetaContextProvider } from "./context/MetaContext";
 import ModalContextProvider from "./context/ModalContext";
 import ErrorBoundary from "./error-handler/ErrorBoundary";
 import Homepage from "./Homepage";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import IntroPage from "./intro/IntroPage";
 import SQLQueryBuilder from "./sql-modeler/query-builder/SQLQueryBuilder";
 import DataSourceBuilder from "./sql-modeler/DataSourceBuilder";
 import EventModeler from "./events/builder/EventModeler";
 import OpenResources from "./menu-panel/OpenResources";
-
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 /* Problem with Drag n Drop : https://stackoverflow.com/questions/54982182/react-beautiful-dnd-drag-out-of-position-problem */
 
@@ -29,19 +30,24 @@ const App = () => {
       <MetaContextProvider>
         <ModalContextProvider>
           <ConfirmationContextProvider>
-          <ErrorBoundary>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<IntroPage />} />
-                <Route path="/form-designer" element={<Homepage />}>
-                  <Route path="sql-builder" element={<SQLQueryBuilder />} />
-                  <Route path="datasource-builder" element={<DataSourceBuilder />} />
-                  <Route path="event-builder" element={<EventModeler />} />
-                  <Route path="resources" element={<OpenResources />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </ErrorBoundary>
+            <ErrorBoundary>
+              <DndProvider backend={HTML5Backend}>
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<IntroPage />} />
+                    <Route path="/form-designer" element={<Homepage />}>
+                      <Route path="sql-builder" element={<SQLQueryBuilder />} />
+                      <Route
+                        path="datasource-builder"
+                        element={<DataSourceBuilder />}
+                      />
+                      <Route path="event-builder" element={<EventModeler />} />
+                      <Route path="resources" element={<OpenResources />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+              </DndProvider>
+            </ErrorBoundary>
           </ConfirmationContextProvider>
         </ModalContextProvider>
       </MetaContextProvider>
