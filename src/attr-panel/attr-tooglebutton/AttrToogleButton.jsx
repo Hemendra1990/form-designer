@@ -10,6 +10,7 @@ const AttrToogleButton = (props) => {
 
     const [onLabel, setOnLabel] = useState("");
     const [offLabel, setOffLabel] = useState("");
+    const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
     const handelOnlableValue = (e) => {
         setOnLabel(e.placeholder);
@@ -26,6 +27,20 @@ const AttrToogleButton = (props) => {
             <div className="field col-12">
                 <label htmlFor="controlId" className="block">Control ID</label>
                 <InputText name="placeholder" style={{ width: '100%' }} value={meta.currentElement.id} disabled />
+            </div>
+            <div className="field col-12">
+                <label htmlFor="controlName" className="block">
+                    Name
+                </label>
+                <InputText
+                    name="name"
+                    style={{ width: "100%" }}
+                    value={controlName}
+                    onChange={(e) => {
+                        setControlName(e.target.value);
+                        handleAttributeChange(e);
+                    }}
+                />
             </div>
             <div className="field col-12">
                 <label htmlFor="maxLen" className="block">

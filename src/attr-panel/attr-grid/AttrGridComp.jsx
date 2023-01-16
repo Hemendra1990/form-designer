@@ -11,7 +11,9 @@ const AttrGrid = (props) => {
   const element = meta.currentElement;
   const currAttribute = meta.currentElement?.attributes;
   const dataConnector = new DataConnector(meta);
+
   const [enbleGridModal, setGridModal] = useState(false);
+  const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
   const openGridoptions = () => {
     setGridModal(true);
@@ -26,6 +28,29 @@ const AttrGrid = (props) => {
   return (
     <>
       <div className="field col-12">
+        <label htmlFor="controlId" className="block">Control ID</label>
+        <InputText
+          style={{ width: '100%' }}
+          name="placeholder"
+          value={meta.currentElement.id}
+          disabled
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="controlName" className="block">
+          Name
+        </label>
+        <InputText
+          name="name"
+          style={{ width: "100%" }}
+          value={controlName}
+          onChange={(e) => {
+            setControlName(e.target.value);
+            handleAttributeChange(e);
+          }}
+        />
+      </div>
+      <div className="field col-12">
         <label className="block">Class</label>
         <InputText
           style={{ width: "100%" }}
@@ -33,18 +58,6 @@ const AttrGrid = (props) => {
           placeholder="col-12 md:col-6 lg:col-3"
           value={currAttribute?.className || ""}
           onChange={updateClass}
-        />
-      </div>
-      <div className="field col-12">
-        <label htmlFor="maxLen" className="block">
-          Grid Header
-        </label>
-        <InputText
-          style={{ width: '100%' }}
-          name="gridLabel"
-          placeholder="Edit the Default Header"
-          onChange={handleAttributeChange}
-          value={currAttribute?.gridLabel || ""}
         />
       </div>
       <div className="field col-12">

@@ -42,9 +42,13 @@ const HDButton = React.forwardRef((props, ref) => {
     element.attributes.label = "Click here";
   }
 
-  const executeEvent = () => {
+  const executeEvent = (event) => {
     //check if the button is configured with the event or not
     if (element.attributes && element.attributes.eventId) {
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
       EventExecutor.executeEvent(
         props.meta,
         element.attributes.eventId,
@@ -71,7 +75,9 @@ const HDButton = React.forwardRef((props, ref) => {
           ref={ref}
           className={props.element?.attributes?.type}
           label={element?.attributes?.hideLabelContent ? "" : element?.attributes?.label}
-          onClick={executeEvent}
+          onClick={(e) => {
+            executeEvent(e);
+          }}
           icon={element?.attributes?.icon}
         />
       </div>

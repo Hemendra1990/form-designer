@@ -24,6 +24,7 @@ const AttrListBox = (props) => {
   const [options, setOptions] = useState([]);
   const [staticOptionList, setStaticOptionList] = useState([emptyOption]);
   const [staticOptionDialog, setStaticOptionDialog] = useState(false);
+  const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
   const handelInputChange = (event, index) => {
     const updatedStaticOptionList = staticOptionList.map((field, i) => {
@@ -69,6 +70,7 @@ const AttrListBox = (props) => {
     setTooltip(currAttribute.tooltip || "");
     setOptionLabel(currAttribute.optionLabel || undefined);
     setOptionValue(currAttribute.optionValue || undefined);
+    setControlName(currAttribute?.name || meta.currentElement.id);
     setStaticOptionList(
       currAttribute?.config?.staticOptionList || [emptyOption]
     );
@@ -91,6 +93,20 @@ const AttrListBox = (props) => {
           style={{ width: "100%" }}
           value={meta.currentElement.id}
           disabled
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="controlName" className="block">
+          Name
+        </label>
+        <InputText
+          name="name"
+          style={{ width: "100%" }}
+          value={controlName}
+          onChange={(e) => {
+            setControlName(e.target.value);
+            handleAttributeChange(e);
+          }}
         />
       </div>
       <div className="field-checkbox">

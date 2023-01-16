@@ -6,22 +6,40 @@ import React, { useState, useEffect } from "react";
 const AttrInput = (props) => {
   const { meta, handleAttributeChange, eventOptions } = props; //Spread
   const currAttribute = meta?.currentElement?.attributes;
-  const [defaultValue, setDefaultValue] = useState("");
 
+  const [defaultValue, setDefaultValue] = useState("");
+  const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
   const handelDefaltValue = (e) => {
     setDefaultValue(e.value);
     handleAttributeChange(e);
   }
   useEffect(() => {
-    setDefaultValue(currAttribute?.defaultValue || "")
+    setDefaultValue(currAttribute?.defaultValue || "");
+    setControlName(currAttribute?.name || meta.currentElement.id);
   }, [meta.currentElement]);
 
   return (
     <>
       <div className="field col-12">
         <label htmlFor="controlId" className="block">Control ID</label>
-        <InputText name="placeholder" style={{ width: '100%' }} value={meta.currentElement.id} disabled />
+        <InputText name="placeholder"
+          style={{ width: '100%' }}
+          value={meta.currentElement.id} disabled />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="controlName" className="block">
+          Name
+        </label>
+        <InputText
+          name="name"
+          style={{ width: "100%" }}
+          value={controlName}
+          onChange={(e) => {
+            setControlName(e.target.value);
+            handleAttributeChange(e);
+          }}
+        />
       </div>
       <div className="field col-12">
         <label htmlFor="maxLen">Max Length</label>

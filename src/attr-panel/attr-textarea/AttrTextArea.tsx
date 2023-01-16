@@ -1,6 +1,6 @@
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
-import React from "react";
+import React, { useState } from "react";
 
 interface AttrTextAreaProps {
     meta: any;
@@ -13,6 +13,8 @@ const AttrTextArea = (props: AttrTextAreaProps) => {
     const { meta, handleAttributeChange, eventOptions } = props;
     const currAttribute = meta.currentElement?.attributes;
 
+    const [controlName, setControlName] = useState(meta.currentElement.id || "");
+
     const handleAttributesChange = (e: any) => {
         handleAttributeChange(e)
     }
@@ -24,6 +26,20 @@ const AttrTextArea = (props: AttrTextAreaProps) => {
                 name="placeholder"
                 value={meta.currentElement.id}
                 disabled
+            />
+        </div>
+        <div className="field col-12">
+            <label htmlFor="controlName" className="block">
+                Name
+            </label>
+            <InputText
+                name="name"
+                style={{ width: "100%" }}
+                value={controlName}
+                onChange={(e) => {
+                    setControlName(e.target.value);
+                    handleAttributeChange(e);
+                }}
             />
         </div>
         <div className="field col-12">
