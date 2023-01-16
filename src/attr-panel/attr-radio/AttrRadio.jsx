@@ -20,8 +20,7 @@ const AttrRadio = (props) => {
   const [staticOptionDialog, setStaticOptionDialog] = useState(false);
   const [staticOptionList, setStaticOptionList] = useState(emptyOption);
   const [heightSize, setHeightSize] = useState(null);
-
-
+  const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
   const handelDisableEventContent = (e) => {
     setDisabled(e.checked);
@@ -78,10 +77,10 @@ const AttrRadio = (props) => {
     setRequired(currAttribute.required || false);
     setTooltip(currAttribute.tooltip || "");
     setHeightSize(currAttribute.heightSize || null);
+    setControlName(currAttribute?.name || meta.currentElement.id);
     setStaticOptionList(
       currAttribute?.config?.staticOptionList || emptyOption
     );
-
   }, [meta.currentElement])
 
   return (
@@ -95,6 +94,20 @@ const AttrRadio = (props) => {
           style={{ width: "100%" }}
           value={meta.currentElement.id}
           disabled
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="controlName" className="block">
+          Name
+        </label>
+        <InputText
+          name="name"
+          style={{ width: "100%" }}
+          value={controlName}
+          onChange={(e) => {
+            setControlName(e.target.value);
+            handleAttributeChange(e);
+          }}
         />
       </div>
       <div className="grid col-12">

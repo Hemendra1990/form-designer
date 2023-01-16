@@ -17,7 +17,6 @@ interface AttrPasswordProps {
 
 const AttrAutoComplete = (props: AttrPasswordProps) => {
     const { handleAttributeChange, currentElement, meta } = props;
-
     const currAttribute = meta?.currentElement?.attributes;
 
     const [autoHighlightEnable, setAutoHighlightEnable] = useState(false);
@@ -28,6 +27,7 @@ const AttrAutoComplete = (props: AttrPasswordProps) => {
     const [options, setOptions] = useState([]);
     const [optionFilterValue, setOptionFilterValue] = useState("");
     const [optionLabel, setOptionLabel] = useState("");
+    const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
     const getOptionListForFilter = () => {
         setOptions(
@@ -44,6 +44,7 @@ const AttrAutoComplete = (props: AttrPasswordProps) => {
         setEmptyMessageValue(currAttribute.emptyMessageValue || "No results found.");
         setOptionFilterValue(currAttribute.optionFilterValue || undefined);
         setOptionLabel(currAttribute.optionLabel || undefined);
+        setControlName(currAttribute?.name || meta.currentElement.id);
     }, [meta.currentElement])
 
     return (
@@ -57,6 +58,20 @@ const AttrAutoComplete = (props: AttrPasswordProps) => {
                     name="controlId"
                     value={currentElement.id}
                     disabled
+                />
+            </div>
+            <div className="field col-12">
+                <label htmlFor="controlName" className="block">
+                    Name
+                </label>
+                <InputText
+                    name="name"
+                    style={{ width: "100%" }}
+                    value={controlName}
+                    onChange={(e) => {
+                        setControlName(e.target.value);
+                        handleAttributeChange(e);
+                    }}
                 />
             </div>
             <div className="field col-12">

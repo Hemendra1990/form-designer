@@ -50,26 +50,42 @@ const HDInput = React.forwardRef((props, ref) => {
     }
   }, []);
 
-  const executeFocusEvent = () => {//TODO Shilpa will take care of it
+  const executeFocusEvent = (event) => {//TODO Shilpa will take care of it
     if (element.attributes && element.attributes.onFocus) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onFocus, null, null);
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
+      EventExecutor.executeEvent(props.meta, element.attributes.onFocus, { data: event.value }, null);
     }
   }
-  const executeBlurEvent = () => {
+  const executeBlurEvent = (event) => {
     if (element.attributes && element.attributes.onBlur) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onBlur, null, null);
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
+      EventExecutor.executeEvent(props.meta, element.attributes.onBlur, { data: event.value }, null);
     }
   }
 
-  const executeKeyupEvent = () => {
+  const executeKeyupEvent = (event) => {
     if (element.attributes && element.attributes.onKeyup) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onKeyup, null, null);
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
+      EventExecutor.executeEvent(props.meta, element.attributes.onKeyup, { data: event.value }, null);
     }
   }
 
-  const executeKeyDownEvent = () => {
+  const executeKeyDownEvent = (event) => {
     if (element.attributes && element.attributes.onKeyDown) {
-      EventExecutor.executeEvent(props.meta, element.attributes.onKeyDown, null, null);
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
+      EventExecutor.executeEvent(props.meta, element.attributes.onKeyDown, { data: event.value }, null);
     }
   }
 

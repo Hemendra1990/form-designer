@@ -16,22 +16,30 @@ const HDListBox = React.forwardRef((props, parentRef) => {
 
   console.log(element);
 
-  const handleOnChangeEvent = (e) => {
+  const handleOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onchangeevent) {
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
       EventExecutor.executeEvent(
         props.meta,
         element.attributes.onchangeevent,
-        { data: e.value },
+        { data: event.value },
         null
       );
     }
   };
-  const handleFilterValueChangeEvent = (e) => {
+  const handleFilterValueChangeEvent = (event) => {
     if (element.attributes && element.attributes.onfiltervaluechange) {
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
       EventExecutor.executeEvent(
         props.meta,
         element.attributes.onfiltervaluechange,
-        { data: e.value },
+        { data: event.value },
         null
       );
     }
@@ -108,10 +116,10 @@ const HDListBox = React.forwardRef((props, parentRef) => {
               ? listOptions
               : element.attributes?.config?.staticOptionList || []
           }
-          onChange={(e) => {
-            setSelectedValue(e.value);
-            handleOnChangeEvent(e);
-            handleFilterValueChangeEvent(e);
+          onChange={(event) => {
+            setSelectedValue(event.value);
+            handleOnChangeEvent(event);
+            handleFilterValueChangeEvent(event);
           }}
           optionValue={element.attributes.optionValue || "value"}
           optionLabel={element.attributes.optionLabel || "label"}

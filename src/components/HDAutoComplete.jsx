@@ -19,93 +19,134 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
     const [selectedValue, setSelectedValue] = useState(null);
     const [filteredValue, setFilteredValue] = useState(null);
     const [controlStyle, setControlStyle] = useState();
-    const [columnList, setColumnList] = useState([])
+    const [columnList, setColumnList] = useState([]);
 
-    const handleOnChangeEvent = (e) => {
-        if (meta && element.attributes.onChangeEvent) {
-            EventExecutor.executeEvent(props.meta,
+    const handleOnChangeEvent = (event) => {
+        if (element.attributes && element.attributes.onChangeEvent) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
+            EventExecutor.executeEvent(
+                props.meta,
                 element.attributes.onChangeEvent,
-                { data: e.value },
-                null);
+                { data: event.value },
+                null
+            );
         }
-
     }
 
-    /* const handelOnBlurEvent = (e) => {
-        if (meta && element.attributes.onBlurEvent) {
+    /* const handelOnBlurEvent = (event) => {
+        if (element.attributes && element.attributes.onBlurEvent) {
+             props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onBlurEvent,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
 
-    const handelOnFocusEvent = (e) => {
-        if (meta && element.attributes.onFocusEvent) {
+    const handelOnFocusEvent = (event) => {
+         if (element.attributes && element.attributes.onFocusEvent) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onFocusEvent,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     } */
 
-    const handelOnSelectEvent = (e) => {
-        if (meta && element.attributes.onSelectEvent) {
+    const handelOnSelectEvent = (event) => {
+        if (element.attributes && element.attributes.onSelectEvent) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onSelectEvent,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
 
-    const handelOnUnSelectEvent = (e) => {
-        if (meta && element.attributes.onUnSelectEvent) {
+    const handelOnUnSelectEvent = (event) => {
+        if (element.attributes && element.attributes.onUnSelectEvent) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onUnSelectEvent,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
-    const handelOnDropdownClickEvent = (e) => {
-        if (meta && element.attributes.onDropdownClick) {
+    const handelOnDropdownClickEvent = (event) => {
+        if (element.attributes && element.attributes.onDropdownClick) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onDropdownClick,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
 
-    const handelOnClickEvent = (e) => {
-        if (meta && element.attributes.onClick) {
+    const handelOnClickEvent = (event) => {
+        if (element.attributes && element.attributes.onClick) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onClick,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
 
-    const handelOnDoubleClickEvent = (e) => {
-        if (meta && element.attributes.onDoubleClick) {
+    const handelOnDoubleClickEvent = (event) => {
+        if (element.attributes && element.attributes.onClick) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onDoubleClick,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
 
-    const handelOnMouseClick = (e) => {
-        if (meta && element.attributes.onMouseDown) {
+    const handelOnMouseClick = (event) => {
+        if (element.attributes && element.attributes.onClick) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onMouseDown,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
-    const handelOnKeyUp = (e) => {
-        if (meta && element.attributes.onKeyUp) {
+    const handelOnKeyUp = (event) => {
+        if (element.attributes && element.attributes.onClick) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta,
                 element.attributes.onKeyUp,
-                { data: e.value },
+                { data: event.value },
                 null);
         }
     }
@@ -166,14 +207,15 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
         return operations;
     });
 
-
     useEffect(() => {
         /*This is necesary, put in all the components...
         we need to update the meta.elementMap so need
         to call this method after the input is rendered */
         updateMeta(meta);
-
-        setSelectedValue(element?.attributes?.selectedValue || null)
+        setSelectedValue(element?.attributes?.selectedValue || null);
+        setFilterValueList(element?.attributes?.filterValueList || []);
+        setFilteredValue(element?.attributes?.filteredValue || null);
+        setColumnList(element?.attributes?.columnList || []);
 
         //Apply style if the element already has
         if (element.style) {

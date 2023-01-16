@@ -18,24 +18,41 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
 
     const executeOnChangeEvent = (event) => {
         if (element.attributes && element.attributes.onChangeEvent) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta, element.attributes.onChangeEvent, { data: event.value }, null);
         }
     }
     const executeOnFilterEvent = (event) => {
         if (element.attributes && element.attributes.onFilterEvent) {
+            props.meta.sqlVariables = {
+                ...props.meta.sqlVariables,
+                [element.attributes.name]: event.value,
+            };
             EventExecutor.executeEvent(props.meta, element.attributes.onFilterEvent, { data: event.value }, null);
         }
     }
-    // const executeFocusEvent = (event) => {
-    //     if (element.attributes && element.attributes.onFocus) {
-    //         EventExecutor.executeEvent(props.meta, element.attributes.onFocus, { data: event.value }, null);
-    //     }
-    // }
-    // const executeBlurEvent = (event) => {
-    //     if (element.attributes && element.attributes.onBlur) {
-    //         EventExecutor.executeEvent(props.meta, element.attributes.onBlur, { data: event.value }, null);
-    //     }
-    // }
+
+    /* const executeFocusEvent = (event) => {
+         if (element.attributes && element.attributes.onFocus) {
+             props.meta.sqlVariables = {
+                 ...props.meta.sqlVariables,
+                 [element.attributes.name]: event.value,
+             };
+             EventExecutor.executeEvent(props.meta, element.attributes.onFocus, { data: event.value }, null);
+         }
+     }
+     const executeBlurEvent = (event) => {
+         if (element.attributes && element.attributes.onBlur) {
+             props.meta.sqlVariables = {
+                 ...props.meta.sqlVariables,
+                 [element.attributes.name]: event.value,
+             };
+             EventExecutor.executeEvent(props.meta, element.attributes.onBlur, { data: event.value }, null);
+         }
+     }*/
 
     const operations = {
         setResult: (result) => {

@@ -21,8 +21,12 @@ const HDLabel = forwardRef((props, ref) => {
 
   const labelRef = useRef();
 
-  const handleClick = () => {
+  const handleClick = (event) => {
     if (element.attributes && element.attributes.onclick) {
+      props.meta.sqlVariables = {
+        ...props.meta.sqlVariables,
+        [element.attributes.name]: event.value,
+      };
       EventExecutor.executeEvent(props.meta, element.attributes.onclick);
     }
   };

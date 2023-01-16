@@ -22,6 +22,7 @@ const AttrPassword = (props: AttrPasswordProps) => {
   const [showStrengthIndicator, setShowStrengthIndicator] = useState<any>(null);
   const [showIconToDisplayPassword, setShowIconToDisplayPassword] = useState<any>(null);
   const [panelFooterForPassword, setPanelFooterForPassword] = useState<any>(null);
+  const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
   const handleShowStrengthIndicatorChange = (e: any) => {
     setShowStrengthIndicator(e.checked);
@@ -42,6 +43,7 @@ const AttrPassword = (props: AttrPasswordProps) => {
     setShowStrengthIndicator(currAttribute?.showStrengthIndicator || "");
     setShowIconToDisplayPassword(currAttribute?.showIconToDisplayPassword || "");
     setPanelFooterForPassword(currAttribute?.panelFooterForPassword || "");
+    setControlName(currAttribute?.name || meta.currentElement.id);
   }, [meta.currentElement]);
 
   return (
@@ -55,6 +57,20 @@ const AttrPassword = (props: AttrPasswordProps) => {
           name="controlId"
           value={currentElement.id}
           disabled
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="controlName" className="block">
+          Name
+        </label>
+        <InputText
+          name="name"
+          style={{ width: "100%" }}
+          value={controlName}
+          onChange={(e) => {
+            setControlName(e.target.value);
+            handleAttributeChange(e);
+          }}
         />
       </div>
       <div className="field col-12">

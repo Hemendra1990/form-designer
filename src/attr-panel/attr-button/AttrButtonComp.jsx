@@ -21,6 +21,7 @@ const AttrButton = (props) => {
 
   const [hideLabelContent, setHideLabelContent] = useState(false);
   const [icon, setIcon] = useState("");
+  const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
   const handelHideLableContent = (e) => {
     setHideLabelContent(e.checked);
@@ -34,13 +35,13 @@ const AttrButton = (props) => {
 
   useEffect(() => {
     setHideLabelContent(currAttribute.hideLabelContent || false);
+    setControlName(currAttribute?.name || meta.currentElement.id);
     setIcon(currAttribute?.icon || "")
     if (currAttribute.hideLabelContent) {
       currAttribute.label = "";
     }
     // handleAttributeChange(contentEditable ? meta.currentElement?.attributes?.label : 'Click Here')
   }, [meta.currentElement]);
-
 
 
   return (
@@ -52,6 +53,20 @@ const AttrButton = (props) => {
           name="placeholder"
           value={meta.currentElement.id}
           disabled
+        />
+      </div>
+      <div className="field col-12">
+        <label htmlFor="controlName" className="block">
+          Name
+        </label>
+        <InputText
+          name="name"
+          style={{ width: "100%" }}
+          value={controlName}
+          onChange={(e) => {
+            setControlName(e.target.value);
+            handleAttributeChange(e);
+          }}
         />
       </div>
       <div className="field col-12">
@@ -95,7 +110,6 @@ const AttrButton = (props) => {
           style={{ width: '100%' }}
         />
       </div>
-
     </>
   );
 };

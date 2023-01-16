@@ -1,5 +1,5 @@
 import { InputText } from "primereact/inputtext";
-import React from "react";
+import React, { useState } from "react";
 
 interface AttrContainerProps {
     meta: any;
@@ -10,6 +10,7 @@ const AttrContainer = (props: AttrContainerProps) => {
 
     const { meta, handleAttributeChange, eventOptions } = props;
     const currAttribute = meta.currentElement?.attributes;
+    const [controlName, setControlName] = useState(meta.currentElement.id || "");
 
     const handleAttributesChange = (e: any) => {
         handleAttributeChange(e)
@@ -23,6 +24,20 @@ const AttrContainer = (props: AttrContainerProps) => {
                     name="placeholder"
                     value={meta.currentElement.id}
                     disabled
+                />
+            </div>
+            <div className="field col-12">
+                <label htmlFor="controlName" className="block">
+                    Name
+                </label>
+                <InputText
+                    name="name"
+                    style={{ width: "100%" }}
+                    value={controlName}
+                    onChange={(e) => {
+                        setControlName(e.target.value);
+                        handleAttributeChange(e);
+                    }}
                 />
             </div>
         </>
