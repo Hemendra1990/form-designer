@@ -18,7 +18,6 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
     const getPrimeNumericRef = useRef(parentRef);
     
     useEffect(() => {
-
       setValue(element.currAttribute?.value || "");
       setSelectedValue(element.currAttribute?.selectedValue || "");
 
@@ -102,10 +101,10 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
                 ref={getPrimeNumericRef} 
                 value={value || element?.attributes?.numericValue }
                 placeholder={element.attributes?.placeholder || "Please enter number"}
-                onBlur={(e) => executeOnBlurEvent(e)}
-                onFocus={(e) => executeOnFocusEvent(e)}
-                onKeyDown={(e) => executeOnKeyDownEvent(e)}
-                onValueChange={(e) => executeOnValueChangeEvent(e)}
+                onBlur={(e) =>{ executeOnBlurEvent(e)}}
+                onFocus={(e) =>{ executeOnFocusEvent(e)}}
+                onKeyDown={(e) =>{ executeOnKeyDownEvent(e)}}
+                onValueChange={(e) =>{ executeOnValueChangeEvent(e)}}
                 onChange={(e) => { setSelectedValue(e.value); executeOnChangeEvent(e); }}
                 mode={element?.attributes?.selectedmode|| "decimal"}
                 currency={ element?.attributes?.currencyValue || "INR" }

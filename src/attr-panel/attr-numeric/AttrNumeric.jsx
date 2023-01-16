@@ -61,7 +61,7 @@ const AttrNumeric = (props) => {
                     style={{ width: '100%' }}
                     name="numericValue"
                     placeholder="Enter value"
-                    value={currAttribute?.numericValue }
+                    value={currAttribute?.numericValue || ""}
                     onChange={handelNumericValue}
                 />
             </div>
