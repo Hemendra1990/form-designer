@@ -5,6 +5,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { createElementId } from '../../utils/Utils'
 import React, { useCallback, useEffect, useRef, useState } from "react";
+
 import ReactFlow, {
   addEdge,
   Background,
@@ -52,7 +53,7 @@ const EventModeler = (props) => {
   const [eventName, setEventName] = useState("");
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
+  
   const [bgColor, setBgColor] = useState(initBgColor);
   const [selectedEvent, setSelectedEvent] = useState("");
 
@@ -181,7 +182,7 @@ const EventModeler = (props) => {
               <Column field="name" header="Action Name" sortable />
             </DataTable>
           </OverlayPanel>
-
+    
           <div className="flex">
             <div className="flex-1 flex align-items-start justify-content-start text-gray-900 m-2 px-5 py-3 border-round">
               <Dropdown
@@ -202,6 +203,7 @@ const EventModeler = (props) => {
                   onChange={handleEventNameChange}
               ></InputText>
             </div>
+            
             <div className="flex-1 flex align-items-end justify-content-end text-gray-900 m-2 px-5 py-3 border-round">
               <Button label="Add Action" onClick={addNewActionNode} />
               <Button style={{ marginLeft: '5px' }} className="p-button-danger" label="Save Event" onClick={saveEvent} />
@@ -236,6 +238,7 @@ const EventModeler = (props) => {
                 <Controls />
                 <Background />
               </ReactFlow>
+              Info : Backspace for delete action
             </div>
           </div>
         </div>

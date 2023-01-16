@@ -89,14 +89,14 @@ export class ControlStyleModel {
 
   static INPUTNUMBER = [
     { label: "Label", value: ".p-inputtext", key: "inputNumber" },
-    { label: "Stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
-    { label: "Horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
-    { label: "Vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },
+    // { label: "Stacked button", value: ".p-inputnumber-stacked", key: "inputStackedButton" },
+    // { label: "Horizontal button", value: ".p-inputnumber-horizontal", key: "inputHorizontalButton" },
+    // { label: "Vertical button", value: ".p-inputnumber-vertical", key: "inputVerticalButton" },
     { label: "Element", value: ".p-inputnumber-input", key: "inputNumberElement" },
     { label: "Button element", value: ".p-inputnumber-button", key: "inputButtonElement" },
     { label: "Increment button", value: ".p-inputnumber-button-up", key: "inputIncrementButton" },
     { label: "Decrement button", value: ".p-inputnumber-button-down", key: "inputDecrementButton" },
-    { label: "Button icon", value: ".p-inputnumber-button-icon", key: "inputNumberButtonIcon" }
+    // { label: "Button icon", value: ".p-inputnumber-button-icon", key: "inputNumberButtonIcon" }
   ];
 
   static DROPDOWN = [
