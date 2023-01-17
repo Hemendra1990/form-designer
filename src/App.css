@@ -123,7 +123,6 @@ body {
 }
 
 .p-sidebar {
-    height: 500px !important;
     right: 0.5%;
 }
 
@@ -167,4 +166,12 @@ body {
     text-align: center !important;
     border-width: 0px !important;
     background: #F6F6F6;
+}
+
+.p-sidebar .p-sidebar-content {
+    padding: unset !important;
+}
+
+.attribute-panel-slidebar .p-sidebar-content {
+    overflow-y: unset !important;
 }

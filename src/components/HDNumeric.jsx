@@ -14,27 +14,11 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
   const [value, setValue] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
   const [controlStyle, setControlStyle] = useState();
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
   const getPrimeNumericRef = useRef(parentRef);
 
-  useEffect(() => {
-    setValue(element.currAttribute?.value || "");
-    setSelectedValue(element.currAttribute?.selectedValue || "");
-
-    updateMeta(meta);
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
-    }
-  }, []);
-
   const operations = {
-
     getStyleAttributes: () => {
       return ControlStyleModel.getInputnumberStyle();
     },
@@ -59,6 +43,7 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
   }
 
   useImperativeHandle(parentRef, () => {
+    setRefInitialize(true);
     return operations;
   });
 
@@ -136,6 +121,26 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
       );
     }
   };
+
+
+  useEffect(() => {
+    updateMeta(meta);
+    setValue(element.currAttribute?.value || "");
+    setSelectedValue(element.currAttribute?.selectedValue || "");
+
+    //Apply style if the element already has
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
+    }
+  }, [isRefInitialize]);
 
   return (
     <>

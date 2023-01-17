@@ -14,13 +14,7 @@ const HDInput = React.forwardRef((props, ref) => {
 
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState();
-
-  /**
-   * We can play with the component dynamically
-   */
-  useImperativeHandle(ref, () => {
-    return operations;
-  });
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
   const operations = {
     sayHello() {
@@ -36,19 +30,14 @@ const HDInput = React.forwardRef((props, ref) => {
       setControlStyle(style);
     }
   }
-  useEffect(() => {
-    updateMeta(meta); //This is necesary, put in all the components... we need to update the meta.elementMap so need to call thuis method after the input is rendered
-    //Apply style if the element already has
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
-    }
-  }, []);
+
+  /**
+   * We can play with the component dynamically
+   */
+  useImperativeHandle(ref, () => {
+    setRefInitialize(true);
+    return operations;
+  });
 
   const executeFocusEvent = (event) => {//TODO Shilpa will take care of it
     if (element.attributes && element.attributes.onFocus) {
@@ -92,6 +81,23 @@ const HDInput = React.forwardRef((props, ref) => {
   const handleBlur = (e) => {
     element.value = value;
   };
+
+  useEffect(() => {
+    updateMeta(meta); //This is necesary, put in all the components... we need to update the meta.elementMap so need to call thuis method after the input is rendered
+
+    //Apply style if the element already has
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
+    }
+  }, [isRefInitialize]);
 
   return (
     <>

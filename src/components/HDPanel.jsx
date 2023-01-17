@@ -9,31 +9,38 @@ const HDPanel = React.forwardRef((props, ref) => {
   const { updateMeta } = useUpdateMetaContext();
   const { element } = props;
   const [controlStyle, setControlStyle] = useState();
+  const [isRefInitialize, setRefInitialize] = useState(false);
+
+  const operations = {
+    getStyleAttributes: () => {
+      return ControlStyleModel.getPanelStyle();
+    },
+
+    addStyle(style = "") {
+      setControlStyle(style);
+    }
+  }
 
   useImperativeHandle(ref, () => {
-    return {
-      getStyleAttributes: () => {
-        return ControlStyleModel.getPanelStyle();
-      },
-
-      addStyle(style = "") {
-        setControlStyle(style);
-      },
-    };
+    setRefInitialize(true);
+    return operations
   });
   useEffect(() => {
     updateMeta(meta);
+
     //Apply style if the element already has
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
     }
-  }, []);
+  }, [isRefInitialize]);
 
   return (
     <>

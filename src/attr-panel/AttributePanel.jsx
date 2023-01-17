@@ -31,8 +31,8 @@ import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
 import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
-import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
-import AttrListBox from "./attr-ListBox/AttrListBox";
+import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
+import AttrListBox from "./attr-listbox/AttrListBox";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -553,42 +553,42 @@ const AttributePanel = (props) => {
           </div>
         </>
       )}
-      <div className="p-fluid grid">
-        <Sidebar
-          dismissable={false}
-          showCloseIcon={false}
-          closeOnEscape={true}
-          modal={false}
-          position="right"
-          visible={showSidebar}
-          onHide={() => {
-            setShowSidebar(false);
-          }}
-        >
-          <div>
-            <Button
-              icon="pi pi-times"
-              className="p-button-rounded p-button-danger p-button-text"
-              aria-label="Cancel"
-              style={{
-                float: "right",
-                width: "30px",
-                height: "30px",
-                marginTop: "5px",
-              }}
-              onClick={() => {
-                setShowSidebar(false);
-              }}
-            />
-          </div>
+      <Sidebar
+        dismissable={false}
+        showCloseIcon={false}
+        closeOnEscape={true}
+        modal={false}
+        position="right"
+        visible={showSidebar}
+        height="85vh"
+        onHide={() => {
+          setShowSidebar(false);
+        }}
+      >
+        <div className="attribute-panel-slidebar">
+          <Button
+            icon="pi pi-times"
+            className="p-button-rounded p-button-danger p-button-text"
+            aria-label="Cancel"
+            style={{
+              float: "right",
+              width: "30px",
+              height: "30px",
+              marginTop: "5px",
+            }}
+            onClick={() => {
+              setShowSidebar(false);
+            }}
+          />
 
-          <div style={{ marginTop: "25px" }}>
+          <div style={{ height: '70vh', overflowY: "scroll" }} className="col-12">
             {showConfigure && renderConfiguration()}
             {showAttributs && renderAttributes()}
             {showDataMapper && renderDataConnector()}
           </div>
-        </Sidebar>
-        {/* <Sidebar
+        </div>
+      </Sidebar>
+      {/* <Sidebar
           dismissable={false}
           showCloseIcon={false}
           closeOnEscape={true}
@@ -601,7 +601,6 @@ const AttributePanel = (props) => {
         >
           {renderDataConnector()}
         </Sidebar> */}
-      </div>
       {getControlStyle()}
     </>
   );

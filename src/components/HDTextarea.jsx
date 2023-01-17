@@ -10,9 +10,13 @@ const HDTextarea = React.forwardRef((props, ref) => {
   const { element, meta, setMeta } = props;
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState('');
+  const [isRefInitialize, setRefInitialize] = useState(false);
+
   const { updateMeta } = useUpdateMetaContext();
+
   const primeTextAreaRef = useRef(ref);
-  useImperativeHandle(ref, () => ({
+
+  const operations = {
     updateValue: (value) => {
       setValue(value);
     },
@@ -25,12 +29,17 @@ const HDTextarea = React.forwardRef((props, ref) => {
     addStyle(style = "") {
       setControlStyle(style);
     }
-  }));
+  }
+  useImperativeHandle(ref, () => {
+    setRefInitialize(true);
+    return operations;
+  });
   useEffect(() => {
     updateMeta(meta);
+
     //Apply style if the element already has
-    if (element.style) {
-      setTimeout(() => {
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
         const elementStyle = addElementStyle(
           element.style,
           element,
@@ -38,11 +47,10 @@ const HDTextarea = React.forwardRef((props, ref) => {
           setControlStyle
         );
         setControlStyle(elementStyle);
-      }, 100);
-
-
+      }
     }
-  }, []);
+
+  }, [isRefInitialize]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
