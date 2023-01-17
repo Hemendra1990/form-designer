@@ -2,19 +2,7 @@ import React, { createElement, createRef, useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ItemType } from "../model/ItemType";
-
-/* interface DraggablePGElementProp {
-  children: any;
-  element: any;
-  pgElements: any[];
-  setPGElements: Function;
-  pgIndex: Number;
-  containerIndex: Number;
-  parentId: String;
-  updatePgElements: Function;
-  moveCard: Function;
-  moveContainerCard: Function;
-} */
+import {CONTROL} from "../constants/Elements"
 
 const DraggablePGElement = React.forwardRef(
   (
@@ -114,19 +102,51 @@ const DraggablePGElement = React.forwardRef(
 
     drag(drop(draggableRef));
 
-    const createComponent = () => {
-      return React.createElement(element.component, {
+    /* const createComponent = () => {
+      const ref = React.createRef(null);
+      const reactComponent = React.createElement(element.component, {
+        ref: ref,
         key: element.id,
         element: element,
         meta,
         handleWhenElementMovedToContainer,
-        setPGElements,
-        pgElements,
         pgIndex,
         containerIndex,
         parentId,
         updatePgElements,
       });
+      element.ref = ref;
+      element.reactComponent = reactComponent;
+      element.attributes = element.attributes || {};
+      return reactComponent;
+    }; */
+
+    const createComponent = () => {
+      element.attributes = element.attributes || {};
+      element.attributes.children = element.attributes.children || [];
+      let ref = element.ref;
+
+      if (element.reactComponent) {
+        //Commented beacuse opening report looses current.ref
+        return React.cloneElement(element.reactComponent, { meta: meta });
+        //return element.reactComponent;
+      }
+
+      if (!ref) {
+        ref = React.createRef();
+      }
+      const reactComponent = React.createElement(element.component, {
+        ref: ref,
+        name: `${element.name}`,
+        setMeta: updateMeta,
+        meta: meta,
+        element: element,
+        enteredValue: "",
+      });
+
+      element.ref = ref;
+      element.reactComponent = reactComponent; //Important: this is used to handle the rerender of the elements after drag n drop
+      return reactComponent;
     };
 
     return (
@@ -134,12 +154,12 @@ const DraggablePGElement = React.forwardRef(
         onClick={(event) => {
           updateCurrentElement(event, element);
         }}
-        style={{ padding: "10px" }}
+        style={{ padding: "10px", border: "1px dashed" }}
         ref={draggableRef}
+        className={element?.attributes?.className || element.type === CONTROL.CONTAINER ? "col-12": "col-4"}
+        title={element.id}
       >
-        {element.name}: {element.id}
         {createComponent()}
-        {children}
       </div>
     );
   }

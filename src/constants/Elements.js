@@ -1,7 +1,6 @@
 import HDButton from "../components/HDButton";
 import HDTextarea from "../components/HDTextarea";
 import HDInput from "../components/HDInput";
-import HDContainer from "../components/HDContainer";
 import HDPanel from "../components/HDPanel";
 import HDFieldset from "../components/HDFieldset";
 import HDRadioButton from "../components/HDRadioButton";
@@ -15,6 +14,7 @@ import HDDropDown from "../components/HDDropDown";
 import HDToogleButton from "../components/HDToggleButton";
 import HDAutoComplete from "../components/HDAutoComplete";
 import HDMultiSelect from "../components/HDMultiSelect";
+import HDContainer from "../components/container/HDContainer";
 
 const ComponentConfig = [
   {

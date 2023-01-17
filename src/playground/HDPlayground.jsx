@@ -18,7 +18,7 @@ function HDPlayground() {
     () => ({
       accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
       canDrop: (item, monitor) => {
-        return true;
+        return meta.editMode;
       },
       drop: (item, monitor) => {
         if (monitor.didDrop()) {
@@ -107,18 +107,20 @@ function HDPlayground() {
       className="grid"
       style={{ minHeight: "30vh", backgroundColor: backgroundColor }}
     >
-      HDPlayground
-      {meta.elements.map((element, index) => (
-        <DraggablePGElement
-          key={element.id}
-          element={element}
-          setPGElements={setPGElements}
-          pgElements={pgElements}
-          pgIndex={index}
-          updatePgElements={updatePgElements}
-          moveCard={moveCard}
-        />
-      ))}
+      HDPlayground {new Date().toLocaleTimeString()}
+      {meta.elements.map((element, index) => {
+        element.currIndex = index
+        return <DraggablePGElement
+        {...element}
+        key={element.id}
+        element={element}
+        setPGElements={setPGElements}
+        pgElements={pgElements}
+        pgIndex={index}
+        updatePgElements={updatePgElements}
+        moveCard={moveCard}
+      />
+      })}
     </div>
   );
 }

@@ -26,8 +26,7 @@ function HDContainer({
   const [containerChildren, setContainerChildren] = useState([]);
 
   containerElement.attributes = containerElement.attributes || {};
-  containerElement.attributes.children =
-    containerElement.attributes.children || [];
+  containerElement.attributes.children = containerElement.attributes.children || [];
 
   useEffect(() => {
     console.log("Container children test", element);
@@ -83,8 +82,7 @@ function HDContainer({
             foundElement = findElement(obj, containerElement.id);
             if (foundElement) {
               foundElement.attributes = foundElement.attributes || {};
-              foundElement.attributes.children =
-                foundElement.attributes.children || [];
+              foundElement.attributes.children = foundElement.attributes.children || [];
               foundElement.attributes.children.push({
                 ...element,
                 id: id,
@@ -97,22 +95,22 @@ function HDContainer({
         } else if (monitor.getItemType() === ItemType.HD_PG_ELEMENT) {
           //hdPGElement
           const helper = new ContainerHelper();
-          pgElements = helper.updateParent(
-            pgElements,
+          meta.elements = helper.updateParent(
+            meta.elements,
             item.element.id,
             containerElement.id
           );
           //check
-          console.log(setPGElements, pgElements, findElement);
-          setPGElements([...pgElements]);
+          //setPGElements([...pgElements]);
 
           const newObj = helper.findNodeAndParent(
-            pgElements,
+            meta.elements,
             containerElement.id
           );
           console.log("New Obj", newObj);
-          setContainerChildren([...newObj?.node?.attributes.children]);
-          updatePgElements([...pgElements]);
+          //setContainerChildren([...newObj?.node?.attributes.children]);
+          //updatePgElements([...pgElements]);
+          updateMeta(meta.elements)
         }
       },
       collect: (monitor) => ({
@@ -172,28 +170,25 @@ function HDContainer({
       ref={drop}
       style={{
         minHeight: "100px",
-        minWidth: "50vw",
         margin: "20px",
-        border: "1px dashed gray",
+        border: meta.editMode ? "1px dashed gray" : "",
         backgroundColor: backgroundColor,
       }}
+      className="grid"
     >
       {element?.attributes?.children.map((childElement, containerIndex) => {
         return (
-          <div
-            key={childElement.id}
+          <DraggablePGElement
+            key={childElement?.id}
             style={{ marginTop: 10, marginBottom: 10 }}
-          >
-            <DraggablePGElement
-              element={childElement}
-              pgIndex={pgIndex}
-              setPGElements={setPGElements}
-              parentId={containerElement.id}
-              pgElements={pgElements}
-              moveContainerCard={moveContainerCard}
-              containerIndex={containerIndex}
-            />
-          </div>
+            element={childElement}
+            pgIndex={pgIndex}
+            setPGElements={setPGElements}
+            parentId={containerElement.id}
+            pgElements={pgElements}
+            moveContainerCard={moveContainerCard}
+            containerIndex={containerIndex}
+          />
         );
       })}
     </div>

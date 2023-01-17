@@ -4,7 +4,10 @@ import { memo, useState } from "react";
 import AttributePanel from "./attr-panel/AttributePanel";
 import { useConfirmationContext } from "./context/ConfirmationDialogContext";
 import {
-  useMetaContext, useToastContext, useUpdateMetaContext } from "./context/MetaContext";
+  useMetaContext,
+  useToastContext,
+  useUpdateMetaContext,
+} from "./context/MetaContext";
 import { useModalContext } from "./context/ModalContext";
 import ControlPanel from "./control-panel/ControlPanel";
 import EventModeler from "./events/builder/EventModeler";
@@ -14,6 +17,10 @@ import EventExecutor from "./service/EventExecutor";
 import { Outlet } from "react-router-dom";
 
 import Draggable from "react-draggable";
+import HDControlPanel from "./control-panel/HDControlPanel";
+import HDPlayground from "./playground/HDPlayground";
+import { useDrop } from "react-dnd";
+import { ItemType } from "./model/ItemType";
 
 const Homepage = (props) => {
   const meta = useMetaContext();
@@ -53,8 +60,21 @@ const Homepage = (props) => {
     //push('Hello Modal Calling from Homepage Button');
   };
 
+  const [, drop] = useDrop({
+    accept: ItemType.CONTROL_PANEL,
+    drop: (item, monitor) => {
+      const delta = monitor.getDifferenceFromInitialOffset();
+      const left = Math.round(item.left + delta.x);
+      const top = Math.round(item.top + delta.y);
+      const snappedX = Math.round(left / 32) * 32;
+      const snappedY = Math.round(top / 32) * 32;
+      item.moveControlPanel(snappedX, snappedY);
+      return undefined;
+    },
+  });
+
   return (
-    <>
+    <div ref={drop} style={{ border: "1px solid red" }}>
       <div className="top-menubar">
         <HDMenubar toggleEventModal={onHide} />
       </div>
@@ -65,7 +85,8 @@ const Homepage = (props) => {
         <div className="col-12">
           {meta.editMode ? (
             <div className="control-panel">
-              <ControlPanel />
+              {/* <ControlPanel /> */}
+              <HDControlPanel />
             </div>
           ) : (
             <></>
@@ -81,7 +102,8 @@ const Homepage = (props) => {
               : "col-12 playground-preview m-20"
           }`}
         >
-          <Playground />
+          <HDPlayground />
+          {/* <Playground /> */}
           <Draggable>
             <Button
               onClick={(e) => togglePlaygroundMode()}
@@ -107,7 +129,7 @@ const Homepage = (props) => {
           <p className="mr-3">&copy; 2022 Hemendra Sethi</p>
         </footer>
       </div>
-    </>
+    </div>
   );
 };
 
