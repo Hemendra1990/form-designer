@@ -20,6 +20,7 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
     const [filteredValue, setFilteredValue] = useState(null);
     const [controlStyle, setControlStyle] = useState();
     const [columnList, setColumnList] = useState([]);
+    const [isRefInitialize, setRefInitialize] = useState(false);
 
     const handleOnChangeEvent = (event) => {
         if (element.attributes && element.attributes.onChangeEvent) {
@@ -204,6 +205,7 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
     };
 
     useImperativeHandle(parentRef, () => {
+        setRefInitialize(true);
         return operations;
     });
 
@@ -218,16 +220,18 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
         setColumnList(element?.attributes?.columnList || []);
 
         //Apply style if the element already has
-        if (element.style) {
-            const elementStyle = addElementStyle(
-                element.style,
-                element,
-                meta,
-                setControlStyle
-            );
-            setControlStyle(elementStyle);
+        if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+            if (element.style) {
+                const elementStyle = addElementStyle(
+                    element.style,
+                    element,
+                    meta,
+                    setControlStyle
+                );
+                setControlStyle(elementStyle);
+            }
         }
-    }, []);
+    }, [isRefInitialize]);
 
     return (
         <>

@@ -13,6 +13,7 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
     const [controlStyle, setControlStyle] = useState();
     const [multiSelectOptions, setMultiSelectOptions] = useState([]);
     const [labelValueOptions, setLabelValueOptions] = useState([]);
+    const [isRefInitialize, setRefInitialize] = useState(false);
 
     const getPrimeMultiSelectRef = useRef(parentRef);
 
@@ -101,6 +102,7 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
     }
 
     useImperativeHandle(parentRef, () => {
+        setRefInitialize(true);
         return operations;
     });
 
@@ -109,8 +111,10 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
         setSelectedValue(element.attributes?.selectedValue || "");
         setLabelValueOptions(element.attributes?.labelValueOptions || []);
         setMultiSelectOptions(element.attributes?.multiSelectOptions || []);
-        if (element.style) {
-            setTimeout(() => {
+
+        //Apply style if the element already has
+        if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+            if (element.style) {
                 const elementStyle = addElementStyle(
                     element.style,
                     element,
@@ -118,9 +122,9 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
                     setControlStyle
                 );
                 setControlStyle(elementStyle);
-            }, 100);
+            }
         }
-    }, []);
+    }, [isRefInitialize]);
 
     return (
         <>

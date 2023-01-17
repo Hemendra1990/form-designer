@@ -12,6 +12,8 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const getPrimeListRef = useRef(parentRef);
   const [controlStyle, setControlStyle] = useState();
+  const [isRefInitialize, setRefInitialize] = useState(false);
+
   const { meta } = useMetaContext();
 
   console.log(element);
@@ -86,6 +88,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   };
 
   useImperativeHandle(parentRef, () => {
+    setRefInitialize(true);
     return operations;
   });
 
@@ -93,16 +96,18 @@ const HDListBox = React.forwardRef((props, parentRef) => {
     element.attributes = element.attributes || {};
     element.attributes.multiple = false;
     //Apply style if the element already has
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
     }
-  }, []);
+  }, [isRefInitialize]);
 
   return (
     <>

@@ -11,31 +11,38 @@ const HDButton = React.forwardRef((props, ref) => {
   const { actions, modals } = useModalContext();
   const { updateMeta } = useUpdateMetaContext();
   const meta = useMetaContext();
-  const [controlStyle, setControlStyle] = useState();
+  const [controlStyle, setControlStyle] = useState("");
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
-  useImperativeHandle(ref, () => ({
+  const operations = {
     getStyleAttributes: () => {
       return ControlStyleModel.getButtonStyle();
     },
-
     addStyle(style = "") {
       setControlStyle(style);
     },
-  }));
+  }
+
+  useImperativeHandle(ref, () => {
+    setRefInitialize(true)
+    return operations;
+  });
 
   useEffect(() => {
     updateMeta(meta);
     //Apply style if the element already has
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
     }
-  }, []);
+  }, [isRefInitialize]);
 
   if (!(element.attributes && element.attributes.label)) {
     if (!element.attributes) element.attributes = {};

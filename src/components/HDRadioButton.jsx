@@ -5,6 +5,7 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import EventExecutor from "../service/EventExecutor";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
+import { Tooltip } from 'primereact/tooltip';
 
 const HDRadioButton = React.forwardRef((props, parentRef) => {
 
@@ -21,6 +22,7 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
   const [columnOption, setColumnOption] = useState([emptyOption]);
   const [radioButtonList, setRadioButtonList] = useState([emptyOption]);
   const [checkEmptyList, setCheckEmptyList] = useState(false);
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
   const handleOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onChange) {
@@ -37,8 +39,7 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
     }
   };
 
-  useImperativeHandle(parentRef, () => ({
-
+  const operations = {
     setResult: (result) => {
       const rows = result.rows || [];
       if (result.columns && result.columns.length > 0) {
@@ -99,7 +100,13 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
     },
 
     getPrimeRadioRef
-  }));
+  }
+
+
+  useImperativeHandle(parentRef, () => {
+    setRefInitialize(true);
+    return operations;
+  });
 
   const renderOptionList = () => {
     let result = [];
@@ -122,12 +129,12 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
                 setSelectedValue(e.value);
                 handleOnChangeEvent(e);
               }}
-              tooltip={element.attributes.tooltip || ""}
+              tooltip={item.name}
               checked={selectedValue.id === item.id}
               disabled={element?.attributes?.disabled || false}
               required={element?.attributes?.required || false}
             />
-            <label htmlFor={item.key}>{item.name}</label>
+            <label htmlFor={item.key} >{item.name}</label>
           </div>
         );
       })}
@@ -142,16 +149,18 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
     // setCheckEmptyList(element.attributes.checkEmptyList)
 
     //Apply style if the element already has
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
     }
-  }, []);
+  }, [isRefInitialize]);
 
   return (
     <>
