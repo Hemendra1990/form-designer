@@ -112,20 +112,20 @@ function HDPlayground() {
     <div
       ref={drop}
       className="grid"
-      style={{ minHeight: "30vh", backgroundColor: backgroundColor }}
+      style={{ backgroundColor: backgroundColor, paddingBottom: "100px" }}
     >
       {meta.elements.map((element, index) => {
         element.currIndex = index
         return <DraggablePGElement
-        {...element}
-        key={element.id}
-        element={element}
-        setPGElements={setPGElements}
-        pgElements={pgElements}
-        pgIndex={index}
-        updatePgElements={updatePgElements}
-        moveCard={moveCard}
-      />
+          {...element}
+          key={element.id}
+          element={element}
+          setPGElements={setPGElements}
+          pgElements={pgElements}
+          pgIndex={index}
+          updatePgElements={updatePgElements}
+          moveCard={moveCard}
+        />
       })}
     </div>
   );
