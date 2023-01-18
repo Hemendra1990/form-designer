@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDrop } from "react-dnd";
+import { CONTROL } from "../constants/Elements";
 import getComponent from "../constants/HemendraConstants";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ItemType } from "../model/ItemType";
@@ -13,6 +14,7 @@ function HDPlayground() {
 
   const meta = useMetaContext();
   const { addElement, updateMeta } = useUpdateMetaContext();
+  const [controlElementHoveringOnIndex, setControlElementHoveringOnIndex] = useState(-999);
 
   const [{ canDrop, isOver, getDropResult }, drop] = useDrop(
     () => ({
@@ -21,7 +23,8 @@ function HDPlayground() {
         return meta.editMode;
       },
       drop: (item, monitor) => {
-        if (monitor.didDrop()) {
+        console.log(controlElementHoveringOnIndex, item.droppedLocation);
+        if (monitor.didDrop() && item.droppedLocation && item.droppedLocation.includes(CONTROL.CONTAINER)) {
           return;
         }
 
@@ -55,7 +58,7 @@ function HDPlayground() {
             component,
           };
           //setPGElements((elements) => [...elements, { ...element, id }]);
-          addElement(element);
+          addElement(element, controlElementHoveringOnIndex);
         }
       },
       collect: (monitor) => ({
@@ -64,7 +67,7 @@ function HDPlayground() {
         getDropResult: monitor.getDropResult(),
       }),
     }),
-    [pgElements]
+    [controlElementHoveringOnIndex]
   );
 
   function updatePgElements(newElements) {
@@ -73,6 +76,10 @@ function HDPlayground() {
 
   const moveCard = useCallback(
     (dragIndex, hoverIndex, item, monitor) => {
+      if(dragIndex === -1) {
+        setControlElementHoveringOnIndex(hoverIndex);
+        return;
+      }
       if (
         item &&
         item.element &&
@@ -107,7 +114,6 @@ function HDPlayground() {
       className="grid"
       style={{ minHeight: "30vh", backgroundColor: backgroundColor }}
     >
-      HDPlayground {new Date().toLocaleTimeString()}
       {meta.elements.map((element, index) => {
         element.currIndex = index
         return <DraggablePGElement

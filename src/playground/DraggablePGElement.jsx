@@ -38,10 +38,12 @@ const DraggablePGElement = React.forwardRef(
       type: ItemType.HD_PG_ELEMENT,
       item: { pgIndex, element },
       end: (item, monitor) => {
-        const dropResult = monitor.getDropResult();
-        if (item && dropResult) {
-          //alert(`You dropped ${item.name} into ${dropResult.name}!`);
+        const dropRes= {location: element}
+        const dropResult = monitor.getDropResult(dropRes);
+        if(monitor.getItemType() === ItemType.HD_ELEMENT) {
+          monitor.getItem().initialDropLocation = element;
         }
+        
       },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
@@ -58,6 +60,16 @@ const DraggablePGElement = React.forwardRef(
       },
       hover(item, monitor) {
         if (!draggableRef.current) {
+          return;
+        }
+        if(monitor.getItemType() === ItemType.HD_ELEMENT) {
+          const dragIndex = -1;
+          const hoverIndex = element.currIndex;
+          if (moveCard) {
+            moveCard(dragIndex, hoverIndex, item, monitor);
+          } else if (moveContainerCard) {
+            moveContainerCard(dragIndex, hoverIndex, item, monitor);
+          }
           return;
         }
         const dragIndex = item.index;
@@ -98,6 +110,9 @@ const DraggablePGElement = React.forwardRef(
         // to avoid expensive index searches.
         item.index = hoverIndex;
       },
+      drop: (item, monitor) => {
+        monitor.getItem().droppedLocation = element.id;
+      }
     });
 
     drag(drop(draggableRef));
@@ -154,7 +169,7 @@ const DraggablePGElement = React.forwardRef(
         onClick={(event) => {
           updateCurrentElement(event, element);
         }}
-        style={{ padding: "10px", border: "1px dashed" }}
+        style={{ padding: "10px", border: "1px dashed", height:"fit-content" }}
         ref={draggableRef}
         className={element?.attributes?.className || element.type === CONTROL.CONTAINER ? "col-12": "col-4"}
         title={element.id}

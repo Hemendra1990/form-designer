@@ -71,8 +71,13 @@ export const MetaContextProvider = ({ children }) => {
    *
    * @param {*} element
    */
-  const addElement = (element) => {
-    meta.elements.push(element);
+  const addElement = (element, index=undefined) => {
+    if(index !== undefined && index !== -999) {
+      meta.elements.splice(index, 0, element);
+      meta.elements = [...meta.elements];
+    } else {
+      meta.elements.push(element);
+    }
     updateMeta(meta);
   };
 
