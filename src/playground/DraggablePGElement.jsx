@@ -2,7 +2,7 @@ import React, { createElement, createRef, useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ItemType } from "../model/ItemType";
-import {CONTROL} from "../constants/Elements"
+import { CONTROL } from "../constants/Elements"
 
 const DraggablePGElement = React.forwardRef(
   (
@@ -154,12 +154,14 @@ const DraggablePGElement = React.forwardRef(
         onClick={(event) => {
           updateCurrentElement(event, element);
         }}
-        style={{ padding: "10px", border: "1px dashed" }}
+        style={{ padding: "10px", border: "1px dashed", height: "fit-content" }}
         ref={draggableRef}
-        className={element?.attributes?.className || element.type === CONTROL.CONTAINER ? "col-12": "col-4"}
+        className={element?.attributes?.className || element.type === CONTROL.CONTAINER ? "col-12" : "col-4"}
         title={element.id}
       >
+        {/* <div style={{ border: "1px dashed", padding: "5px" }}> */}
         {createComponent()}
+        {/* </div> */}
       </div>
     );
   }
