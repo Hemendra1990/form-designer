@@ -4,16 +4,19 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ItemType } from "../model/ItemType";
 import { CONTROL } from "../constants/Elements"
 
-const DraggablePGElement = React.forwardRef(
+const DraggableContainerElement = React.forwardRef(
   (
-    {
-      element,
-      pgIndex,
-      moveCard,
-      moveContainerCard,
-    },
+    props,
     ref
   ) => {
+    const {
+      element,
+      pgIndex,
+      moveContainerCard,
+      containerIndex
+    } = props;
+    console.log(props);
+
     const meta = useMetaContext();
     const { updateMeta } = useUpdateMetaContext();
 
@@ -42,7 +45,7 @@ const DraggablePGElement = React.forwardRef(
         isDragging: monitor.isDragging(),
         handlerId: monitor.getHandlerId(),
       }),
-    }));
+    }),[containerIndex]);
 
     const [{ handlerId }, drop] = useDrop({
       accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
@@ -58,15 +61,13 @@ const DraggablePGElement = React.forwardRef(
         if(monitor.getItemType() === ItemType.HD_ELEMENT) {
           const dragIndex = -1;
           const hoverIndex = element.currIndex;
-          if (moveCard) {
-            moveCard(dragIndex, hoverIndex, item, monitor);
-          } /* else if (moveContainerCard) {
+          if (moveContainerCard) {
             moveContainerCard(dragIndex, hoverIndex, item, monitor);
-          } */
+          }
           return;
         }
-        const dragIndex = item.index;
-        const hoverIndex = pgIndex;
+        const dragIndex = item.element.currIndex || item.index;
+        const hoverIndex = containerIndex;
         // Don't replace items with themselves
         if (dragIndex === hoverIndex) {
           return;
@@ -92,9 +93,7 @@ const DraggablePGElement = React.forwardRef(
           return;
         }
         // Time to actually perform the action
-        if (moveCard) {
-          moveCard(dragIndex, hoverIndex, item, monitor);
-        } else if (moveContainerCard) {
+        if (moveContainerCard) {
           moveContainerCard(dragIndex, hoverIndex, item, monitor);
         }
         // Note: we're mutating the monitor item here!
@@ -106,7 +105,7 @@ const DraggablePGElement = React.forwardRef(
       drop: (item, monitor) => {
         monitor.getItem().droppedLocation = element.id;
       }
-    });
+    },[containerIndex]);
 
     drag(drop(draggableRef));
 
@@ -156,4 +155,4 @@ const DraggablePGElement = React.forwardRef(
   }
 );
 
-export default DraggablePGElement;
+export default DraggableContainerElement;

@@ -71,8 +71,8 @@ export const MetaContextProvider = ({ children }) => {
    *
    * @param {*} element
    */
-  const addElement = (element, index=undefined) => {
-    if(index !== undefined && index !== -999) {
+  const addElement = (element, index = undefined) => {
+    if (index !== undefined && index !== -999) {
       meta.elements.splice(index, 0, element);
       meta.elements = [...meta.elements];
     } else {
@@ -203,6 +203,25 @@ export const MetaContextProvider = ({ children }) => {
     });
   }
 
+  function updateMetaWithElement(elementToBeUpdated) {
+    if (elementToBeUpdated.id === undefined) {
+      return;
+    }
+    updateMetaWithChildHelper(meta.elements, elementToBeUpdated)
+  }
+
+  function updateMetaWithChildHelper(elements, elementToBeUpdated) {
+    for (let element of elements) {
+      if (element.id === elementToBeUpdated.id) {
+        element = elementToBeUpdated;
+        break;
+      }
+      if (element.attributes && element.attributes.children) {
+        updateMetaWithChildHelper(element.attributes.children);
+      }
+    }
+  }
+
   return (
     <>
       <MetaContext.Provider value={meta}>
@@ -219,6 +238,7 @@ export const MetaContextProvider = ({ children }) => {
             configureApi,
             configureDataSource,
             configureQueryBuilder,
+            updateMetaWithElement,
           }}
         >
           <ToastContext.Provider value={{ toastRef, setToastPosition }}>

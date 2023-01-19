@@ -76,7 +76,7 @@ function HDPlayground() {
 
   const moveCard = useCallback(
     (dragIndex, hoverIndex, item, monitor) => {
-      if(dragIndex === -1) {
+      if (dragIndex === -1) {
         setControlElementHoveringOnIndex(hoverIndex);
         return;
       }
@@ -86,6 +86,13 @@ function HDPlayground() {
         dragIndex !== undefined &&
         hoverIndex !== undefined
       ) {
+        if (monitor.didDrop()) {
+          return; //ebe evening re 7:00 pm re add kali 19 jan 2023
+        }
+        if (item.element && item.element.parent && item.element.parent.type === CONTROL.CONTAINER) {
+          //It is a container element so dont do nything here in the Playground...
+          return;
+        }
         console.log({ dragIndex, hoverIndex });
         const { node, parent } = helper.findNodeAndParent(
           meta.elements,
@@ -106,6 +113,8 @@ function HDPlayground() {
   let backgroundColor = "";
   if (isOver) {
     backgroundColor = "#DCDCDC";
+  } else if (canDrop) {
+    backgroundColor = "#F8D5E3";
   }
 
   return (
@@ -115,17 +124,20 @@ function HDPlayground() {
       style={{ backgroundColor: backgroundColor, paddingBottom: "100px" }}
     >
       {meta.elements.map((element, index) => {
-        element.currIndex = index
-        return <DraggablePGElement
-          {...element}
-          key={element.id}
-          element={element}
-          setPGElements={setPGElements}
-          pgElements={pgElements}
-          pgIndex={index}
-          updatePgElements={updatePgElements}
-          moveCard={moveCard}
-        />
+        console.log('HD Playground:', element);
+        if (element) {
+          element.currIndex = index
+          return <DraggablePGElement
+            {...element}
+            key={element.id}
+            element={element}
+            setPGElements={setPGElements}
+            pgElements={pgElements}
+            pgIndex={index}
+            updatePgElements={updatePgElements}
+            moveCard={moveCard}
+          />
+        }
       })}
     </div>
   );

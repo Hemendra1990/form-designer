@@ -2,10 +2,12 @@ import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { memo, useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { deprecate } from "util";
 import getComponent from "../constants/HemendraConstants";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext"
 import { TEST_REPORTS_FOR_TESTING } from "../tests/report";
 
+//deprecate
 const HDContainer = React.forwardRef((props, ref) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();

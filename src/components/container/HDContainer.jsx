@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
+import { CONTROL } from "../../constants/Elements";
 import getComponent from "../../constants/HemendraConstants";
 import {
   useMetaContext,
   useUpdateMetaContext,
 } from "../../context/MetaContext";
 import { ItemType } from "../../model/ItemType";
+import DraggableContainerElement from "../../playground/DraggableContainerElement";
 import DraggablePGElement from "../../playground/DraggablePGElement";
 import { createElementId } from "../../utils/Utils";
 import ContainerHelper from "../../_helpers/ContainerHelper";
@@ -19,11 +21,12 @@ function HDContainer({
   updatePgElements,
 }) {
   const meta = useMetaContext();
-  const { updateMeta } = useUpdateMetaContext();
+  const { updateMeta, updateMetaWithElement } = useUpdateMetaContext();
   const containerElement = element;
   const helper = new ContainerHelper();
 
   const [containerChildren, setContainerChildren] = useState([]);
+  const [controlElementHoveringOnIndex, setControlElementHoveringOnIndex] = useState(-999);
 
   containerElement.attributes = containerElement.attributes || {};
   containerElement.attributes.children = containerElement.attributes.children || [];
@@ -36,46 +39,39 @@ function HDContainer({
     () => ({
       accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
 
+      hover: (item, monitor) => {
+        if (monitor.didDrop()) { //check if the element is dropped anywhere in pg or container
+          return;
+        }
+
+        //we need to find the hover index, kaha upare hiover hauchi
+        //We need to know dragIndex and hoverIndex, kahiniki kaina ame tapare meta.elements achhi seithi modify kariba
+
+
+      },
       drop: (item, monitor) => {
         //check if the element is already dropped or not
-        if (monitor.didDrop()) {
+        if (monitor.didDrop() && monitor.getItem().droppedLocation && monitor.getItem().droppedLocation.includes(CONTROL.CONTAINER)) {
+          return;
+        }
+
+        if (item.resizingInsideContainer) {
+          monitor.getItem().resizingInsideContainer = false;
+          item.resizingInsideContainer = false;
           return;
         }
 
         if (monitor.getItemType() === ItemType.HD_ELEMENT) {
           const { controlItem } = item;
-          const id = createElementId();
+          let id = createElementId();
+          id = `${controlItem.value}-${id}`
           const component = getComponent(controlItem.value);
           const element = {
             type: controlItem.value.toLowerCase(),
             name: `${controlItem.value}-${id}`,
-            id: `${controlItem.value}-${id}`,
+            id: id,
             component,
           };
-          //containerElement.attributes.children.push({...item.element, id: newId});
-          /* setContainerChildren((children) => [
-            ...children,
-            { ...item.element, id: id },
-          ]); */
-
-          /* setPGElements((prevPGElements) => {
-            let foundElement = null;
-            for (let obj of prevPGElements) {
-              foundElement = findElement(obj, containerElement.id);
-              if (foundElement) {
-                foundElement.attributes = foundElement.attributes || {};
-                foundElement.attributes.children =
-                  foundElement.attributes.children || [];
-                foundElement.attributes.children.push({
-                  ...item.element,
-                  id: id,
-                  parentId: containerElement.id,
-                });
-                break;
-              }
-            }
-            return [...prevPGElements];
-          }); */
 
           let foundElement = null;
           for (let obj of meta.elements) {
@@ -83,11 +79,17 @@ function HDContainer({
             if (foundElement) {
               foundElement.attributes = foundElement.attributes || {};
               foundElement.attributes.children = foundElement.attributes.children || [];
-              foundElement.attributes.children.push({
-                ...element,
-                id: id,
-                parentId: containerElement.id,
-              });
+              if (foundElement.attributes.children.length === 0) {
+                foundElement.attributes.children.push({
+                  ...element,
+                  id: id,
+                  parentId: containerElement.id,
+                });
+              } else { //insert at hover index
+                foundElement.attributes.children.splice(controlElementHoveringOnIndex, 0, element);
+                foundElement.attributes.children = [...foundElement.attributes.children];
+              }
+
               break;
             }
           }
@@ -119,7 +121,7 @@ function HDContainer({
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [pgElements]
+    [controlElementHoveringOnIndex]
   );
 
   function findElement(obj, elementId) {
@@ -139,28 +141,39 @@ function HDContainer({
 
   const moveContainerCard = useCallback(
     (dragIndex, hoverIndex, item, monitor) => {
+
+      if (dragIndex === -1) {
+        setControlElementHoveringOnIndex(hoverIndex);
+        return;
+      }
+
       if (dragIndex !== undefined && hoverIndex !== undefined) {
         console.log({ dragIndex, hoverIndex });
-        const { node, parent } = helper.findNodeAndParent(
-          pgElements,
-          item.element.id
-        );
-        /* if(node && pgElements[hoverIndex]) {//check if any element is already there at the index or not
-        const [draggedItem] = pgElements.splice(dragIndex, 1);
-        pgElements.splice(hoverIndex, 0, draggedItem);
-      } */
+        const { node, parent } = helper.findNodeAndParent(meta.elements, item.element.id);
+        if (node && parent.attributes['children'] && parent.attributes['children'][hoverIndex]) {//check if any element is already there at the index or not
+          const children = parent.attributes['children'];
+          const [draggedItem] = children.splice(dragIndex, 1);
+          children.splice(hoverIndex, 0, draggedItem);
+          parent.attributes['children'] = children;
+
+          //setting another flag
+          monitor.getItem().resizingInsideContainer = true;
+
+          console.log({ parent, meta });
+          //updateMeta(meta);
+        }
       }
     },
-    [pgElements]
+    [controlElementHoveringOnIndex, setControlElementHoveringOnIndex]
   );
 
   const isActive = canDrop && isOver;
   let backgroundColor = "";
-  /* if (isActive) {
+  if (isActive) {
     backgroundColor = "";
   } else if (canDrop) {
-    backgroundColor = "gray";
-  } */
+    backgroundColor = "#E4F8F0";
+  }
 
   if (isOverCurrent) {
     backgroundColor = "#DCDCDC";
@@ -171,21 +184,23 @@ function HDContainer({
       style={{
         minHeight: "100px",
         margin: "20px",
+        paddingBottom: "100px",
         border: meta.editMode ? "1px dashed gray" : "",
         backgroundColor: backgroundColor,
       }}
       className="grid"
     >
       {element?.attributes?.children.map((childElement, containerIndex) => {
+        childElement.currIndex = containerIndex;
+        childElement.parent = element;//element means container
         return (
-          <DraggablePGElement
+          <DraggableContainerElement
+            {...childElement}
             key={childElement?.id}
             style={{ marginTop: 10, marginBottom: 10 }}
             element={childElement}
             pgIndex={pgIndex}
-            setPGElements={setPGElements}
             parentId={containerElement.id}
-            pgElements={pgElements}
             moveContainerCard={moveContainerCard}
             containerIndex={containerIndex}
           />
