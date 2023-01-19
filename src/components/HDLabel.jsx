@@ -7,17 +7,22 @@ import {
   useRef,
   useState,
 } from "react";
+import { useMetaContext } from "../context/MetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
+import { addElementStyle } from "../control-styles/ControlStyles";
 import EventExecutor from "../service/EventExecutor";
 
 const HDLabel = forwardRef((props, ref) => {
   const { element } = props;
+  const meta = useMetaContext();
+
   console.log("HDLabel:", element);
   const [visible, setVisible] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const [labelHTML, setLabelHTML] = useState("Sample Text");
   const [divRefreshKey, setDivRefreshKey] = useState(Math.random());
-  const [controlStyle, setControlStyle] = useState();
+  const [controlStyle, setControlStyle] = useState("");
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
   const labelRef = useRef();
 
@@ -38,39 +43,45 @@ const HDLabel = forwardRef((props, ref) => {
     element.labelHTML = html;
   };
 
-  const getElement = () => labelRef.current;
+  const operations = {
+    getElement() { labelRef.current },
 
-  const addLabel = (value) => {
-    if (getElement()) {
-      const element = getElement();
-      element.innerHTML = value;
-    }
-  };
-
-  const getStyleAttributes = () => {
-    return ControlStyleModel.getLabelStyle();
-  };
-
-  const addStyle = (style = "") => {
-    setControlStyle(style);
-  };
-
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        addLabel,
-        getElement,
-        getStyleAttributes,
-        addStyle,
-      };
+    addLabel(value) {
+      if (getElement()) {
+        const element = getElement();
+        element.innerHTML = value;
+      }
     },
-    []
-  );
+
+    getStyleAttributes() {
+      return ControlStyleModel.getLabelStyle();
+    },
+
+    addStyle(style = "") {
+      setControlStyle(style);
+    }
+  }
+
+  useImperativeHandle(ref, () => {
+    setRefInitialize(true);
+    return operations;
+  });
 
   useEffect(() => {
     setLabelHTML(element.labelHTML || labelHTML);
-  });
+    //Apply style if the element already has
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
+    }
+  }, [isRefInitialize]);
 
   const renderLabel = () => {
     if (visible) {

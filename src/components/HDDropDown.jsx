@@ -14,27 +14,9 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
   const [controlStyle, setControlStyle] = useState();
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
   const getPrimeDropdownRef = useRef(parentRef);
-
-  useEffect(() => {
-    updateMeta(meta);
-    setSelectedValue(element.attributes?.selectedValue || "");
-    setLabelValueOptions(element.attributes?.labelValueOptions || []);
-    setListOptions(element.attributes?.listOptions || []);
-    //Apply style if the element already has
-    if (element.style) {
-      setTimeout(() => {
-        const elementStyle = addElementStyle(
-          element.style,
-          element,
-          meta,
-          setControlStyle
-        );
-        setControlStyle(elementStyle);
-      }, 100);
-    }
-  }, []);
 
   const operations = {
     setResult: (result) => {
@@ -87,6 +69,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   };
 
   useImperativeHandle(parentRef, () => {
+    setRefInitialize(true);
     return operations;
   });
 
@@ -154,6 +137,25 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
       );
     }
   };
+
+  useEffect(() => {
+    updateMeta(meta);
+    setSelectedValue(element.attributes?.selectedValue || "");
+    setLabelValueOptions(element.attributes?.labelValueOptions || []);
+    setListOptions(element.attributes?.listOptions || []);
+    //Apply style if the element already has
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
+    }
+  }, [isRefInitialize]);
 
   return (
     <>

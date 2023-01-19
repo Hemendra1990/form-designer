@@ -23,6 +23,7 @@ const HDPassword = forwardRef((props, ref) => {
   const passwordRef = useRef(ref);
   //const { } = useMetaContext();
   const [controlStyle, setControlStyle] = useState();
+  const [isRefInitialize, setRefInitialize] = useState(false);
 
   const footer = (
     <React.Fragment>
@@ -71,39 +72,43 @@ const HDPassword = forwardRef((props, ref) => {
       return null;
     }
   }
-
+  const operations = {
+    getValue() {
+      return passwordValue;
+    },
+    setValue(passwordVal) {
+      setPasswordValue(passwordVal);
+    },
+    getStyleAttributes: () => {
+      return ControlStyleModel.getPasswordStyle();
+    },
+    addStyle(style = "") {
+      setControlStyle(style);
+    },
+  };
   useImperativeHandle(ref, () => {
-    return {
-      getValue() {
-        return passwordValue;
-      },
-      setValue(passwordVal) {
-        setPasswordValue(passwordVal);
-      },
-      getStyleAttributes: () => {
-        return ControlStyleModel.getPasswordStyle();
-      },
-      addStyle(style = "") {
-        setControlStyle(style);
-      },
-    };
+    setRefInitialize(true);
+    return operations;
   });
 
   useEffect(() => {
     checkShowStrengthIndicatorValue();
     checkPanelFooterForPasswordValue();
     updateMeta(meta); //This is necesary, put in all the components... we need to update the meta.elementMap so need to call this method after the input is rendered
+
     //Apply style if the element already has
-    if (element.style) {
-      const elementStyle = addElementStyle(
-        element.style,
-        element,
-        meta,
-        setControlStyle
-      );
-      setControlStyle(elementStyle);
+    if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
+      if (element.style) {
+        const elementStyle = addElementStyle(
+          element.style,
+          element,
+          meta,
+          setControlStyle
+        );
+        setControlStyle(elementStyle);
+      }
     }
-  }, []);
+  }, [isRefInitialize]);
 
   return (
     <>

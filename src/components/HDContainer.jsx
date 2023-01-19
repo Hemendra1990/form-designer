@@ -11,18 +11,18 @@ import { TEST_REPORTS_FOR_TESTING } from "../tests/report";
 const HDContainer = React.forwardRef((props, ref) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
-  const { element} = props;
+  const { element } = props;
 
   const [containerMeta, setContainerMeta] = useState({});
   const [loadedReport, setLoadedReport] = useState();
 
   function initializeComponent(reportElements) {
-    if(!reportElements) {
+    if (!reportElements) {
       return;
     }
     reportElements.forEach(el => {
       el.component = getComponent(el.type);
-      if(el.attributes && el.attributes.children && el.attributes.children.length > 0) {
+      if (el.attributes && el.attributes.children && el.attributes.children.length > 0) {
         initializeComponent(el.attributes.children);
       }
     })
@@ -31,14 +31,14 @@ const HDContainer = React.forwardRef((props, ref) => {
   function createElementMap(elements, elementMap) {
     elements.forEach(elm => {
       elementMap[elm.name] = elm;
-      if(elm.attributes && elm.attributes.children.length > 0) {
+      if (elm.attributes && elm.attributes.children.length > 0) {
         createElementMap(elm.attributes.children, elementMap);
       }
     })
   }
 
   const generateElementMap = (preMeta) => {
-    if(preMeta.elements && preMeta.elements.length > 0) {
+    if (preMeta.elements && preMeta.elements.length > 0) {
       const elementMap = {};
       createElementMap(preMeta.elements, elementMap);
       containerMeta.elementMap = elementMap;
@@ -48,14 +48,14 @@ const HDContainer = React.forwardRef((props, ref) => {
   }
 
   useImperativeHandle(ref, () => ({
-    loadReport(resourceId, data={}) {
+    loadReport(resourceId, data = {}) {
       //TODO: we need to make the server call taking the resourceId
 
       //This is for testing
       const json = TEST_REPORTS_FOR_TESTING.find(trpt => trpt.id === resourceId).json; //we will be getting the json string from the server
       const report = JSON.parse(json);
       initializeComponent(report.elements);
-      if(element.attributes && element.attributes.children) {
+      if (element.attributes && element.attributes.children) {
         element.attributes.children = [];
         element.attributes.children = report.elements;
         setContainerMeta(report);
@@ -69,11 +69,11 @@ const HDContainer = React.forwardRef((props, ref) => {
 
   const createChildElement = useCallback((child, index) => {
     let ref = child.ref;
-    if(!ref) {
+    if (!ref) {
       ref = React.createRef();
     }
     let cMeta;
-    if(Object.keys(containerMeta).length > 0) {
+    if (Object.keys(containerMeta).length > 0) {
       cMeta = containerMeta;
     } else {
       cMeta = meta;
@@ -96,11 +96,11 @@ const HDContainer = React.forwardRef((props, ref) => {
    * Observable will be create which will emit element click change
    * @param {*} element
    */
-   const handleChildElementClick = (event, element, child) => {
+  const handleChildElementClick = (event, element, child) => {
     event.preventDefault();
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
-    
+
     meta.currentElement = child;
     updateMeta(meta);
   };
@@ -109,7 +109,7 @@ const HDContainer = React.forwardRef((props, ref) => {
     <Droppable droppableId={`${element.id}`} type="pgElement">
       {(provided, snapshot) => (
         <div
-        className="grid col-12"
+          className="grid col-12"
           ref={provided.innerRef}
           {...provided.droppableProps}
           style={{
@@ -134,7 +134,7 @@ const HDContainer = React.forwardRef((props, ref) => {
                           style={{ float: "right" }}
                         />}
                       </span>
-                      <div onClick={(e) => {handleChildElementClick(e, element, child)}}>
+                      <div onClick={(e) => { handleChildElementClick(e, element, child) }}>
                         {createChildElement(child, index)}
                       </div>
                       {provided.placeholder}
