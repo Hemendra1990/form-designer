@@ -5,6 +5,7 @@ import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { useUpdateMetaContext } from "../../context/MetaContext";
+import { Slider } from "primereact/slider";
 
 const AttrRadio = (props) => {
   const { meta, handleAttributeChange, updateClass, eventOptions } = props;
@@ -21,6 +22,7 @@ const AttrRadio = (props) => {
   const [staticOptionList, setStaticOptionList] = useState(emptyOption);
   const [heightSize, setHeightSize] = useState(null);
   const [controlName, setControlName] = useState(meta.currentElement.id || "");
+  const [colValue, setColValue] = useState(4);
 
   const handelDisableEventContent = (e) => {
     setDisabled(e.checked);
@@ -164,16 +166,31 @@ const AttrRadio = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label className="block">Class</label>
+        <label htmlFor="class" className="block">
+          Class ( col -{currAttribute.classNameSlider || 4} )
+        </label>
         <InputText
-          style={{ width: "100%" }}
           name="className"
+          className="mt-3"
           placeholder="col-12 md:col-6 lg:col-3"
-          value={className}
+          value={currAttribute?.className || ""}
+          style={{ width: "100%" }}
+          onChange={updateClass}
+        />
+        <Slider
+          name="classNameSlider"
+          value={currAttribute.classNameSlider || 4}
           onChange={(e) => {
-            setClassName(e.target.value);
+            setColValue(e.value);
+            if (!currAttribute) {
+              currAttribute = {};
+            }
+            currAttribute.classNameSlider = e.value;
+            currAttribute.className = 'col-' + colValue;
             updateClass(e);
           }}
+          min={1}
+          max={12}
         />
       </div>
       <div className="field col-12">
@@ -231,7 +248,7 @@ const AttrRadio = (props) => {
                 <div className="col-5">
                   <InputText
                     style={{ width: "100%" }}
-                    name="code"
+                    name="id"
                     key={index}
                     value={staticOptionList[index].id || ""}
                     placeholder="Value"

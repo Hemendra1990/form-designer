@@ -71,14 +71,11 @@ const HDGrid = forwardRef((props, ref) => {
   }));
 
   function setResult({ columns, rows }) {
-    setTimeout(() => {
-      //This i have ketpt for testing, remove setTimeout
-      const { element } = props;
-      element.attributes["columns"] = columns;
-      setColumns(columns);
-      setRows(rows);
-      setLoading(false);
-    });
+    const { element } = props;
+    element.attributes["columns"] = columns;
+    setColumns(columns);
+    setRows(rows);
+    setLoading(false);
   }
 
   function applyGridOptions() {
@@ -138,6 +135,7 @@ const HDGrid = forwardRef((props, ref) => {
   const DropdownEditor = (options, configClmId) => {
     return (
       <ColumnDropdownEditor
+        meta={meta}
         options={options}
         rows={rows}
         element={props.element}

@@ -55,7 +55,7 @@ const Homepage = (props) => {
   const openModal = () => {
     actions.push(
       `Hello Modal Calling from Homepage Button ${new Date().toLocaleTimeString()}`,
-      (poppedModal) => {}
+      (poppedModal) => { }
     );
     //push('Hello Modal Calling from Homepage Button');
   };
@@ -74,7 +74,7 @@ const Homepage = (props) => {
   });
 
   return (
-    <div ref={drop} style={{ border: "1px solid red" }}>
+    <div ref={drop} >
       <div className="top-menubar">
         <HDMenubar toggleEventModal={onHide} />
       </div>
@@ -96,11 +96,10 @@ const Homepage = (props) => {
 
       <div className="grid p-fluid" style={{ height: "90vh", width: "100%" }}>
         <div
-          className={`${
-            meta.editMode
+          className={`${meta.editMode
               ? "col-12 playground"
               : "col-12 playground-preview m-20"
-          }`}
+            }`}
         >
           <HDPlayground />
           {/* <Playground /> */}

@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { useUpdateMetaContext } from "../../context/MetaContext";
+import { Slider } from "primereact/slider";
 
 const AttrMultiSelect = (props) => {
     const { meta, updateClass, handleAttributeChange } = props;
@@ -34,6 +35,7 @@ const AttrMultiSelect = (props) => {
     const [emptyFilterMessage, setemptyFilterMessage] = useState("");
     const [display, setDisplay] = useState([]);
     const [controlName, setControlName] = useState(meta.currentElement.id || "");
+    const [colValue, setColValue] = useState(4);
 
     const handelInputChange = (event, index) => {
         const updatedStaticOptionList = staticOptionList.map((field, i) => {
@@ -376,16 +378,30 @@ const AttrMultiSelect = (props) => {
             </Dialog>
 
             <div className="field col-12">
-                <label className="block">Class</label>
-                <InputText
-                    style={{ width: "100%" }}
-                    name="className"
-                    placeholder="col-12 md:col-6 lg:col-3"
-                    value={className}
+                <label htmlFor="class" className="block">
+                    Class ( col -{currAttribute.classNameSlider || 4} )
+                </label>
+                {/* <InputText
+            name="className"
+            placeholder="col-12 md:col-6 lg:col-3"
+            value={currAttribute?.className || ""}
+            style={{ width: "100%" }}
+            onChange={updateClass}
+          /> */}
+                <Slider
+                    name="classNameSlider"
+                    value={currAttribute.classNameSlider || 4}
                     onChange={(e) => {
-                        setClassName(e.target.value);
+                        setColValue(e.value);
+                        if (!currAttribute) {
+                            currAttribute = {};
+                        }
+                        currAttribute.classNameSlider = e.value;
+                        currAttribute.className = 'col-' + colValue;
                         updateClass(e);
                     }}
+                    min={1}
+                    max={12}
                 />
             </div>
             <div className="field col-12">

@@ -4,6 +4,7 @@ import { DataConnector } from "../data-connector/DataConnector";
 import { Button } from "primereact/button";
 import { useState } from "react";
 import GridEditAttributes from "./GridEditAttributes";
+import { Slider } from "primereact/slider";
 
 const AttrGrid = (props) => {
   const meta = props.meta;
@@ -14,6 +15,7 @@ const AttrGrid = (props) => {
 
   const [enbleGridModal, setGridModal] = useState(false);
   const [controlName, setControlName] = useState(meta.currentElement.id || "");
+  const [colValue, setColValue] = useState(4);
 
   const openGridoptions = () => {
     setGridModal(true);
@@ -51,13 +53,31 @@ const AttrGrid = (props) => {
         />
       </div>
       <div className="field col-12">
-        <label className="block">Class</label>
+        <label htmlFor="class" className="block">
+          Class ( col -{currAttribute.classNameSlider || 4} )
+        </label>
         <InputText
-          style={{ width: "100%" }}
           name="className"
           placeholder="col-12 md:col-6 lg:col-3"
           value={currAttribute?.className || ""}
+          style={{ width: "100%" }}
           onChange={updateClass}
+        />
+        <Slider
+          name="classNameSlider"
+          className="mt-3"
+          value={currAttribute.classNameSlider || 4}
+          onChange={(e) => {
+            setColValue(e.value);
+            if (!currAttribute) {
+              currAttribute = {};
+            }
+            currAttribute.classNameSlider = e.value;
+            currAttribute.className = 'col-' + colValue;
+            updateClass(e);
+          }}
+          min={1}
+          max={12}
         />
       </div>
       <div className="field col-12">

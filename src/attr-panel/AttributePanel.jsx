@@ -1,6 +1,7 @@
 import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
+import { Slider } from "primereact/slider";
 import { Fragment, useEffect, useState } from "react";
 import { ProductService } from "../components/grid/ProductService";
 import { CONTROL } from "../constants/Elements";
@@ -31,8 +32,8 @@ import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
 import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
-import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
-import AttrListBox from "./attr-ListBox/AttrListBox";
+import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
+import AttrListBox from "./attr-listbox/AttrListBox";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -51,13 +52,14 @@ const AttributePanel = (props) => {
   const [showConfigure, setShowConfigure] = useState(false);
   const [showAttributs, setShowAttributs] = useState(false);
   const [showDataMapper, setShowDataMapper] = useState(false);
+  const [colValue, setColValue] = useState(4);
 
   const handleAttributeChange = (e) => {
     if (!meta.currentElement.attributes) {
       meta.currentElement.attributes = {};
     }
     if (e.checked !== undefined) {
-      //Radio, Dropdown
+      //Radio, Dropdowl
       meta.currentElement.attributes[
         (e.target || e.originalEvent.target).name
       ] = e.checked;
@@ -77,7 +79,7 @@ const AttributePanel = (props) => {
   };
 
   const updateClass = (e) => {
-    setClassNameValue(e.target.value);
+    setClassNameValue((e.target || e.originalEvent.target).value);
     handleAttributeChange(e);
   };
 
@@ -226,7 +228,7 @@ const AttributePanel = (props) => {
       const classDiv = (
         <div className="field col-12">
           <label htmlFor="class" className="block">
-            Class
+            Width ( col-{currAttribute.classNameSlider || 4} )
           </label>
           <InputText
             name="className"
@@ -234,6 +236,22 @@ const AttributePanel = (props) => {
             value={currAttribute?.className || ""}
             style={{ width: "100%" }}
             onChange={updateClass}
+          />
+          <Slider
+            name="classNameSlider"
+            value={currAttribute.classNameSlider || 4}
+            className="mt-3"
+            onChange={(e) => {
+              setColValue(e.value);
+              if (!currAttribute) {
+                currAttribute = {};
+              }
+              currAttribute.classNameSlider = e.value;
+              currAttribute.className = 'col-' + colValue;
+              updateClass(e);
+            }}
+            min={1}
+            max={12}
           />
         </div>
       );

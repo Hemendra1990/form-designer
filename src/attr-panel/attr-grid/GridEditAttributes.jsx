@@ -15,14 +15,14 @@ const GridEditAttributes = ({ meta, currentElement, hideModal }) => {
 
   console.log(currentElement);
 
-  useEffect(()=> {
+  useEffect(() => {
     setColumns(currentElement?.attributes?.columns || []);
   }, [])
 
   const gridOptionsRef = useRef();
 
   const applyGridOptions = () => {
-    
+
     hideModal();
   };
 
@@ -65,7 +65,7 @@ const GridEditAttributes = ({ meta, currentElement, hideModal }) => {
           ></GridCellTemplate>
         </TabPanel>
         <TabPanel header="Editable">
-          <GridColumnEditable element={currentElement} selectedColumn={selectedColumn} columns={columns} />
+          <GridColumnEditable meta={meta} element={currentElement} selectedColumn={selectedColumn} columns={columns} />
           {/* `<Dropdown value={selectedEditableType} options={editableFieldTypes} onChange={(e)=> {updateElement(e)}}></Dropdown>` */}
         </TabPanel>
       </TabView>
@@ -100,7 +100,7 @@ const GridEditAttributes = ({ meta, currentElement, hideModal }) => {
               </div>
             </TabPanel>
             <TabPanel header="Options">
-              <GridOptions ref={gridOptionsRef} element={currentElement}/>
+              <GridOptions ref={gridOptionsRef} element={currentElement} />
             </TabPanel>
           </TabView>
         </div>

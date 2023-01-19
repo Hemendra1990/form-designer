@@ -6,7 +6,7 @@ import { useMetaContext } from "../context/MetaContext";
 import TargetHandle from "./model/TargetHandle";
 
 //This list will grow in future as we will be adding different components
-const candidateRefreshElemnts = ["grid", "combobox", "autocomplete", "dropdown", "listbox"];
+const candidateRefreshElemnts = ["grid", "combobox", "autocomplete", "dropdown", "listbox", "multiselect"];
 
 const RefreshElements = (props) => {
   const meta = useMetaContext();
@@ -65,7 +65,7 @@ const RefreshElements = (props) => {
           type="source"
           position="right"
           style={{ background: "#555", height: "10px", width: "10px" }}
-          onConnect={(params) => {}}
+          onConnect={(params) => { }}
           isConnectable={true}
         />
       </Card>
