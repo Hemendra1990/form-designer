@@ -44,11 +44,13 @@ const HDLabel = forwardRef((props, ref) => {
   };
 
   const operations = {
-    getElement() { labelRef.current },
+    getElement() {
+      return labelRef.current
+    },
 
     addLabel(value) {
-      if (getElement()) {
-        const element = getElement();
+      if (this.getElement()) {
+        const element = this.getElement();
         element.innerHTML = value;
       }
     },

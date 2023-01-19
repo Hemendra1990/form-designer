@@ -14,11 +14,7 @@ import ContainerHelper from "../../_helpers/ContainerHelper";
 
 function HDContainer({
   element,
-  handleWhenElementMovedToContainer,
-  setPGElements,
-  pgElements,
   pgIndex,
-  updatePgElements,
 }) {
   const meta = useMetaContext();
   const { updateMeta, updateMetaWithElement } = useUpdateMetaContext();
@@ -93,7 +89,6 @@ function HDContainer({
               break;
             }
           }
-          //updateMeta(meta);
         } else if (monitor.getItemType() === ItemType.HD_PG_ELEMENT) {
           //hdPGElement
           const helper = new ContainerHelper();
@@ -102,16 +97,12 @@ function HDContainer({
             item.element.id,
             containerElement.id
           );
-          //check
-          //setPGElements([...pgElements]);
 
           const newObj = helper.findNodeAndParent(
             meta.elements,
             containerElement.id
           );
           console.log("New Obj", newObj);
-          //setContainerChildren([...newObj?.node?.attributes.children]);
-          //updatePgElements([...pgElements]);
           updateMeta(meta.elements)
         }
       },
@@ -121,7 +112,7 @@ function HDContainer({
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [controlElementHoveringOnIndex]
+    [controlElementHoveringOnIndex, meta.elements]
   );
 
   function findElement(obj, elementId) {
@@ -160,11 +151,10 @@ function HDContainer({
           monitor.getItem().resizingInsideContainer = true;
 
           console.log({ parent, meta });
-          //updateMeta(meta);
         }
       }
     },
-    [controlElementHoveringOnIndex, setControlElementHoveringOnIndex]
+    [controlElementHoveringOnIndex, setControlElementHoveringOnIndex, meta.elements]
   );
 
   const isActive = canDrop && isOver;
