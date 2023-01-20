@@ -6,10 +6,12 @@ import { useMetaContext } from "../context/MetaContext";
 import TargetHandle from "./model/TargetHandle";
 import { SelectButton } from "primereact/selectbutton";
 import { InputText } from "primereact/inputtext";
+import { PageMetaData } from "../model/PageMetaData";
+import { HttpFormResourceService } from "../http-service/HttpFormResourceService";
 
 
 //Test
-const testReSources = ["rid-0123", "rid-1345"];
+//const testReSources = ["rid-0123", "rid-1345"];
 
 //TODO: LoadInContainer event will have two optionn, 1) Dynamic 2) Static
 //1. Dynamic: The user can use the sqlVariable to pass the resourceId(report Id) and this value will be evaluated in the runtinme and report will be loaded to the target container
@@ -19,9 +21,10 @@ const LoadReportInContainer = (props) => {
   const { data, isConnectable } = props;
 
   const [selectedContainer, setSelectedContainer] = useState(null);
-  const [selectedResource, setSelectedResource] = useState(null);
+  const [selectedResource, setSelectedResource] = useState([]);
   const [selectedResourceType, setSelectedResourceType] = useState(null);
   const [resourceId, setResourceId] = useState("");
+  const httpResourceService = new HttpFormResourceService();
 
   const resourceTypeOptions = ["Dynamic", "Static"];
   //fetch the list of containers available in the meta for the current report
@@ -29,28 +32,37 @@ const LoadReportInContainer = (props) => {
     .filter((key) => key.includes("container-"))
     .map((key) => key);
 
-    useEffect(() => {
+  useEffect(() => {
+    let param = PageMetaData;
+    param.pageNumber = 0;
+    param.pageSize = 10;
 
-        const loadReportData = {
-            contianer: selectedContainer,
-            resource: selectedResource,
-            type: selectedResourceType,
-            resourceId
-        }
+    httpResourceService.getAll(param).then(res => {
+      console.log(res);
+      const { data } = res.data;
+      setSelectedResource(data);
+    }).catch(err => { console.error(err) });
 
-        data.eventInfo = {...data.eventInfo, data: loadReportData};
-
-    }, [selectedResource, selectedContainer, selectedResourceType, resourceId])
-
-
-    const handleResourceTypeChange = (e) => {
-        setSelectedResourceType(e.value);
-        if(e.value === 'Dynamic') {
-            setSelectedResource(null)
-        } else {
-            setResourceId(null);
-        }
+    const loadReportData = {
+      contianer: selectedContainer,
+      resource: selectedResource,
+      type: selectedResourceType,
+      resourceId
     }
+
+    data.eventInfo = { ...data.eventInfo, data: loadReportData };
+
+  }, [selectedResource, selectedContainer, selectedResourceType, resourceId])
+
+
+  const handleResourceTypeChange = (e) => {
+    setSelectedResourceType(e.value);
+    if (e.value === 'Dynamic') {
+      setSelectedResource(null)
+    } else {
+      setResourceId(null);
+    }
+  }
 
   const showResource = () => {
     if (selectedResourceType === 'Dynamic') {
@@ -72,8 +84,9 @@ const LoadReportInContainer = (props) => {
             Resource<span style={{ color: "red" }}>(*)</span>{" "}
           </label>
           <Dropdown
-            options={testReSources}
+            //options={"resourceName"}
             value={selectedResource}
+            optionLabel={"resourceName"}
             onChange={(e) => setSelectedResource(e.value)}
           ></Dropdown>
         </div>
@@ -85,7 +98,7 @@ const LoadReportInContainer = (props) => {
       <div className="grid p-fluid">
         <div className="col-12 p-2">
           <label className="block">
-            Contianer<span style={{ color: "red" }}>(*)</span>{" "}
+            Container<span style={{ color: "red" }}>(*)</span>{" "}
           </label>
           <Dropdown
             options={containers}

@@ -4,6 +4,7 @@ import MessageAlert from "../MessageAlert";
 import PopupModal from "../PopupModal";
 import RefreshElements from "../RefreshElements";
 import Script from "../Script";
+import ShowHideControl from "../ShowHideControl";
 
 export const EVENTS = [
   {
@@ -36,6 +37,11 @@ export const EVENTS = [
     eventNodeType: "loadReport",
     eventNodeTypeComponent: LoadReportInContainer,
   },
+  {
+    name: "Show/Hide Control",
+    eventNodeType: "showHideControl",
+    eventNodeTypeComponent: ShowHideControl,
+  },
 ];
 
 export const NODE_TYPES = () => {
@@ -46,11 +52,12 @@ export const NODE_TYPES = () => {
   return ans;
 };
 
-export const EVENT_TYPE  = {
+export const EVENT_TYPE = {
   SCRIPT: "script",
   ALERT: "alert",
   CONFIRMATION: "confirmation",
   POP_UP: "popup",
   REFRESH_ELEMENTS: "refreshElements",
-  LOAD_REPORT: "loadReport"
+  LOAD_REPORT: "loadReport",
+  SHOWHIDE_CONTROL: "showHideControl"
 };

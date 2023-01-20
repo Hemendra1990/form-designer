@@ -181,20 +181,22 @@ function HDContainer({
       className="grid"
     >
       {element?.attributes?.children.map((childElement, containerIndex) => {
-        childElement.currIndex = containerIndex;
-        childElement.parent = element;//element means container
-        return (
-          <DraggableContainerElement
-            {...childElement}
-            key={childElement?.id}
-            style={{ marginTop: 10, marginBottom: 10 }}
-            element={childElement}
-            pgIndex={pgIndex}
-            parentId={containerElement.id}
-            moveContainerCard={moveContainerCard}
-            containerIndex={containerIndex}
-          />
-        );
+        if (childElement) {
+          childElement.currIndex = containerIndex;
+          childElement.parent = element;//element means container
+          return (
+            <DraggableContainerElement
+              {...childElement}
+              key={childElement?.id}
+              style={{ marginTop: 10, marginBottom: 10 }}
+              element={childElement}
+              pgIndex={pgIndex}
+              parentId={containerElement.id}
+              moveContainerCard={moveContainerCard}
+              containerIndex={containerIndex}
+            />
+          );
+        }
       })}
     </div>
   );

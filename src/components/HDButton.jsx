@@ -14,6 +14,12 @@ const HDButton = React.forwardRef((props, ref) => {
   const [controlStyle, setControlStyle] = useState("");
   const [isRefInitialize, setRefInitialize] = useState(false);
 
+  const [showHideFalg, setShowHideFlag] = useState(true); //will change later as the event modeler itself is going to change for showHide
+
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
+
   const operations = {
     getStyleAttributes: () => {
       return ControlStyleModel.getButtonStyle();
@@ -21,6 +27,7 @@ const HDButton = React.forwardRef((props, ref) => {
     addStyle(style = "") {
       setControlStyle(style);
     },
+    showHide
   }
 
   useImperativeHandle(ref, () => {
@@ -77,7 +84,7 @@ const HDButton = React.forwardRef((props, ref) => {
   return (
     <>
       <style>{controlStyle}</style>
-      <div id={element.id}>
+      {showHideFalg && <div id={element.id}>
         <Button
           ref={ref}
           className={props.element?.attributes?.type}
@@ -87,7 +94,7 @@ const HDButton = React.forwardRef((props, ref) => {
           }}
           icon={element?.attributes?.icon}
         />
-      </div>
+      </div>}
     </>
   );
 });
