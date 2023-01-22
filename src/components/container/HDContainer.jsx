@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { useDrop } from "react-dnd";
 import { CONTROL } from "../../constants/Elements";
 import getComponent from "../../constants/HemendraConstants";
@@ -6,30 +6,121 @@ import {
   useMetaContext,
   useUpdateMetaContext,
 } from "../../context/MetaContext";
+import { HttpFormResourceService } from "../../http-service/HttpFormResourceService";
 import { ItemType } from "../../model/ItemType";
 import DraggableContainerElement from "../../playground/DraggableContainerElement";
-import DraggablePGElement from "../../playground/DraggablePGElement";
-import { createElementId } from "../../utils/Utils";
+import { createElementId, generateElementMap } from "../../utils/Utils";
 import ContainerHelper from "../../_helpers/ContainerHelper";
 
-function HDContainer({
+const httpResourceService = new HttpFormResourceService();
+const HDContainer = forwardRef(({
   element,
   pgIndex,
-}) {
-  const meta = useMetaContext();
-  const { updateMeta, updateMetaWithElement } = useUpdateMetaContext();
+  meta
+}, ref) => {
+  const { updateMetaWithElement } = useUpdateMetaContext();
   const containerElement = element;
   const helper = new ContainerHelper();
 
   const [containerChildren, setContainerChildren] = useState([]);
   const [controlElementHoveringOnIndex, setControlElementHoveringOnIndex] = useState(-999);
 
+  const [resourceMeta, setResourceMeta] = useState(null);
+
   containerElement.attributes = containerElement.attributes || {};
   containerElement.attributes.children = containerElement.attributes.children || [];
+
+  //New Code
+  const [children, setChildren] = useState([]);
+
+  useEffect(() => {
+    setChildren(element.attributes.children || []);
+  }, []);
 
   useEffect(() => {
     console.log("Container children test", element);
   }, [element]);
+
+
+
+  function initializeComponent(reportElements) {
+    if (!reportElements) {
+      return;
+    }
+    reportElements.forEach(el => {
+      el.component = getComponent(el.type);
+      if (el.attributes && el.attributes.children && el.attributes.children.length > 0) {
+        initializeComponent(el.attributes.children);
+      }
+    })
+  }
+
+  /* function createElementMap(elements, elementMap) {
+    elements.forEach(elm => {
+      elementMap[elm.name] = elm;
+      if (elm.attributes && elm.attributes.children.length > 0) {
+        createElementMap(elm.attributes.children, elementMap);
+      }
+    })
+  }
+
+  const generateElementMap = (preMeta) => {
+    if (preMeta.elements && preMeta.elements.length > 0) {
+      const elementMap = {};
+      createElementMap(preMeta.elements, elementMap);
+
+    }
+    return <></>;
+  } */
+
+  useEffect(() => {
+    if (resourceMeta) {
+      setChildren(resourceMeta.elements || []);
+    }
+  }, [resourceMeta]);
+
+  useImperativeHandle(ref, () => ({
+    loadReport(resourceId, data = {}) {
+      //TODO: we need to make the server call taking the resourceId
+      httpResourceService.getFormJson(resourceId).then(res => {
+        const report = res.data
+
+        const { json } = report
+        initializeComponent(json.elements);
+        setResourceMeta(() => {
+          const reportMeta = {};
+          reportMeta.elementMap = {};
+          reportMeta.resourceId = report.resourceId;
+          reportMeta.sessionId = report.sessionId;
+          reportMeta.description = report.description;
+          reportMeta.name = report.resourceName;
+          reportMeta.elements = json.elements; //Just check what elements came into it....
+          reportMeta.configuration = json.configuration;
+          reportMeta.sqlList = json.sqlList;
+          reportMeta.apiList = json.apiList;
+          reportMeta.events = json.events;
+          reportMeta.elementMap = generateElementMap(reportMeta);
+          //reportMeta.events.forEach((e) => initialiseScripts(e));
+          reportMeta.editMode = false;
+          reportMeta.sqlVariables = json.sqlVariables;
+          meta.sqlVariables = json.sqlVariables; //Adding the sqlVariables to actual meta
+
+
+          return reportMeta;
+        })
+      }).catch(err => {
+        console.error("Failed to fetch the form data from server.", err);
+      });
+
+      //This is for testing
+
+
+    },
+    addStyle(style = "") {
+      //TODO: implementation of style
+      /* code to add styles from the Style Control component */
+    },
+  }));
 
   const [{ canDrop, isOver, isOverCurrent }, drop] = useDrop(
     () => ({
@@ -103,7 +194,7 @@ function HDContainer({
             containerElement.id
           );
           console.log("New Obj", newObj);
-          updateMeta(meta.elements)
+          /* updateMeta(meta.elements) */
         }
       },
       collect: (monitor) => ({
@@ -180,7 +271,7 @@ function HDContainer({
       }}
       className="grid"
     >
-      {element?.attributes?.children.map((childElement, containerIndex) => {
+      {children.map((childElement, containerIndex) => {
         childElement.currIndex = containerIndex;
         childElement.parent = element;//element means container
         return (
@@ -190,6 +281,8 @@ function HDContainer({
             style={{ marginTop: 10, marginBottom: 10 }}
             element={childElement}
             pgIndex={pgIndex}
+            containerMeta={resourceMeta}
+            meta={meta}
             parentId={containerElement.id}
             moveContainerCard={moveContainerCard}
             containerIndex={containerIndex}
@@ -198,6 +291,6 @@ function HDContainer({
       })}
     </div>
   );
-}
+});
 
 export default HDContainer;

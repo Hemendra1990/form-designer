@@ -10,7 +10,7 @@ const HDButton = React.forwardRef((props, ref) => {
   const element = props.element;
   const { actions, modals } = useModalContext();
   const { updateMeta } = useUpdateMetaContext();
-  const meta = useMetaContext();
+  const meta = props.meta;
   const [controlStyle, setControlStyle] = useState("");
   const [isRefInitialize, setRefInitialize] = useState(false);
 
@@ -23,13 +23,17 @@ const HDButton = React.forwardRef((props, ref) => {
     },
   }
 
+  useEffect(() => {
+    element.ref.current = operations;
+  }, [])
+
   useImperativeHandle(ref, () => {
     setRefInitialize(true)
     return operations;
   });
 
   useEffect(() => {
-    updateMeta(meta);
+    /* updateMeta(meta); */
     //Apply style if the element already has
     if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
       if (element.style) {
@@ -52,12 +56,12 @@ const HDButton = React.forwardRef((props, ref) => {
   const executeEvent = (event) => {
     //check if the button is configured with the event or not
     if (element.attributes && element.attributes.eventId) {
-      props.meta.sqlVariables = {
-        ...props.meta.sqlVariables,
+      meta.sqlVariables = {
+        ...meta.sqlVariables,
         [element.attributes.name]: event.value,
       };
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.eventId,
         actions,
         modals

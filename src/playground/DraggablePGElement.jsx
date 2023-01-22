@@ -18,11 +18,14 @@ const DraggablePGElement = React.forwardRef(
     const { updateMeta } = useUpdateMetaContext();
 
     const updateCurrentElement = (event, element) => {
-      event.preventDefault();
-      event.stopPropagation();
-      meta.currentElement = element;
+      if (meta.editMode) {
+        event.preventDefault();
+        event.stopPropagation();
+        meta.currentElement = element;
 
-      updateMeta(meta);
+        updateMeta(meta);
+      }
+
     };
 
     const draggableRef = useRef(null);
@@ -124,6 +127,8 @@ const DraggablePGElement = React.forwardRef(
       if (!ref) {
         ref = React.createRef();
       }
+      element.getMeta = () => meta;
+      element.getInstance = () => ref.current;
       const reactComponent = React.createElement(element.component, {
         ref: ref,
         name: `${element.name}`,
