@@ -25,6 +25,11 @@ const HDLabel = forwardRef((props, ref) => {
   const [isRefInitialize, setRefInitialize] = useState(false);
 
   const labelRef = useRef();
+  const [showHideFlag, setShowHideFlag] = useState(true);
+
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
 
   const handleClick = (event) => {
     if (element.attributes && element.attributes.onclick) {
@@ -61,7 +66,8 @@ const HDLabel = forwardRef((props, ref) => {
 
     addStyle(style = "") {
       setControlStyle(style);
-    }
+    },
+    showHide
   }
 
   useImperativeHandle(ref, () => {
@@ -92,6 +98,7 @@ const HDLabel = forwardRef((props, ref) => {
           <style>{controlStyle}</style>
           <div id={element.id}>
             <div
+              style={showHideFlag ? { display: 'block' } : { display: 'none' }}
               key={divRefreshKey}
               ref={labelRef}
               disabled={disabled}

@@ -14,7 +14,7 @@ const HDButton = React.forwardRef((props, ref) => {
   const [controlStyle, setControlStyle] = useState("");
   const [isRefInitialize, setRefInitialize] = useState(false);
 
-  const [showHideFalg, setShowHideFlag] = useState(true); //will change later as the event modeler itself is going to change for showHide
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
   const showHide = (value) => {//expecing the value to be boolean
     setShowHideFlag(value);
@@ -84,8 +84,9 @@ const HDButton = React.forwardRef((props, ref) => {
   return (
     <>
       <style>{controlStyle}</style>
-      {showHideFalg && <div id={element.id}>
+      <div id={element.id}>
         <Button
+          style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
           ref={ref}
           className={props.element?.attributes?.type}
           label={element?.attributes?.hideLabelContent ? "" : element?.attributes?.label}
@@ -94,7 +95,7 @@ const HDButton = React.forwardRef((props, ref) => {
           }}
           icon={element?.attributes?.icon}
         />
-      </div>}
+      </div>
     </>
   );
 });

@@ -23,7 +23,11 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
   const [radioButtonList, setRadioButtonList] = useState([emptyOption]);
   const [checkEmptyList, setCheckEmptyList] = useState(false);
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const handleOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onChange) {
       props.meta.sqlVariables = {
@@ -99,7 +103,9 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
       return element.attributes.required = value;
     },
 
-    getPrimeRadioRef
+    getPrimeRadioRef,
+
+    showHide
   }
 
 
@@ -120,6 +126,7 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
         return (
           <div key={item.id} className="field-radiobutton">
             <RadioButton
+              style={showHideFlag ? { display: 'block' } : { display: 'none' }}
               ref={getPrimeRadioRef}
               inputId={item.id}
               key={item.id}
@@ -165,9 +172,9 @@ const HDRadioButton = React.forwardRef((props, parentRef) => {
   return (
     <>
       <style>{controlStyle}</style>
-      <div id={element.id} style={{ overflow: "auto", height: `${element.attributes.heightSize || 10}vh` }}>
+      {showHideFlag && <div id={element.id} style={{ overflow: "auto", height: `${element.attributes.heightSize || 10}vh` }}>
         {renderOptionList()}
-      </div>
+      </div>}
     </>
   );
 });

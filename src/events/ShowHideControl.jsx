@@ -1,5 +1,4 @@
 import { Card } from "primereact/card";
-import { Dropdown } from "primereact/dropdown";
 import React, { memo, useEffect, useState } from "react";
 import { Handle } from "reactflow";
 import { useMetaContext } from "../context/MetaContext";
@@ -16,8 +15,7 @@ const ShowHideControl = (props) => {
     const [elementId, setElementId] = useState("");
     const [elements, setElements] = useState([]);
 
-    const controlTypeOptions = ["Show", "Hide"];
-    const [showElement, setShowElement] = useState(true);
+    const controlTypeOptions = ["show", "hide"];
 
     useEffect(() => {
         if (meta.elementMap != undefined) {
@@ -36,7 +34,7 @@ const ShowHideControl = (props) => {
 
     const handleResourceTypeChange = (e) => {
         setSelectedControlType(e.value);
-        if (e.value === 'Show') {
+        if (e.value === 'show') {
             setSelectedControl(null)
         } else {
             setElementId(null);
@@ -44,7 +42,7 @@ const ShowHideControl = (props) => {
     }
 
     const showResource = () => {
-        if (selectedControlType === 'Show' || 'Hide') {
+        if (selectedControlType === 'show' || 'hide') {
             return (
                 <div className="col-12 p-2">
                     <label className="block">

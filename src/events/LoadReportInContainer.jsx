@@ -6,7 +6,6 @@ import { useMetaContext } from "../context/MetaContext";
 import TargetHandle from "./model/TargetHandle";
 import { SelectButton } from "primereact/selectbutton";
 import { InputText } from "primereact/inputtext";
-import { PageMetaData } from "../model/PageMetaData";
 import { HttpFormResourceService } from "../http-service/HttpFormResourceService";
 
 
@@ -21,7 +20,8 @@ const LoadReportInContainer = (props) => {
   const { data, isConnectable } = props;
 
   const [selectedContainer, setSelectedContainer] = useState(null);
-  const [selectedResource, setSelectedResource] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [selectedResource, setSelectedResource] = useState(null);
   const [selectedResourceType, setSelectedResourceType] = useState(null);
   const [resourceId, setResourceId] = useState("");
   const httpResourceService = new HttpFormResourceService();
@@ -32,16 +32,21 @@ const LoadReportInContainer = (props) => {
     .filter((key) => key.includes("container-"))
     .map((key) => key);
 
-  useEffect(() => {
-    let param = PageMetaData;
-    param.pageNumber = 0;
-    param.pageSize = 10;
+  let param = {
+    totalPages: 99,
+    totalRows: 99,
+    pageNumber: 0,
+    pageSize: 10,
+  }
 
-    httpResourceService.getAll(param).then(res => {
-      console.log(res);
+  useEffect(() => {
+    httpResourceService.getAllDetails(param).then(res => {
       const { data } = res.data;
-      setSelectedResource(data);
+      setOptions(data);
     }).catch(err => { console.error(err) });
+  }, [])
+
+  useEffect(() => {
 
     const loadReportData = {
       contianer: selectedContainer,
@@ -53,7 +58,6 @@ const LoadReportInContainer = (props) => {
     data.eventInfo = { ...data.eventInfo, data: loadReportData };
 
   }, [selectedResource, selectedContainer, selectedResourceType, resourceId])
-
 
   const handleResourceTypeChange = (e) => {
     setSelectedResourceType(e.value);
@@ -84,9 +88,10 @@ const LoadReportInContainer = (props) => {
             Resource<span style={{ color: "red" }}>(*)</span>{" "}
           </label>
           <Dropdown
-            //options={"resourceName"}
+            options={options}
             value={selectedResource}
             optionLabel={"resourceName"}
+            optionValue={"resourceId"}
             onChange={(e) => setSelectedResource(e.value)}
           ></Dropdown>
         </div>

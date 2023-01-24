@@ -15,7 +15,11 @@ const HDInput = React.forwardRef((props, ref) => {
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true); //will change later as the event modeler itself is going to change for showHide
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const operations = {
     sayHello() {
       alert('Hello Imperative handle')
@@ -28,7 +32,8 @@ const HDInput = React.forwardRef((props, ref) => {
     },
     addStyle(style = "") {
       setControlStyle(style);
-    }
+    },
+    showHide
   }
 
   /**
@@ -104,6 +109,7 @@ const HDInput = React.forwardRef((props, ref) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <InputText
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}
           ref={ref}
           maxLength={element?.attributes?.maxLength}
           placeholder={element?.attributes?.placeholder}

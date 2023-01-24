@@ -24,7 +24,11 @@ const HDPassword = forwardRef((props, ref) => {
   //const { } = useMetaContext();
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const footer = (
     <React.Fragment>
       <Divider />
@@ -85,6 +89,7 @@ const HDPassword = forwardRef((props, ref) => {
     addStyle(style = "") {
       setControlStyle(style);
     },
+    showHide
   };
   useImperativeHandle(ref, () => {
     setRefInitialize(true);
@@ -115,6 +120,7 @@ const HDPassword = forwardRef((props, ref) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <Password
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}
           ref={passwordRef}
           value={passwordValue}
           onChange={handlePasswordChangeVal}

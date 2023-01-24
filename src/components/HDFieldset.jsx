@@ -11,6 +11,11 @@ const HDFieldset = React.forwardRef((props, ref) => {
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true); //will change later as the event modeler itself is going to change for showHide
+
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
 
   const operations = {
     updateValue: (value) => {
@@ -24,7 +29,8 @@ const HDFieldset = React.forwardRef((props, ref) => {
     },
     addStyle(style = "") {
       setControlStyle(style);
-    }
+    },
+    showHide
   }
   useImperativeHandle(ref, () => {
     setRefInitialize(true);
@@ -51,7 +57,8 @@ const HDFieldset = React.forwardRef((props, ref) => {
     <>
       <style>{controlStyle}</style>
       <div id={element.id}>
-        <Fieldset legend="Header">
+        <Fieldset legend="Header"
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat

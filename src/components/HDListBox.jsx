@@ -15,8 +15,11 @@ const HDListBox = React.forwardRef((props, parentRef) => {
   const [isRefInitialize, setRefInitialize] = useState(false);
 
   const { meta } = useMetaContext();
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
-  console.log(element);
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
 
   const handleOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onchangeevent) {
@@ -85,6 +88,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       setSelectedValue(value);
     },
     getPrimeListRef,
+    showHide
   };
 
   useImperativeHandle(parentRef, () => {
@@ -114,6 +118,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <ListBox
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}
           ref={getPrimeListRef}
           value={selectedValue}
           options={
