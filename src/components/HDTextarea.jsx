@@ -11,7 +11,11 @@ const HDTextarea = React.forwardRef((props, ref) => {
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState('');
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const { updateMeta } = useUpdateMetaContext();
 
   const primeTextAreaRef = useRef(ref);
@@ -28,7 +32,8 @@ const HDTextarea = React.forwardRef((props, ref) => {
     },
     addStyle(style = "") {
       setControlStyle(style);
-    }
+    },
+    showHide
   }
   useImperativeHandle(ref, () => {
     setRefInitialize(true);
@@ -63,8 +68,8 @@ const HDTextarea = React.forwardRef((props, ref) => {
         {controlStyle}
       </style>
       <div id={props.name}>
-
         <InputTextarea
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}
           ref={primeTextAreaRef}
           maxLength={element?.attributes?.maxLength}
           rows={element?.attributes?.rows}

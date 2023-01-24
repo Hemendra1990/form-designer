@@ -53,6 +53,11 @@ const HDGrid = forwardRef((props, ref) => {
   const [dataTableProps, setDataTableProps] = useState({});
 
   const [refreshgrid, setRefreshgrid] = useState(""); //tried to refresh the grid on applying to attributes, need to change this later after anlysing the impact of this line.
+  const [showHideFlag, setShowHideFlag] = useState(true);
+
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
 
   useImperativeHandle(ref, () => ({
     setResult,
@@ -68,6 +73,7 @@ const HDGrid = forwardRef((props, ref) => {
       setControlStyle(style);
     },
     primeGridRef: gridRef,
+    showHide
   }));
 
   function setResult({ columns, rows }) {
@@ -204,6 +210,7 @@ const HDGrid = forwardRef((props, ref) => {
       <style>{controlStyle}</style>
       <div id={element.id} refreshgrid={refreshgrid.toString()}>
         <DataTable
+
           ref={gridRef}
           value={rows}
           showGridlines={dataTableProps?.showGridlines}
@@ -216,7 +223,7 @@ const HDGrid = forwardRef((props, ref) => {
           responsiveLayout="scroll"
           loading={loading}
           emptyMessage="No data to display"
-          style={{ width: "100%" }}
+          style={showHideFlag ? { display: 'block', width: "100%" } : { display: 'none', width: "100%" }}
           tableStyle={{
             minHeight: "20rem",
           }}

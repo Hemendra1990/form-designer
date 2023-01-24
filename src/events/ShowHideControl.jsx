@@ -14,6 +14,7 @@ const ShowHideControl = (props) => {
     const [showHideOptionList, setShowHideOptionList] = useState(data?.eventInfo?.data?.showHideOptionList || [emptyOption]);
 
     const controlTypeOptions = ["show", "hide"];
+
     const handelAddclick = () => {
         setShowHideOptionList([...showHideOptionList, {}]);
     };
@@ -22,8 +23,6 @@ const ShowHideControl = (props) => {
         const list = [...showHideOptionList];
         list.splice(index, 1);
         setShowHideOptionList(list);
-        console.log("-------------------");
-        console.log(list);
     };
 
     const handelInputChange = (event, index) => {

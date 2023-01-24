@@ -21,7 +21,11 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
     const [controlStyle, setControlStyle] = useState();
     const [columnList, setColumnList] = useState([]);
     const [isRefInitialize, setRefInitialize] = useState(false);
+    const [showHideFlag, setShowHideFlag] = useState(true);
 
+    const showHide = (value) => {//expecing the value to be boolean
+        setShowHideFlag(value);
+    }
     const handleOnChangeEvent = (event) => {
         if (element.attributes && element.attributes.onChangeEvent) {
             props.meta.sqlVariables = {
@@ -202,6 +206,7 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
         },
 
         getPrimeAutoCompleteRef,
+        showHide
     };
 
     useImperativeHandle(parentRef, () => {
@@ -238,6 +243,7 @@ const HDAutoComplete = React.forwardRef((props, parentRef) => {
             <style>{controlStyle}</style>
             <div id={element.id}>
                 <AutoComplete
+                    style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
                     ref={getPrimeAutoCompleteRef}
                     placeholder={element?.attributes?.placeholder || "Search"}
                     value={selectedValue}

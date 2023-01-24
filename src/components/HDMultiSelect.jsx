@@ -16,6 +16,11 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
     const [isRefInitialize, setRefInitialize] = useState(false);
 
     const getPrimeMultiSelectRef = useRef(parentRef);
+    const [showHideFlag, setShowHideFlag] = useState(true);
+
+    const showHide = (value) => {//expecing the value to be boolean
+        setShowHideFlag(value);
+    }
 
     const executeOnChangeEvent = (event) => {
         if (element.attributes && element.attributes.onChangeEvent) {
@@ -99,6 +104,7 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
         },
 
         getPrimeMultiSelectRef,
+        showHide
     }
 
     useImperativeHandle(parentRef, () => {
@@ -131,6 +137,7 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
             <style>{controlStyle}</style>
             <div id={element.id}>
                 <MultiSelect
+                    style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
                     value={selectedValue}
                     ref={getPrimeMultiSelectRef}
                     options={

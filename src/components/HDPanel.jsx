@@ -10,7 +10,11 @@ const HDPanel = React.forwardRef((props, ref) => {
   const { element } = props;
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const operations = {
     getStyleAttributes: () => {
       return ControlStyleModel.getPanelStyle();
@@ -18,7 +22,8 @@ const HDPanel = React.forwardRef((props, ref) => {
 
     addStyle(style = "") {
       setControlStyle(style);
-    }
+    },
+    showHide
   }
 
   useImperativeHandle(ref, () => {
@@ -46,7 +51,8 @@ const HDPanel = React.forwardRef((props, ref) => {
     <>
       <style>{controlStyle}</style>
       <div id={element.id}>
-        <Panel header="Header">
+        <Panel header="Header"
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
