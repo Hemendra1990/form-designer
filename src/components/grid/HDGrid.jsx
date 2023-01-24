@@ -8,10 +8,7 @@ import React, {
 } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import {
-  useMetaContext,
-  useUpdateMetaContext,
-} from "../../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
 import { StringToJSX } from "../../utils/StringToJSX";
 import { evaluateCellTemplate } from "../../utils/Utils";
 import ColumnTextEditor from "./editors/ColumnTextEditor";
@@ -172,7 +169,7 @@ const HDGrid = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
-    updateMeta(meta);
+    /* updateMeta(meta); */
     applyGridOptions();
     //Apply style if the element already has
     if (element.style) {

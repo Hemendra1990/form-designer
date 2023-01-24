@@ -17,6 +17,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
 
+
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
@@ -82,12 +83,12 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
 
   const executeOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onChangeEvent) {
-      props.meta.sqlVariables = {
-        ...props.meta.sqlVariables,
+      meta.sqlVariables = {
+        ...meta.sqlVariables,
         [element.attributes.name]: event.value,
       };
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.onChangeEvent,
         { data: event.value },
         null
@@ -97,7 +98,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const executeOnMouseDownEvent = (event) => {
     if (element.attributes && element.attributes.onMouseDownEvent) {
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.onMouseDownEvent,
         { data: event.value },
         null
@@ -107,7 +108,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const executeOnContextMenuEvent = (event) => {
     if (element.attributes && element.attributes.onContextMenuEvent) {
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.onContextMenuEvent,
         { data: event.value },
         null
@@ -117,7 +118,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const executeOnFilterEvent = (event) => {
     if (element.attributes && element.attributes.onFilterEvent) {
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.onFilterEvent,
         { data: event.value },
         null
@@ -127,7 +128,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const executeFocusEvent = (event) => {
     if (element.attributes && element.attributes.onFocus) {
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.onFocus,
         { data: event.value },
         null
@@ -137,7 +138,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const executeBlurEvent = (event) => {
     if (element.attributes && element.attributes.onBlur) {
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.onBlur,
         { data: event.value },
         null
@@ -146,7 +147,6 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   };
 
   useEffect(() => {
-    updateMeta(meta);
     setSelectedValue(element.attributes?.selectedValue || "");
     setLabelValueOptions(element.attributes?.labelValueOptions || []);
     setListOptions(element.attributes?.listOptions || []);

@@ -24,12 +24,10 @@ const DraggableContainerElement = React.forwardRef((props, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerMeta]);
 
-
   const updateCurrentElement = (event, element) => {
     event.preventDefault();
     event.stopPropagation();
     meta.currentElement = element;
-
     updateMeta(meta);
   };
 
@@ -44,7 +42,6 @@ const DraggableContainerElement = React.forwardRef((props, ref) => {
       if (monitor.getItemType() === ItemType.HD_ELEMENT) {
         monitor.getItem().initialDropLocation = element;
       }
-
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -126,7 +123,6 @@ const DraggableContainerElement = React.forwardRef((props, ref) => {
       return React.cloneElement(element.reactComponent, { meta: meta });
       //return element.reactComponent;
     }
-
     if (!ref) {
       ref = React.createRef();
     }

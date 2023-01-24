@@ -1,3 +1,4 @@
+import { generateElementMap } from "../utils/Utils";
 import { HDEventExecutorService } from "./HDEventExecutorService";
 
 /**
@@ -59,6 +60,10 @@ export class HDEventExecutor {
       eventToExecute.bucket.nodes &&
       eventToExecute.bucket.nodes.length === 1
     ) {
+      if(!meta.elementMap) {
+        const elementMap = generateElementMap(meta);
+        meta.elementMap = elementMap;
+      }
       executorService.execute(meta, eventToExecute.bucket.nodes[0]);
     }
   }

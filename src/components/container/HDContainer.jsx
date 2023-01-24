@@ -33,10 +33,16 @@ const HDContainer = forwardRef(({ element, pgIndex, }, ref) => {
   const [controlElementHoveringOnIndex, setControlElementHoveringOnIndex] = useState(-999);
 
   const [resourceMeta, setResourceMeta] = useState(null);
-  const [children, setChildren] = useState([]);
 
   containerElement.attributes = containerElement.attributes || {};
   containerElement.attributes.children = containerElement.attributes.children || [];
+
+  //New Code
+  const [children, setChildren] = useState([]);
+
+  useEffect(() => {
+    setChildren(element.attributes.children || []);
+  }, []);
 
   useEffect(() => {
     setChildren(element.attributes.children || []);
@@ -280,6 +286,7 @@ const HDContainer = forwardRef(({ element, pgIndex, }, ref) => {
             style={{ marginTop: 10, marginBottom: 10 }}
             element={childElement}
             pgIndex={pgIndex}
+            meta={meta}
             parentId={containerElement.id}
             moveContainerCard={moveContainerCard}
             containerIndex={containerIndex}
