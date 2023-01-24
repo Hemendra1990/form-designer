@@ -4,11 +4,18 @@ import EventExecutor from "../service/EventExecutor";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDDropDown = React.forwardRef((props, parentRef) => {
   const { element } = props;
-  const meta = useMetaContext();
-  const { updateMeta } = useUpdateMetaContext();
+
+  /* const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
 
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);

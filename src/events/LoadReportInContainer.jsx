@@ -9,7 +9,7 @@ import { InputText } from "primereact/inputtext";
 
 
 //Test
-const testReSources = ["rid-0123", "rid-1345"];
+const testReSources = ["rid-0123", "rid-1345", "b0547ce9-ea2a-4e9c-8ef2-f8a3997f6565"];
 
 //TODO: LoadInContainer event will have two optionn, 1) Dynamic 2) Static
 //1. Dynamic: The user can use the sqlVariable to pass the resourceId(report Id) and this value will be evaluated in the runtinme and report will be loaded to the target container
@@ -29,28 +29,28 @@ const LoadReportInContainer = (props) => {
     .filter((key) => key.includes("container-"))
     .map((key) => key);
 
-    useEffect(() => {
+  useEffect(() => {
 
-        const loadReportData = {
-            contianer: selectedContainer,
-            resource: selectedResource,
-            type: selectedResourceType,
-            resourceId
-        }
-
-        data.eventInfo = {...data.eventInfo, data: loadReportData};
-
-    }, [selectedResource, selectedContainer, selectedResourceType, resourceId])
-
-
-    const handleResourceTypeChange = (e) => {
-        setSelectedResourceType(e.value);
-        if(e.value === 'Dynamic') {
-            setSelectedResource(null)
-        } else {
-            setResourceId(null);
-        }
+    const loadReportData = {
+      contianer: selectedContainer,
+      resource: selectedResource,
+      type: selectedResourceType,
+      resourceId
     }
+
+    data.eventInfo = { ...data.eventInfo, data: loadReportData };
+
+  }, [selectedResource, selectedContainer, selectedResourceType, resourceId])
+
+
+  const handleResourceTypeChange = (e) => {
+    setSelectedResourceType(e.value);
+    if (e.value === 'Dynamic') {
+      setSelectedResource(null)
+    } else {
+      setResourceId(null);
+    }
+  }
 
   const showResource = () => {
     if (selectedResourceType === 'Dynamic') {

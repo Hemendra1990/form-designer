@@ -124,6 +124,7 @@ const DraggablePGElement = React.forwardRef(
       if (!ref) {
         ref = React.createRef();
       }
+      element.isInReportContainer = false;//This is important to chec
       const reactComponent = React.createElement(element.component, {
         ref: ref,
         name: `${element.name}`,

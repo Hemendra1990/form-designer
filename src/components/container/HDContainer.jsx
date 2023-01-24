@@ -1,117 +1,131 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { useDrop } from "react-dnd";
 import { CONTROL } from "../../constants/Elements";
 import getComponent from "../../constants/HemendraConstants";
-import {
-  useMetaContext,
-  useUpdateMetaContext,
-} from "../../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../../context/ReportMetaContext";
+import { HttpFormResourceService } from "../../http-service/HttpFormResourceService";
 import { ItemType } from "../../model/ItemType";
 import DraggableContainerElement from "../../playground/DraggableContainerElement";
-import DraggablePGElement from "../../playground/DraggablePGElement";
-import { createElementId } from "../../utils/Utils";
+import { createElementId, generateElementMap } from "../../utils/Utils";
 import ContainerHelper from "../../_helpers/ContainerHelper";
 
-function HDContainer({
-  element,
-  pgIndex,
-}) {
-  const meta = useMetaContext();
-  const { updateMeta, updateMetaWithElement } = useUpdateMetaContext();
+const httpResourceService = new HttpFormResourceService();
+const HDContainer = forwardRef(({ element, pgIndex, }, ref) => {
+
+  /* const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+
+  const updateReportMeta = useReportUpdateMetaContext();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
+
+
   const containerElement = element;
   const helper = new ContainerHelper();
 
   const [containerChildren, setContainerChildren] = useState([]);
   const [controlElementHoveringOnIndex, setControlElementHoveringOnIndex] = useState(-999);
 
+  const [resourceMeta, setResourceMeta] = useState(null);
+  const [children, setChildren] = useState([]);
+
   containerElement.attributes = containerElement.attributes || {};
   containerElement.attributes.children = containerElement.attributes.children || [];
+
+  useEffect(() => {
+    setChildren(element.attributes.children || []);
+  }, [element.attributes.children]);
 
   useEffect(() => {
     console.log("Container children test", element);
   }, [element]);
 
-  const [{ canDrop, isOver, isOverCurrent }, drop] = useDrop(
-    () => ({
-      accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
+  const [{ canDrop, isOver, isOverCurrent }, drop] = useDrop(() => ({
+    accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
 
-      hover: (item, monitor) => {
-        if (monitor.didDrop()) { //check if the element is dropped anywhere in pg or container
-          return;
-        }
+    hover: (item, monitor) => {
+      if (monitor.didDrop()) { //check if the element is dropped anywhere in pg or container
+        return;
+      }
 
-        //we need to find the hover index, kaha upare hiover hauchi
-        //We need to know dragIndex and hoverIndex, kahiniki kaina ame tapare meta.elements achhi seithi modify kariba
+      //we need to find the hover index, kaha upare hiover hauchi
+      //We need to know dragIndex and hoverIndex, kahiniki kaina ame tapare meta.elements achhi seithi modify kariba
 
 
-      },
-      drop: (item, monitor) => {
-        //check if the element is already dropped or not
-        if (monitor.didDrop() && monitor.getItem().droppedLocation && monitor.getItem().droppedLocation.includes(CONTROL.CONTAINER)) {
-          return;
-        }
+    },
+    drop: (item, monitor) => {
+      //check if the element is already dropped or not
+      if (monitor.didDrop() && monitor.getItem().droppedLocation && monitor.getItem().droppedLocation.includes(CONTROL.CONTAINER)) {
+        return;
+      }
 
-        if (item.resizingInsideContainer) {
-          monitor.getItem().resizingInsideContainer = false;
-          item.resizingInsideContainer = false;
-          return;
-        }
+      if (item.resizingInsideContainer) {
+        monitor.getItem().resizingInsideContainer = false;
+        item.resizingInsideContainer = false;
+        return;
+      }
 
-        if (monitor.getItemType() === ItemType.HD_ELEMENT) {
-          const { controlItem } = item;
-          let id = createElementId();
-          id = `${controlItem.value}-${id}`
-          const component = getComponent(controlItem.value);
-          const element = {
-            type: controlItem.value.toLowerCase(),
-            name: `${controlItem.value}-${id}`,
-            id: id,
-            component,
-          };
+      if (monitor.getItemType() === ItemType.HD_ELEMENT) {
+        const { controlItem } = item;
+        let id = createElementId();
+        id = `${controlItem.value}-${id}`
+        const component = getComponent(controlItem.value);
+        const element = {
+          type: controlItem.value.toLowerCase(),
+          name: `${controlItem.value}-${id}`,
+          id: id,
+          component,
+        };
 
-          let foundElement = null;
-          for (let obj of meta.elements) {
-            foundElement = findElement(obj, containerElement.id);
-            if (foundElement) {
-              foundElement.attributes = foundElement.attributes || {};
-              foundElement.attributes.children = foundElement.attributes.children || [];
-              if (foundElement.attributes.children.length === 0) {
-                foundElement.attributes.children.push({
-                  ...element,
-                  id: id,
-                  parentId: containerElement.id,
-                });
-              } else { //insert at hover index
-                foundElement.attributes.children.splice(controlElementHoveringOnIndex, 0, element);
-                foundElement.attributes.children = [...foundElement.attributes.children];
-              }
-
-              break;
+        let foundElement = null;
+        for (let obj of meta.elements) {
+          foundElement = findElement(obj, containerElement.id);
+          if (foundElement) {
+            foundElement.attributes = foundElement.attributes || {};
+            foundElement.attributes.children = foundElement.attributes.children || [];
+            if (foundElement.attributes.children.length === 0) {
+              foundElement.attributes.children.push({
+                ...element,
+                id: id,
+                parentId: containerElement.id,
+              });
+            } else { //insert at hover index
+              foundElement.attributes.children.splice(controlElementHoveringOnIndex, 0, element);
+              foundElement.attributes.children = [...foundElement.attributes.children];
             }
+            updateMeta(meta);
+            break;
           }
-        } else if (monitor.getItemType() === ItemType.HD_PG_ELEMENT) {
-          //hdPGElement
-          const helper = new ContainerHelper();
-          meta.elements = helper.updateParent(
-            meta.elements,
-            item.element.id,
-            containerElement.id
-          );
-
-          const newObj = helper.findNodeAndParent(
-            meta.elements,
-            containerElement.id
-          );
-          console.log("New Obj", newObj);
-          updateMeta(meta.elements)
         }
-      },
-      collect: (monitor) => ({
-        isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
-        isOverCurrent: monitor.isOver({ shallow: true }),
-      }),
+      } else if (monitor.getItemType() === ItemType.HD_PG_ELEMENT) {
+        //hdPGElement
+        const helper = new ContainerHelper();
+        meta.elements = helper.updateParent(
+          meta.elements,
+          item.element.id,
+          containerElement.id
+        );
+
+        const newObj = helper.findNodeAndParent(
+          meta.elements,
+          containerElement.id
+        );
+        console.log("New Obj", newObj);
+        updateMeta(meta.elements)
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+      isOverCurrent: monitor.isOver({ shallow: true }),
     }),
+  }),
     [controlElementHoveringOnIndex, meta.elements]
   );
 
@@ -157,6 +171,82 @@ function HDContainer({
     [controlElementHoveringOnIndex, setControlElementHoveringOnIndex, meta.elements]
   );
 
+  useEffect(() => {
+    if (resourceMeta) {
+      setChildren(resourceMeta.elements || []);
+    }
+  }, [resourceMeta]);
+
+  function initializeComponent(reportElements) {
+    if (!reportElements) {
+      return;
+    }
+    reportElements.forEach(el => {
+      el.component = getComponent(el.type);
+      if (el.attributes && el.attributes.children && el.attributes.children.length > 0) {
+        initializeComponent(el.attributes.children);
+      }
+    })
+  }
+
+  function addFlagReportContainer(elements) {
+    for (let ele of elements) {
+      ele.isInReportContainer = true;
+      if (ele.attributes && ele.attributes.children) {
+        addFlagReportContainer(ele.attributes.children);
+      }
+    }
+
+  }
+
+  useImperativeHandle(ref, () => ({
+    loadReport(resourceId, data = {}) {
+      //TODO: we need to make the server call taking the resourceId
+      httpResourceService.getFormJson(resourceId).then(res => {
+        const report = res.data
+
+        const { json } = report
+        initializeComponent(json.elements);
+        const getReportMeta = () => {
+          const reportMeta = {};
+          reportMeta.elementMap = {};
+          reportMeta.resourceId = report.resourceId;
+          reportMeta.sessionId = report.sessionId;
+          reportMeta.description = report.description;
+          reportMeta.name = report.resourceName;
+          reportMeta.elements = json.elements; //Just check what elements came into it....
+          const elements = [...reportMeta.elements];
+          addFlagReportContainer(elements);
+
+          reportMeta.configuration = json.configuration;
+          reportMeta.sqlList = json.sqlList;
+          reportMeta.apiList = json.apiList;
+          reportMeta.events = json.events;
+          reportMeta.elementMap = generateElementMap(reportMeta);
+          //reportMeta.events.forEach((e) => initialiseScripts(e));
+          reportMeta.editMode = false;
+          reportMeta.sqlVariables = json.sqlVariables;
+          meta.sqlVariables = json.sqlVariables; //Adding the sqlVariables to actual meta
+          return reportMeta;
+        };
+        updateReportMeta.updateMeta(getReportMeta()); //Let's seee what magic is going on Here..........
+        setResourceMeta(getReportMeta());
+        /* setTimeout(() => {
+        }, 10); */
+      }).catch(err => {
+        console.error("Failed to fetch the form data from server.", err);
+      });
+
+      //This is for testing
+
+
+    },
+    addStyle(style = "") {
+      //TODO: implementation of style
+      /* code to add styles from the Style Control component */
+    },
+  }));
+
   const isActive = canDrop && isOver;
   let backgroundColor = "";
   if (isActive) {
@@ -180,7 +270,7 @@ function HDContainer({
       }}
       className="grid"
     >
-      {element?.attributes?.children.map((childElement, containerIndex) => {
+      {children.map((childElement, containerIndex) => {
         childElement.currIndex = containerIndex;
         childElement.parent = element;//element means container
         return (
@@ -193,11 +283,12 @@ function HDContainer({
             parentId={containerElement.id}
             moveContainerCard={moveContainerCard}
             containerIndex={containerIndex}
+            containerMeta={resourceMeta}
           />
         );
       })}
     </div>
   );
-}
+})
 
 export default HDContainer;

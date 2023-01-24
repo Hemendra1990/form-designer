@@ -16,57 +16,56 @@ function HDPlayground() {
   const { addElement, updateMeta } = useUpdateMetaContext();
   const [controlElementHoveringOnIndex, setControlElementHoveringOnIndex] = useState(-999);
 
-  const [{ canDrop, isOver, getDropResult }, drop] = useDrop(
-    () => ({
-      accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
-      canDrop: (item, monitor) => {
-        return meta.editMode;
-      },
-      drop: (item, monitor) => {
-        console.log(controlElementHoveringOnIndex, item.droppedLocation);
-        if (monitor.didDrop() && item.droppedLocation && item.droppedLocation.includes(CONTROL.CONTAINER)) {
-          return;
-        }
+  const [{ canDrop, isOver, getDropResult }, drop] = useDrop(() => ({
+    accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
+    canDrop: (item, monitor) => {
+      return meta.editMode;
+    },
+    drop: (item, monitor) => {
+      console.log(controlElementHoveringOnIndex, item.droppedLocation);
+      if (monitor.didDrop() && item.droppedLocation && item.droppedLocation.includes(CONTROL.CONTAINER)) {
+        return;
+      }
 
-        if (monitor.getItemType() === ItemType.HD_PG_ELEMENT) {
-          const { element } = item;
-          //"hdPGElement"
-          const helper = new ContainerHelper();
-          const result = helper.findNodeAndParent(
-            [...meta.elements],
-            element.id
+      if (monitor.getItemType() === ItemType.HD_PG_ELEMENT) {
+        const { element } = item;
+        //"hdPGElement"
+        const helper = new ContainerHelper();
+        const result = helper.findNodeAndParent(
+          [...meta.elements],
+          element.id
+        );
+        const { node, parent } = result;
+        if (parent && parent.attributes && parent.attributes.children) {
+          parent.attributes.children = parent.attributes.children.filter(
+            (child) => child.id !== element.id
           );
-          const { node, parent } = result;
-          if (parent && parent.attributes && parent.attributes.children) {
-            parent.attributes.children = parent.attributes.children.filter(
-              (child) => child.id !== element.id
-            );
-            //setPGElements((elements) => [...elements, { ...node }]);
+          //setPGElements((elements) => [...elements, { ...node }]);
 
-            meta.elements = [...meta.elements, { ...node }];
-            updateMeta(meta);
-          }
-        } else {
-          const { controlItem } = item;
-
-          const id = createElementId();
-          const component = getComponent(controlItem.value);
-          const element = {
-            type: controlItem.value.toLowerCase(),
-            name: `${controlItem.value}-${id}`,
-            id: `${controlItem.value}-${id}`,
-            component,
-          };
-          //setPGElements((elements) => [...elements, { ...element, id }]);
-          addElement(element, controlElementHoveringOnIndex);
+          meta.elements = [...meta.elements, { ...node }];
+          updateMeta(meta);
         }
-      },
-      collect: (monitor) => ({
-        isOver: monitor.isOver({ shallow: true }),
-        canDrop: monitor.canDrop(),
-        getDropResult: monitor.getDropResult(),
-      }),
+      } else {
+        const { controlItem } = item;
+
+        const id = createElementId();
+        const component = getComponent(controlItem.value);
+        const element = {
+          type: controlItem.value.toLowerCase(),
+          name: `${controlItem.value}-${id}`,
+          id: `${controlItem.value}-${id}`,
+          component,
+        };
+        //setPGElements((elements) => [...elements, { ...element, id }]);
+        addElement(element, controlElementHoveringOnIndex);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver({ shallow: true }),
+      canDrop: monitor.canDrop(),
+      getDropResult: monitor.getDropResult(),
     }),
+  }),
     [controlElementHoveringOnIndex]
   );
 
