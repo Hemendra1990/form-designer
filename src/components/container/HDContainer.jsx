@@ -84,7 +84,7 @@ const HDContainer = forwardRef(({ element, pgIndex, }, ref) => {
         const component = getComponent(controlItem.value);
         const element = {
           type: controlItem.value.toLowerCase(),
-          name: `${controlItem.value}-${id}`,
+          name: `${id}`,
           id: id,
           component,
         };
