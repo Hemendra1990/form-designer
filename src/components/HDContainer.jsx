@@ -7,7 +7,14 @@ import getComponent from "../constants/HemendraConstants";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext"
 import { TEST_REPORTS_FOR_TESTING } from "../tests/report";
 
+//******************************** */
+//******************************** */
 //deprecate
+//This component is no longer used
+//******************************** */
+//******************************** */
+//
+
 const HDContainer = React.forwardRef((props, ref) => {
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
