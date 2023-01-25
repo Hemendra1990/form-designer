@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -18,9 +18,16 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
   const meta = useMetaContext();
   const { toastRef } = useToastContext();
 
+  useEffect(() => {
+    if (meta.resourceName) {
+      handleSave();
+    }
+  }, []);
+
+
   const handleSave = () => {
     let formResourceData = new SaveResource();
-    if (resourceName === undefined || resourceName == "") {
+    if (!meta.resourceName && (resourceName === undefined || resourceName == "")) {
       alert("Blank Report cannot be saved!!");
       return;
     }
@@ -31,7 +38,7 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
 
     const tempMeta = JSON.parse(metaJson);
 
-    formResourceData.resourceName = resourceName;
+    formResourceData.resourceName = meta.resourceName || resourceName;
     formResourceData.comment = "Some comment";
     formResourceData.description = resourceDescription;
     formResourceData.json.elements = tempMeta.elements;
@@ -43,6 +50,9 @@ const SaveFormDesignResource = (props: SaveFormProp) => {
     formResourceData.images = []; //TODO: need to be added later
     formResourceData.assetIds = []; //TODO: need to be added later
     formResourceData.sessionId = tempMeta.sessionId;
+    if (meta.resourceId) {
+      formResourceData.resourceId = tempMeta.resourceId;
+    }
     if (
       formResourceData.json.sqlList !== undefined &&
       formResourceData.json.sqlList.length > 0

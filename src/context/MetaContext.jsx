@@ -44,6 +44,10 @@ export const MetaContextProvider = ({ children }) => {
     sqlList: [],
     editMode: true,
     sessionId: uuidv4(),
+    resourceName: null,
+    resourceDescription: null,
+    resourceId: null,
+    versionId: null
   };
   const [meta, setMeta] = useState(sharedMeta);
   const [toastPosition, setToastPosition] = useState("top-right");
@@ -107,7 +111,7 @@ export const MetaContextProvider = ({ children }) => {
    * Load existing report
    */
   const openReport = (reportData) => {
-    const { sessionId, json } = reportData;
+    const { sessionId, json, resourceId, resourceName, versionId } = reportData;
     //const report = JSON.parse(json);
     const report = json;
     initializeComponent(report.elements);
@@ -116,6 +120,9 @@ export const MetaContextProvider = ({ children }) => {
         ...report,
         toastRef: prevValue.toastRef,
         sessionId: sessionId,
+        resourceId,
+        resourceName,
+        versionId
       };
     });
   };
