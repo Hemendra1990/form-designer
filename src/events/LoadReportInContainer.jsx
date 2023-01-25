@@ -10,7 +10,7 @@ import { HttpFormResourceService } from "../http-service/HttpFormResourceService
 
 
 //Test
-//const testReSources = ["rid-0123", "rid-1345"];
+const testReSources = ["rid-0123", "rid-1345", "b0547ce9-ea2a-4e9c-8ef2-f8a3997f6565"];
 
 //TODO: LoadInContainer event will have two optionn, 1) Dynamic 2) Static
 //1. Dynamic: The user can use the sqlVariable to pass the resourceId(report Id) and this value will be evaluated in the runtinme and report will be loaded to the target container

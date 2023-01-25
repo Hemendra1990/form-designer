@@ -64,10 +64,35 @@ export const Reference = {
     if(meta.elementMap) {
       const instance = meta.elementMap[elementId].ref.current
       return instance;
+    } else {
+      const elementMap = generateElementMap(meta);
+      meta.elementMap = elementMap;
+      const instance = meta.elementMap[elementId].ref.current
+      return instance;
     }
-
     return null;
   }
+}
+
+export const generateElementMap = (prevMeta) => {
+  if (prevMeta.elements && prevMeta.elements.length > 0) {
+    const elementMap = {};
+    createElementMap(prevMeta.elements, elementMap);
+    return elementMap;
+  }
+};
+
+function createElementMap(elements, elementMap) {
+  elements.forEach((elm) => {
+    elementMap[elm.name] = elm;
+    if (
+      elm.attributes &&
+      elm.attributes.children &&
+      elm.attributes.children.length > 0
+    ) {
+      createElementMap(elm.attributes.children, elementMap);
+    }
+  });
 }
 
 /**

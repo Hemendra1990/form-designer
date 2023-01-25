@@ -1,31 +1,28 @@
 import React, { useContext, useRef, useState } from "react";
-import { existingReport } from "../tests/report";
 import { Toast } from "primereact/toast";
 import { v4 as uuidv4 } from "uuid";
 
 import getComponent, {
   jsonStringifyIgnoredList,
 } from "../constants/HemendraConstants";
-import ApiModeler from "../api-modeler/ApiModeler";
-import eventBus from "../event-bus/EventBus";
 
 /**
  * Contexts created to share the data between the child components without usign the props
  */
-export const MetaContext = React.createContext();
-export const UpdateMetaContext = React.createContext();
+export const ReportMetaContext = React.createContext();
+export const UpdateReportMetaContext = React.createContext();
 export const ToastContext = React.createContext();
 
 /**
  *
  * @returns Custom hooks
  */
-export const useMetaContext = () => {
-  return useContext(MetaContext);
+export const useReportMetaContext = () => {
+  return useContext(ReportMetaContext);
 };
 
-export const useUpdateMetaContext = () => {
-  return useContext(UpdateMetaContext);
+export const useReportUpdateMetaContext = () => {
+  return useContext(UpdateReportMetaContext);
 };
 export const useToastContext = () => {
   return useContext(ToastContext);
@@ -36,18 +33,15 @@ export const useToastContext = () => {
  * @param {*} param0
  * @returns
  */
-export const MetaContextProvider = ({ children }) => {
+export const ReportMetaContextProvider = ({ children }) => {
   const sharedMeta = {
     elements: [],
     sqlVariables: {},
     events: [],
     sqlList: [],
-    editMode: true,
+    editMode: false,
     sessionId: uuidv4(),
-    resourceName: null,
-    resourceDescription: null,
-    resourceId: null,
-    versionId: null
+    itis: 'ReportMeta'
   };
   const [meta, setMeta] = useState(sharedMeta);
   const [toastPosition, setToastPosition] = useState("top-right");
@@ -60,6 +54,7 @@ export const MetaContextProvider = ({ children }) => {
    * @param {*} value
    */
   const updateMeta = (prevMeta) => {
+    console.log('Inside... ReportMetaContext', prevMeta);
     const elementMap = generateElementMap(prevMeta);
     setMeta((meta) => {
       return {
@@ -111,7 +106,7 @@ export const MetaContextProvider = ({ children }) => {
    * Load existing report
    */
   const openReport = (reportData) => {
-    const { sessionId, json, resourceId, resourceName, versionId } = reportData;
+    const { sessionId, json } = reportData;
     //const report = JSON.parse(json);
     const report = json;
     initializeComponent(report.elements);
@@ -120,9 +115,6 @@ export const MetaContextProvider = ({ children }) => {
         ...report,
         toastRef: prevValue.toastRef,
         sessionId: sessionId,
-        resourceId,
-        resourceName,
-        versionId
       };
     });
   };
@@ -231,8 +223,8 @@ export const MetaContextProvider = ({ children }) => {
 
   return (
     <>
-      <MetaContext.Provider value={meta}>
-        <UpdateMetaContext.Provider
+      <ReportMetaContext.Provider value={meta}>
+        <UpdateReportMetaContext.Provider
           value={{
             updateMeta,
             addElement,
@@ -251,8 +243,8 @@ export const MetaContextProvider = ({ children }) => {
           <ToastContext.Provider value={{ toastRef, setToastPosition }}>
             {children}
           </ToastContext.Provider>
-        </UpdateMetaContext.Provider>
-      </MetaContext.Provider>
+        </UpdateReportMetaContext.Provider>
+      </ReportMetaContext.Provider>
       <Toast ref={toastRef} position={toastPosition} />
     </>
   );

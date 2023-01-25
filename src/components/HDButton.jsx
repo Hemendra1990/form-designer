@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import React, { memo, useEffect, useImperativeHandle, useState } from "react";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { useModalContext } from "../context/ModalContext";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
 import EventExecutor from "../service/EventExecutor";
@@ -9,8 +10,12 @@ import EventExecutor from "../service/EventExecutor";
 const HDButton = React.forwardRef((props, ref) => {
   const element = props.element;
   const { actions, modals } = useModalContext();
-  const { updateMeta } = useUpdateMetaContext();
-  const meta = useMetaContext();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
   const [controlStyle, setControlStyle] = useState("");
   const [isRefInitialize, setRefInitialize] = useState(false);
 
@@ -30,13 +35,17 @@ const HDButton = React.forwardRef((props, ref) => {
     showHide
   }
 
+  useEffect(() => {
+    element.ref.current = operations;
+  }, [])
+
   useImperativeHandle(ref, () => {
     setRefInitialize(true)
     return operations;
   });
 
   useEffect(() => {
-    updateMeta(meta);
+    /* updateMeta(meta); */
     //Apply style if the element already has
     if (element.ref && element.ref.current && element.ref.current.getStyleAttributes) {
       if (element.style) {
@@ -59,12 +68,12 @@ const HDButton = React.forwardRef((props, ref) => {
   const executeEvent = (event) => {
     //check if the button is configured with the event or not
     if (element.attributes && element.attributes.eventId) {
-      props.meta.sqlVariables = {
-        ...props.meta.sqlVariables,
+      meta.sqlVariables = {
+        ...meta.sqlVariables,
         [element.attributes.name]: event.value,
       };
       EventExecutor.executeEvent(
-        props.meta,
+        meta,
         element.attributes.eventId,
         actions,
         modals

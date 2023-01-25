@@ -8,16 +8,14 @@ import React, {
 } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import {
-  useMetaContext,
-  useUpdateMetaContext,
-} from "../../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../../context/MetaContext";
 import { StringToJSX } from "../../utils/StringToJSX";
 import { evaluateCellTemplate } from "../../utils/Utils";
 import ColumnTextEditor from "./editors/ColumnTextEditor";
 import ColumnDropdownEditor from "./editors/ColumnDropdownEditor";
 import { addElementStyle } from "../../control-styles/ControlStyles";
 import { ControlStyleModel } from "../../control-styles/ControlStyleModel";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../../context/ReportMetaContext";
 
 const MyTestFun = new Function(
   "row",
@@ -43,12 +41,18 @@ const HDGrid = forwardRef((props, ref) => {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [controlStyle, setControlStyle] = useState();
-  const { updateMeta } = useUpdateMetaContext();
-  const meta = useMetaContext();
+  const { element } = props;
+
+  /* const { updateMeta } = useUpdateMetaContext();
+  const meta = useMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
   const gridColRef = useRef();
   const gridRef = useRef();
-
-  const { element } = props;
 
   const [dataTableProps, setDataTableProps] = useState({});
 
@@ -77,6 +81,7 @@ const HDGrid = forwardRef((props, ref) => {
   }));
 
   function setResult({ columns, rows }) {
+    console.log({ columns, rows });
     const { element } = props;
     element.attributes["columns"] = columns;
     setColumns(columns);
@@ -170,7 +175,7 @@ const HDGrid = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
-    updateMeta(meta);
+    /* updateMeta(meta); */
     applyGridOptions();
     //Apply style if the element already has
     if (element.style) {
