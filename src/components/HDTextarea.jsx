@@ -5,9 +5,20 @@ import { useImperativeHandle } from "react";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDTextarea = React.forwardRef((props, ref) => {
-  const { element, meta, setMeta } = props;
+  const { element } = props;
+
+  /* const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
+
   const [value, setValue] = useState(element.value || "");
   const [controlStyle, setControlStyle] = useState('');
   const [isRefInitialize, setRefInitialize] = useState(false);
@@ -16,7 +27,6 @@ const HDTextarea = React.forwardRef((props, ref) => {
   const showHide = (value) => {//expecing the value to be boolean
     setShowHideFlag(value);
   }
-  const { updateMeta } = useUpdateMetaContext();
 
   const primeTextAreaRef = useRef(ref);
 

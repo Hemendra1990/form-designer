@@ -3,11 +3,19 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { Panel } from "primereact/panel";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDPanel = React.forwardRef((props, ref) => {
-  const meta = useMetaContext();
-  const { updateMeta } = useUpdateMetaContext();
   const { element } = props;
+
+  /* const meta = useMetaContext();
+   const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
   const [showHideFlag, setShowHideFlag] = useState(true);

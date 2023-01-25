@@ -7,14 +7,21 @@ import {
   useRef,
   useState,
 } from "react";
-import { useMetaContext } from "../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
 import EventExecutor from "../service/EventExecutor";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDLabel = forwardRef((props, ref) => {
   const { element } = props;
-  const meta = useMetaContext();
+  /* const meta = useMetaContext();
+   const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
 
   console.log("HDLabel:", element);
   const [visible, setVisible] = useState(true);

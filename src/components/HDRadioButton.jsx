@@ -5,13 +5,18 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import EventExecutor from "../service/EventExecutor";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
-import { Tooltip } from 'primereact/tooltip';
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDRadioButton = React.forwardRef((props, parentRef) => {
-
-  const meta = useMetaContext();
-  const { updateMeta } = useUpdateMetaContext();
   const { element } = props;
+
+  /* const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
 
   const emptyOption = [{ name: 'Male', id: 'm' }, { name: 'Female', id: 'f' }];
 
