@@ -10,7 +10,6 @@ import { UserService } from "../components/grid/UserService";
 import AttrGrid from "./attr-grid/AttrGridComp";
 import AttrInput from "./attr-input/AttrInput";
 import AttrRadio from "./attr-radio/AttrRadio";
-import AttrListBox from "./attr-ListBox/AttrListBox";
 import { Sidebar } from "primereact/sidebar";
 import ControlStyles from "../control-styles/ControlStyles";
 import AttrLabel from "./attr-label/AttrLabel";
@@ -19,7 +18,6 @@ import { Button } from "primereact/button";
 import AttrButtonConfig from "./attr-button/AttrButtonConfig";
 import AttrInputConfig from "./attr-input/AttrInputConfig";
 import AttrLableConfig from "./attr-label/AttrLabelConfig";
-import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
 import AttrPasswordConfig from "./attr-password/AttrPasswordConfig";
 import AttrRadioConfig from "./attr-radio/AttrRadioConfig";
 import AttrTextArea from "./attr-textarea/AttrTextArea";
@@ -27,8 +25,13 @@ import AttrContainer from "./attr-container/AttrContainer";
 import AttrDropDown from "./attr-dropdown/AttrDropDown";
 import AttrDropDownConfig from "./attr-dropdown/AttrDropDownConfig";
 import AttrDataConnector from "./data-connector/AttrDataConnector";
+
 import AttrDatePicker from "./attr-datepicker/AttrDatePicker";
 import AttrDatePickerConfig from "./attr-datepicker/AttrDatePickerConfig";
+
+import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
+import AttrListBox from "./attr-listbox/AttrListBox";
+
 
 const AttributePanel = (props) => {
   const productService = new ProductService();

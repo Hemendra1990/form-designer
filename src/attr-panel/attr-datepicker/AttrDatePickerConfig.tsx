@@ -9,7 +9,7 @@ interface AttrDatePickerConfigProps {
 
 const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
     const { meta, handleAttributeChange, eventOptions } = props;
-    const currAttribute = meta?.currentElement?.attribute;
+    const currAttribute = meta?.currentElement?.attributes;
     const [onBlur, setOnBlur] = useState("");
     const [onFocus, setOnFocus] = useState("");
     const [onInput, setOnInput] = useState("");
@@ -26,50 +26,54 @@ const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
 
     const handleBlurChange = (e: any) => {
         setOnBlur(e.value);
-        currAttribute.onblur = e.value;
+        handleAttributeChange(e)
     };
 
     const handleFocusChange = (e: any) => {
         setOnFocus(e.value);
-        currAttribute.onfocus = e.value;
+        currAttribute.onFocus = e.value;
+        handleAttributeChange(e)
     };
 
     const handleOnInput = (e: any) => {
         setOnInput(e.value);
-        currAttribute.oninput = e.value;
+        currAttribute.onInput = e.value;
+        handleAttributeChange(e)
     };
 
     const handleOnSelect = (e: any) => {
         setOnSelect(e.value);
-        currAttribute.onselect = e.value;
+        currAttribute.onSelect = e.value;
+        handleAttributeChange(e)
     };
     const handleOnChange = (e: any) => {
         setOnChange(e.value);
-        currAttribute.onselect = e.value;
+        currAttribute.onChange = e.value;
+        handleAttributeChange(e)
     };
     const handleOnTodayButtonClick = (e: any) => {
         setOnTodayButtonClick(e.value);
-        currAttribute.onselect = e.value;
+        handleAttributeChange(e)
     };
     const handleOnClearButtonClick = (e: any) => {
         setOnClearButtonClick(e.value);
-        currAttribute.onselect = e.value;
+        handleAttributeChange(e)
     };
     const handleOnViewDateChange = (e: any) => {
         setOnViewDateChange(e.value);
-        currAttribute.onselect = e.value;
+        handleAttributeChange(e)
     };
     const handleOnShow = (e: any) => {
         setOnShow(e.value);
-        currAttribute.onselect = e.value;
+        handleAttributeChange(e)
     };
     const handleOnHide = (e: any) => {
         setOnHide(e.value);
-        currAttribute.onselect = e.value;
+        handleAttributeChange(e)
     };
     const handleOnVisibleChange = (e: any) => {
         setOnVisibleChange(e.value);
-        currAttribute.onselect = e.value;
+        currAttribute.onSelect = e.value;
     };
     return (
         <>
@@ -79,13 +83,14 @@ const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
                 </label>
                 <Dropdown
                     style={{ width: "100%" }}
-                    name="onblur"
-                    value={onBlur}
-                    options={eventOptions}
+                    name="onBlur"
+                    value={currAttribute?.onBlur}
+                    options={eventOptions || []}
                     placeholder="Select a Blur Event"
                     onChange={(e) => {
                         handleBlurChange(e);
                     }}
+                    showClear
                 />
             </div>
             <div className="field col-12">
@@ -94,13 +99,14 @@ const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
                 </label>
                 <Dropdown
                     style={{ width: "100%" }}
-                    name="onfocus"
-                    value={onFocus}
+                    name="onFocus"
+                    value={currAttribute?.onFocus}
                     options={eventOptions}
                     placeholder="Select a Focus Event"
                     onChange={(e) => {
                         handleFocusChange(e);
                     }}
+                    showClear
                 />
             </div>
             <div className="field col-12">
@@ -110,12 +116,13 @@ const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
                 <Dropdown
                     style={{ width: "100%" }}
                     name="onInput"
-                    value={onInput}
+                    value={currAttribute?.onInput}
                     options={eventOptions}
                     placeholder="Select a Input Event"
                     onChange={(e) => {
                         handleOnInput(e);
                     }}
+                    showClear
                 />
             </div>
             <div className="field col-12">
@@ -125,12 +132,13 @@ const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
                 <Dropdown
                     style={{ width: "100%" }}
                     name="onSelect"
-                    value={onSelect}
+                    value={currAttribute?.onSelect}
                     options={eventOptions}
                     placeholder="Select a Select Event"
                     onChange={(e) => {
                         handleOnSelect(e);
                     }}
+                    showClear
                 />
             </div>
             <div className="field col-12">
@@ -140,12 +148,13 @@ const AttrDatePickerConfig = (props: AttrDatePickerConfigProps) => {
                 <Dropdown
                     style={{ width: "100%" }}
                     name="onChange"
-                    value={onChange}
+                    value={currAttribute?.onChange}
                     options={eventOptions}
                     placeholder="Select a Change Event"
                     onChange={(e) => {
                         handleOnChange(e);
                     }}
+                    showClear
                 />
             </div>
         </>
