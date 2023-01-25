@@ -3,20 +3,31 @@ import { ListBox } from "primereact/listbox";
 import EventExecutor from "../service/EventExecutor";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
-import { useMetaContext } from "../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDListBox = React.forwardRef((props, parentRef) => {
   const { element } = props;
+
+  /* const meta = useMetaContext();
+ const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
   const [selectedValue, setSelectedValue] = useState(null);
   const [listOptions, setListOptions] = useState([]);
   const [labelValueOptions, setLabelValueOptions] = useState([]);
   const getPrimeListRef = useRef(parentRef);
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
-  const { meta } = useMetaContext();
-
-  console.log(element);
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
 
   const handleOnChangeEvent = (event) => {
     if (element.attributes && element.attributes.onchangeevent) {
@@ -85,6 +96,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       setSelectedValue(value);
     },
     getPrimeListRef,
+    showHide
   };
 
   useImperativeHandle(parentRef, () => {
@@ -114,6 +126,7 @@ const HDListBox = React.forwardRef((props, parentRef) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <ListBox
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}
           ref={getPrimeListRef}
           value={selectedValue}
           options={

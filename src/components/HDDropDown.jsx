@@ -25,7 +25,11 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
   const [isRefInitialize, setRefInitialize] = useState(false);
 
   const getPrimeDropdownRef = useRef(parentRef);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const operations = {
     setResult: (result) => {
       const rows = result.rows || [];
@@ -74,6 +78,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
     },
 
     getPrimeDropdownRef,
+    showHide
   };
 
   useImperativeHandle(parentRef, () => {
@@ -169,6 +174,7 @@ const HDDropDown = React.forwardRef((props, parentRef) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <Dropdown
+          style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
           ref={getPrimeDropdownRef}
           value={selectedValue}
           options={

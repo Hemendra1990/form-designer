@@ -11,20 +11,32 @@ import EventExecutor from "../service/EventExecutor";
 import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 /* type PasswordProps = {
   element: any;
 } */
 
 const HDPassword = forwardRef((props, ref) => {
-  const { updateMeta } = useUpdateMetaContext();
-  const { element, meta } = props;
+  const { element } = props;
+  /* const meta = useMetaContext();
+  const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
   const [passwordValue, setPasswordValue] = useState();
   const passwordRef = useRef(ref);
   //const { } = useMetaContext();
   const [controlStyle, setControlStyle] = useState();
   const [isRefInitialize, setRefInitialize] = useState(false);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const footer = (
     <React.Fragment>
       <Divider />
@@ -85,6 +97,7 @@ const HDPassword = forwardRef((props, ref) => {
     addStyle(style = "") {
       setControlStyle(style);
     },
+    showHide
   };
   useImperativeHandle(ref, () => {
     setRefInitialize(true);
@@ -115,6 +128,7 @@ const HDPassword = forwardRef((props, ref) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <Password
+          style={showHideFlag ? { display: 'block' } : { display: 'none' }}
           ref={passwordRef}
           value={passwordValue}
           onChange={handlePasswordChangeVal}

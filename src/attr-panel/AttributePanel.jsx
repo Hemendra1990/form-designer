@@ -32,8 +32,8 @@ import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
 import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
-import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
-import AttrListBox from "./attr-ListBox/AttrListBox";
+import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
+import AttrListBox from "./attr-listbox/AttrListBox";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();

@@ -19,6 +19,12 @@ const HDButton = React.forwardRef((props, ref) => {
   const [controlStyle, setControlStyle] = useState("");
   const [isRefInitialize, setRefInitialize] = useState(false);
 
+  const [showHideFlag, setShowHideFlag] = useState(true);
+
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
+
   const operations = {
     getStyleAttributes: () => {
       return ControlStyleModel.getButtonStyle();
@@ -26,6 +32,7 @@ const HDButton = React.forwardRef((props, ref) => {
     addStyle(style = "") {
       setControlStyle(style);
     },
+    showHide
   }
 
   useEffect(() => {
@@ -88,6 +95,7 @@ const HDButton = React.forwardRef((props, ref) => {
       <style>{controlStyle}</style>
       <div id={element.id}>
         <Button
+          style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
           ref={ref}
           className={props.element?.attributes?.type}
           label={element?.attributes?.hideLabelContent ? "" : element?.attributes?.label}

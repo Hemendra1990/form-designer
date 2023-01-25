@@ -3,13 +3,19 @@ import { InputNumber } from 'primereact/inputnumber';
 import EventExecutor from '../service/EventExecutor';
 import { addElementStyle } from "../control-styles/ControlStyles";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
-import { useUpdateMetaContext } from "../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDNumeric = React.forwardRef((props, parentRef) => {
   const { element } = props;
 
-  const meta = useUpdateMetaContext();
-  const { updateMeta } = useUpdateMetaContext();
+  /* const meta = useMetaContext();
+   const { updateMeta } = useUpdateMetaContext(); */
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
 
   const [value, setValue] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
@@ -17,7 +23,11 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
   const [isRefInitialize, setRefInitialize] = useState(false);
 
   const getPrimeNumericRef = useRef(parentRef);
+  const [showHideFlag, setShowHideFlag] = useState(true);
 
+  const showHide = (value) => {//expecing the value to be boolean
+    setShowHideFlag(value);
+  }
   const operations = {
     getStyleAttributes: () => {
       return ControlStyleModel.getInputnumberStyle();
@@ -39,7 +49,8 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
       return { ...parentRef };
     },
 
-    getPrimeNumericRef
+    getPrimeNumericRef,
+    showHide
   }
 
   useImperativeHandle(parentRef, () => {
@@ -146,8 +157,8 @@ const HDNumeric = React.forwardRef((props, parentRef) => {
     <>
       <style>{controlStyle}</style>
       <div id={element.id}>
-
         <InputNumber
+          style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
           ref={getPrimeNumericRef}
           value={value || element?.attributes?.numericValue}
           placeholder={element.attributes?.placeholder || "Please enter number"}

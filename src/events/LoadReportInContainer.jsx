@@ -6,6 +6,7 @@ import { useMetaContext } from "../context/MetaContext";
 import TargetHandle from "./model/TargetHandle";
 import { SelectButton } from "primereact/selectbutton";
 import { InputText } from "primereact/inputtext";
+import { HttpFormResourceService } from "../http-service/HttpFormResourceService";
 
 
 //Test
@@ -19,15 +20,31 @@ const LoadReportInContainer = (props) => {
   const { data, isConnectable } = props;
 
   const [selectedContainer, setSelectedContainer] = useState(null);
+  const [options, setOptions] = useState([]);
   const [selectedResource, setSelectedResource] = useState(null);
   const [selectedResourceType, setSelectedResourceType] = useState(null);
   const [resourceId, setResourceId] = useState("");
+  const httpResourceService = new HttpFormResourceService();
 
   const resourceTypeOptions = ["Dynamic", "Static"];
   //fetch the list of containers available in the meta for the current report
   const containers = Object.keys(meta.elementMap || [])
     .filter((key) => key.includes("container-"))
     .map((key) => key);
+
+  let param = {
+    totalPages: 99,
+    totalRows: 99,
+    pageNumber: 0,
+    pageSize: 10,
+  }
+
+  useEffect(() => {
+    httpResourceService.getAllDetails(param).then(res => {
+      const { data } = res.data;
+      setOptions(data);
+    }).catch(err => { console.error(err) });
+  }, [])
 
   useEffect(() => {
 
@@ -41,7 +58,6 @@ const LoadReportInContainer = (props) => {
     data.eventInfo = { ...data.eventInfo, data: loadReportData };
 
   }, [selectedResource, selectedContainer, selectedResourceType, resourceId])
-
 
   const handleResourceTypeChange = (e) => {
     setSelectedResourceType(e.value);
@@ -72,8 +88,10 @@ const LoadReportInContainer = (props) => {
             Resource<span style={{ color: "red" }}>(*)</span>{" "}
           </label>
           <Dropdown
-            options={testReSources}
+            options={options}
             value={selectedResource}
+            optionLabel={"resourceName"}
+            optionValue={"resourceId"}
             onChange={(e) => setSelectedResource(e.value)}
           ></Dropdown>
         </div>
@@ -85,7 +103,7 @@ const LoadReportInContainer = (props) => {
       <div className="grid p-fluid">
         <div className="col-12 p-2">
           <label className="block">
-            Contianer<span style={{ color: "red" }}>(*)</span>{" "}
+            Container<span style={{ color: "red" }}>(*)</span>{" "}
           </label>
           <Dropdown
             options={containers}

@@ -57,7 +57,39 @@ export class HDEventExecutorService {
       ) {
         this.execute(meta, eventTreeNode.targetEvent[0]);
       }
+    } else if (eventTreeNode.type === EVENT_TYPE.SHOWHIDE_CONTROL) {
+      this.executeShowHideControl(meta, eventTreeNode);
     }
+  }
+  executeShowHideControl(meta: any, eventTreeNode: any) {
+    const { eventInfo } = eventTreeNode.data;
+    console.log(eventInfo);
+    const { showHideOptionList } = eventInfo.data;
+
+    if (showHideOptionList) {
+      showHideOptionList.map((object: any, i: any) => {
+        const elementRef = meta.elementMap[object.elementId].ref.current;
+        if (elementRef) {
+          if (object.controlType == 'hide') {
+            elementRef?.showHide(false)
+          } else {
+            elementRef?.showHide(true)
+
+          }
+        }
+      });
+    }
+    // for (let eleId of elementId) {
+    //   const elementRef = Reference.of(eleId) || meta.elementMap[eleId].ref.current;
+    //   if (elementRef) {
+    //     if (selectedControlType == 'Hide') {
+    //       elementRef?.showHide(false)
+    //     } else {
+    //       elementRef?.showHide(true)
+
+    //     }
+    //   }
+    // }
   }
 
   executeMessageAlert(meta: any, eventNode: any) {
@@ -131,7 +163,7 @@ export class HDEventExecutorService {
 
   executeConfirmation(meta: any, eventNode: any) {
     const { confirmActions } = this.confirmContext;
-    const ConfirmationDialogHideCallback = () => {};
+    const ConfirmationDialogHideCallback = () => { };
 
     const ConfirmationDialogAcceptCallback = () => {
       this.executeEventAfterMultipleHandler(

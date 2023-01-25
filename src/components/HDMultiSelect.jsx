@@ -4,11 +4,18 @@ import { useMetaContext, useUpdateMetaContext } from "../context/MetaContext";
 import { ControlStyleModel } from "../control-styles/ControlStyleModel";
 import { addElementStyle } from "../control-styles/ControlStyles";
 import EventExecutor from '../service/EventExecutor';
+import { useReportMetaContext, useReportUpdateMetaContext } from "../context/ReportMetaContext";
 
 const HDMultiSelect = React.forwardRef((props, parentRef) => {
     const { element } = props;
-    const meta = useMetaContext();
-    const { updateMeta } = useUpdateMetaContext()
+    /* const meta = useMetaContext();
+   const { updateMeta } = useUpdateMetaContext(); */
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { updateMeta } = element.isInReportContainer ? useReportUpdateMetaContext() : useUpdateMetaContext();//figured out contexts can be used conditionally
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const meta = element.isInReportContainer ? useReportMetaContext() : useMetaContext();
+
     const [selectedValue, setSelectedValue] = useState(null);
     const [controlStyle, setControlStyle] = useState();
     const [multiSelectOptions, setMultiSelectOptions] = useState([]);
@@ -16,6 +23,11 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
     const [isRefInitialize, setRefInitialize] = useState(false);
 
     const getPrimeMultiSelectRef = useRef(parentRef);
+    const [showHideFlag, setShowHideFlag] = useState(true);
+
+    const showHide = (value) => {//expecing the value to be boolean
+        setShowHideFlag(value);
+    }
 
     const executeOnChangeEvent = (event) => {
         if (element.attributes && element.attributes.onChangeEvent) {
@@ -99,6 +111,7 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
         },
 
         getPrimeMultiSelectRef,
+        showHide
     }
 
     useImperativeHandle(parentRef, () => {
@@ -131,6 +144,7 @@ const HDMultiSelect = React.forwardRef((props, parentRef) => {
             <style>{controlStyle}</style>
             <div id={element.id}>
                 <MultiSelect
+                    style={showHideFlag ? { display: 'flex' } : { display: 'none' }}
                     value={selectedValue}
                     ref={getPrimeMultiSelectRef}
                     options={
