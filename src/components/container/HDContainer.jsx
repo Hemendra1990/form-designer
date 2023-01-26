@@ -270,7 +270,7 @@ const HDContainer = forwardRef(({ element, pgIndex, }, ref) => {
       style={{
         minHeight: "100px",
         margin: "20px",
-        paddingBottom: "100px",
+        paddingBottom: "30px",
         border: meta.editMode ? "1px dashed gray" : "",
         backgroundColor: backgroundColor,
       }}

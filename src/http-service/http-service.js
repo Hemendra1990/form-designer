@@ -35,6 +35,9 @@ const httpService = {
     validateQueries(queryParams) {
       return axios.post(`${baseURL}/query/validate/queries`, queryParams);
     },
+    testMultipleQueries(queries) { //array of MTestQuery
+      return axios.post(`${baseURL}/query/test/multiple`, queries)
+    }
   },
   SAVE_FORM: {
     save(data) {

@@ -103,3 +103,18 @@ function createElementMap(elements, elementMap) {
 export function getRandomUUID() {
   return window.crypto.randomUUID();
 }
+
+/**
+ * 
+ * Groups the array by the Key provided 
+ * 
+ * @param {*} Array 
+ * @param {*} key 
+ * @returns 
+ */
+export const groupBy = function(arr, key) {
+  return arr.reduce(function(accumulator, currVal) {
+    (accumulator[currVal[key]] = accumulator[currVal[key]] || []).push(currVal);
+    return accumulator;
+  }, {});
+};

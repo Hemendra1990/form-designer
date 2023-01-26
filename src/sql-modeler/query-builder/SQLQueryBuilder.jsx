@@ -5,14 +5,12 @@ import { TabPanel, TabView } from "primereact/tabview";
 import AddSQL from "./AddSQL";
 import httpService from "../../http-service/http-service";
 import randomstring from "randomstring";
-import {
-  useMetaContext,
-  useUpdateMetaContext,
-} from "../../context/MetaContext";
+import { useMetaContext, useUpdateMetaContext, useToastContext } from "../../context/MetaContext";
 import { useNavigate } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { getRandomUUID } from "../../utils/Utils";
+import { getRandomUUID, groupBy } from "../../utils/Utils";
+
 //"select" | "insert" | "update" | "delete" | "procedure"
 const tab = {
   id: 0,
@@ -52,6 +50,9 @@ const SQLQueryBuilder = (props) => {
   const [queryTestResult, setQueryTestResult] = useState("");
   const [queryTestStatus, setQueryTestStatus] = useState(null);
 
+  const [refreshQryTab, setRefreshQryTab] = useState(0); //we want to refresh the query tab, but unless we update the state we won't be able to update the component
+  const { toastRef } = useToastContext();
+
   const meta = useMetaContext();
   const { updateMeta } = useUpdateMetaContext();
   let navigate = useNavigate();
@@ -68,6 +69,7 @@ const SQLQueryBuilder = (props) => {
   }, []);
 
   const testSelectQuery = (currTab) => {
+    currTab.isTesting = true;
     const testQueryData = {
       usedPlaceHolderList: [],
       sqlVariables: {},
@@ -89,8 +91,13 @@ const SQLQueryBuilder = (props) => {
         const resData = res.data;
         setQueryTestStatus(resData.status);
         setQueryTestResult(resData.msg);
+        currTab.isTesting = false;
+        currTab.isSuccess = resData.status;
+
       })
       .catch((err) => {
+        currTab.isTesting = false;
+        currTab.hasError = true;
         console.error(err);
       });
   };
@@ -121,8 +128,13 @@ const SQLQueryBuilder = (props) => {
         const resData = queryRes.data;
         setQueryTestStatus(resData[currTab.queryId].status);
         setQueryTestResult(resData[currTab.queryId].msg);
+
+        currTab.isTesting = false;
+        currTab.isSuccess = resData.status;
       })
       .catch((err) => {
+        currTab.isTesting = false;
+        currTab.hasError = true;
         console.error(err);
       });
   };
@@ -136,7 +148,134 @@ const SQLQueryBuilder = (props) => {
     }
   };
 
+  function splitQueries() {
+    let dmlSQLs = [];
+    let selectSQLs = [];
+
+    editSqlQueryTabs.forEach(sql => {
+      const tmpSql = JSON.parse(JSON.stringify(sql))
+      tmpSql.datasourceName = sql.dataSourceName.name;
+      if (tmpSql.type === 'select') {
+        selectSQLs.push(tmpSql)
+      } else {
+        dmlSQLs.push(tmpSql);
+      }
+    });
+
+    return {
+      dmlSQLs,
+      selectSQLs
+    }
+
+  }
+
+  const testAllQuery = () => {
+    let count = 0;
+    setRefreshQryTab(Math.random() * 100);
+    editSqlQueryTabs.map(tab => {
+      tab.isTesting = true;
+      return tab;
+    })
+    console.log(editSqlQueryTabs);
+    //Seggregate Select and DML queries separately
+    const dmlSelectSplittedSQLs = splitQueries();
+    const testQueryApis = []
+    if (dmlSelectSplittedSQLs.selectSQLs && dmlSelectSplittedSQLs.selectSQLs.length > 0) {
+      const selectTestCalls = httpService.QUERY.testMultipleQueries(dmlSelectSplittedSQLs.selectSQLs)
+      testQueryApis.push(selectTestCalls);
+    }
+    if (dmlSelectSplittedSQLs.dmlSQLs && dmlSelectSplittedSQLs.dmlSQLs.length > 0) {
+
+      let map = {};
+      dmlSelectSplittedSQLs.dmlSQLs.forEach((sql) => map[sql.queryId] = sql);
+      const dmls = httpService.QUERY.validateQueries(map);
+      testQueryApis.push(dmls);
+    }
+
+    return Promise.all(testQueryApis).then(responses => {
+      console.log(responses);
+      const selectQueryTestResponse = responses[0];
+      const dmlQueryTestResponse = responses[1];
+
+      const tabsGroupedByQueryId = groupBy(editSqlQueryTabs, 'queryId')
+
+      if (selectQueryTestResponse) {
+        const selectQries = selectQueryTestResponse.data;
+        selectQries.forEach(slctSql => {
+          if (slctSql.queryId) {
+            const qryTab = tabsGroupedByQueryId[slctSql.queryId][0];
+            qryTab.isTesting = false;
+            qryTab.isSuccess = slctSql.status;
+            if (slctSql.status != undefined && slctSql.status) {
+              count++;
+            }
+          }
+        });
+      }
+
+      if (dmlQueryTestResponse) {
+        const dmlQueries = dmlQueryTestResponse.data;
+        Object.keys(dmlQueries).forEach(key => {
+          const qryTab = tabsGroupedByQueryId[key][0];
+          qryTab.isTesting = false;
+          qryTab.isSuccess = dmlQueries[key].status;
+          if (dmlQueries[key].status != undefined && dmlQueries[key].status) {
+            count++;
+          }
+        })
+      }
+      setTimeout(() => {
+        setRefreshQryTab(!refreshQryTab);
+      }, 10);
+
+      return count;
+
+    }).catch(errs => {
+      console.error(errs);
+    });
+  }
+
   const handleSaveQuery = () => {
+    testAllQuery().then(count => {
+      console.log("After testing", count);
+      if (count === editSqlQueryTabs.length) {
+        const cacheQueryData = {};
+        editSqlQueryTabs.forEach(tab => {
+          cacheQueryData[tab.queryId] = tab.query
+        });
+        httpService.QUERY.cacheQuery(meta.sessionId, cacheQueryData).then((res) => {
+          if (res.data.status) {
+            //Save the query in the meta.sqlList
+            editSqlQueryTabs.forEach(tab => {
+              const saveQueryData = {
+                extraParam: {
+                  controlIds: [],
+                  paginationInfo: "0-25",
+                  placeHolders: {},
+                },
+                type: tab.type,
+                queryId: tab.queryId,
+                datasourceName: tab.dataSourceName.name,
+                name: tab.name,
+                sort: {},
+                orderBy: false,
+                sessionId: meta.sessionId,
+              };
+              meta.sqlList.push(saveQueryData);
+            });
+            updateMeta(meta);
+            setShowQueryModeler(false);
+
+            //setShowSQLBuilder(false); //Menubar parent
+          }
+          navigate(-1);
+        });
+      } else {
+        toastRef.current.show({ severity: 'error', summary: 'Error', detail: 'There are errors in the Queries.' });
+      }
+    })
+  };
+  /* const handleSaveQuery = () => {
     const currTab = editSqlQueryTabs[tabActiveIndex - 1];
     const cacheQueryData = {
       [currTab.queryId]: `${currTab.query}`,
@@ -169,7 +308,7 @@ const SQLQueryBuilder = (props) => {
       }
       navigate(-1);
     });
-  };
+  }; */
 
   const updateTabName = (tab) => {
     console.log(tab);
@@ -201,6 +340,12 @@ const SQLQueryBuilder = (props) => {
         icon="pi pi-check"
         onClick={testQuery}
       />
+      {(editSqlQueryTabs.length > 1) && <Button
+        className="p-button-outlined p-button-secondary"
+        label="Test All"
+        icon="pi pi-check"
+        onClick={testAllQuery}
+      />}
       <Button
         className="p-button-outlined p-button-success"
         label="Save"
@@ -224,9 +369,8 @@ const SQLQueryBuilder = (props) => {
     const uuid = getRandomUUID();
     tab.id = uuid;
     tab.queryId = randomstring.generate(8);
-    tab.name = `sql_query_${
-      meta.sqlList.length + editSqlQueryTabs.length + 1 || 0
-    }`;
+    tab.name = `sql_query_${meta.sqlList.length + editSqlQueryTabs.length + 1 || 0
+      }`;
     const tabs = [...editSqlQueryTabs, JSON.parse(JSON.stringify(tab))];
     setEditSQLQueryTabs(tabs);
     setTabActiveIndex(tabs.length);
@@ -305,6 +449,24 @@ const SQLQueryBuilder = (props) => {
     }
   };
 
+  function closeTab(tabIndex) {
+    editSqlQueryTabs.splice(tabIndex, 1);
+    setEditSQLQueryTabs([...editSqlQueryTabs]);
+    setTimeout(() => {
+      setTabActiveIndex(tabIndex)
+    }, 10);
+  }
+
+  const headerTemplate = (options, tab, index) => {
+    return <button type="button" onClick={options.onClick} className={options.className}>
+      {<i className={tab.isTesting ? "mr-2 inProgress blink"
+        : ((tab.isSuccess != undefined) && !tab.isSuccess && !tab.isTesting) ? "mr-2 testError"
+          : (tab.isSuccess && !tab.isTesting) ? "mr-2 testSuccess" : "hello"} />}
+      {options.titleElement}
+      <i className="pi pi-times" onClick={() => closeTab(index)}></i>
+    </button>
+  };
+
   return (
     <>
       <Dialog
@@ -350,8 +512,8 @@ const SQLQueryBuilder = (props) => {
               <Column field="datasourceName" header="DataSource Name" />
             </DataTable>
           </TabPanel>
-          {editSqlQueryTabs.map((tab) => (
-            <TabPanel key={tab.id} header={tab.name} closable>
+          {editSqlQueryTabs.map((tab, index) => (
+            <TabPanel key={tab.id} header={tab.name} closable headerTemplate={(options) => headerTemplate(options, tab, index)} headerClassName="flex align-items-center">
               <AddSQL
                 tab={tab}
                 dataSources={dataSources}
