@@ -15,6 +15,7 @@ import OpenResources from "./menu-panel/OpenResources";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { ReportMetaContext, ReportMetaContextProvider } from "./context/ReportMetaContext";
+import HDModalHolder from "./components/HDModalHolder";
 
 /* Problem with Drag n Drop : https://stackoverflow.com/questions/54982182/react-beautiful-dnd-drag-out-of-position-problem */
 
@@ -48,6 +49,7 @@ const App = () => {
                       </Route>
                     </Routes>
                   </BrowserRouter>
+                  <HDModalHolder />
                 </DndProvider>
               </ErrorBoundary>
             </ConfirmationContextProvider>

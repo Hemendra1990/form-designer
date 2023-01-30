@@ -1,10 +1,15 @@
-import React, { Fragment, useCallback, useContext, useState } from "react";
+import React, { Fragment, useCallback, useContext, useEffect, useState } from "react";
+import ReactDOM from 'react-dom';
 import { createContext } from "react";
 import { Dialog } from "primereact/dialog";
 import { TEST_REPORTS_FOR_TESTING } from "../tests/report";
 import getComponent from "../constants/HemendraConstants";
-import { useMetaContext } from "./MetaContext";
+import { HttpFormResourceService } from "../http-service/HttpFormResourceService";
+import { generateElementMap } from "../utils/Utils";
+import { useReportMetaContext, useReportUpdateMetaContext } from "./ReportMetaContext";
+import DraggableContainerElement from "../playground/DraggableContainerElement";
 
+const httpResourceService = new HttpFormResourceService();
 export const ModalContext = createContext();
 
 export const useModalContext = () => {
@@ -18,10 +23,12 @@ const uniqueModalId = (() => {
 
 export const ModalContextProvider = ({ children }) => {
   const [modals, setModals] = useState([]);
-  const [containerMeta, setContainerMeta] = useState({});
 
-  const meta = useMetaContext();
-  const [elements, setElements] = useState([]);
+  const updateReportMeta = useReportUpdateMetaContext();
+  const meta = useReportMetaContext();
+
+  const [resourceMeta, setResourceMeta] = useState(null);
+  const [popupChildren, setPopupChildren] = useState([]);
 
   function initializeComponent(reportElements) {
     if (!reportElements) {
@@ -39,55 +46,67 @@ export const ModalContextProvider = ({ children }) => {
     });
   }
 
-  const createChildElement = useCallback((child, index) => {
-    let ref = child.ref;
-    if (!ref) {
-      ref = React.createRef();
+  function addFlagReportContainer(elements) {
+    for (let ele of elements) {
+      ele.isInReportContainer = true;
+      if (ele.attributes && ele.attributes.children) {
+        addFlagReportContainer(ele.attributes.children);
+      }
     }
-    let cMeta;
-    if (Object.keys(containerMeta).length > 0) {
-      cMeta = containerMeta;
-    } else {
-      cMeta = meta;
-    }
-    const reactComponent = React.createElement(child.component, {
-      ref: ref,
-      key: index + 1,
-      name: `${child.name}`,
-      meta: cMeta,
-      element: child,
-      enteredValue: "",
-    });
-    child.ref = ref;
-    return reactComponent;
-  });
 
-  const loadReport = (content) => {
-    const resourceId = content.resourceId || "rid-0123";
-    const json = TEST_REPORTS_FOR_TESTING.find(
-      (trpt) => trpt.id === resourceId
-    ).json; //we will be getting the json string from the server
-    const report = JSON.parse(json);
-    initializeComponent(report.elements);
-    setContainerMeta(report);
-    setElements(report.elements);
-    return (
-      <Fragment>
-        HELLO LOAD REPORT
-        {elements.map((element, index) => {
-          return createChildElement(element, index);
-        })}
-      </Fragment>
-    );
-  };
+  }
+
+  useEffect(() => {
+    if (resourceMeta) {
+      setPopupChildren(resourceMeta.elements || []);
+    }
+  }, [resourceMeta]);
+
+  const loadReport = (resourceId, data = {}) => {
+    resourceId = "6ea08539-a629-45ba-a1d6-48030da2f029";
+    //TODO: we need to make the server call taking the resourceId
+    return httpResourceService.getFormJson(resourceId).then(res => {
+      const report = res.data
+      const { json } = report
+      initializeComponent(json.elements);
+      const reportMeta = {};
+      reportMeta.elementMap = {};
+      reportMeta.resourceId = report.resourceId;
+      reportMeta.sessionId = report.sessionId;
+      reportMeta.description = report.description;
+      reportMeta.name = report.resourceName;
+      reportMeta.elements = json.elements; //Just check what elements came into it....
+      const elements = [...reportMeta.elements];
+      addFlagReportContainer(elements);
+
+      reportMeta.configuration = json.configuration;
+      reportMeta.sqlList = json.sqlList;
+      reportMeta.apiList = json.apiList;
+      reportMeta.events = json.events;
+      reportMeta.elementMap = generateElementMap(reportMeta);
+      //reportMeta.events.forEach((e) => initialiseScripts(e));
+      reportMeta.editMode = false;
+      reportMeta.sqlVariables = json.sqlVariables;
+      meta.sqlVariables = json.sqlVariables; //Adding the sqlVariables to actual meta
+
+      updateReportMeta.updateMeta(reportMeta); //Let's seee what magic is going on Here..........
+      //setResourceMeta(reportMeta);
+      /* setTimeout(() => {
+      }, 10); */
+      return reportMeta;
+    }).catch(err => {
+      console.error("Failed to fetch the form data from server.", err);
+    });
+  }
 
   const actions = {
     push(content, onHideCallback) {
+      debugger
       // => means push: () => {}
       let modal;
       if (typeof content === "object") {
-        modal = (
-          <Dialog
+        loadReport(content).then((reportMeta) => {
+          modal = ReactDOM.createPortal(<Dialog
             breakpoints={{ "1360px": "75vw", "960px": "75vw", "640px": "90vw" }}
             style={{ width: "85%", height: "80vh" }}
             visible={true}
@@ -99,9 +118,27 @@ export const ModalContextProvider = ({ children }) => {
             {" "}
             {/*TODO  What if I want to handle the event on Modal close */}
             <p>{content.popupText}</p>
-            {loadReport(content)}
-          </Dialog>
-        );
+            <div className="grid col-12">
+              {reportMeta.elements.map((childElement, containerIndex) => {
+                childElement.currIndex = containerIndex;
+                return (
+                  <DraggableContainerElement
+                    {...childElement}
+                    key={childElement?.id}
+                    style={{ marginTop: 10, marginBottom: 10 }}
+                    element={childElement}
+                    containerIndex={containerIndex}
+                    containerMeta={resourceMeta}
+                  />
+                );
+              })}
+            </div>
+          </Dialog>, document.querySelector("#hdportal"));
+          setTimeout(() => {
+            setModals((modals) => [...modals, modal]);
+          }, 200);
+        });
+
       } else {
         modal = (
           <Dialog
@@ -118,7 +155,6 @@ export const ModalContextProvider = ({ children }) => {
           </Dialog>
         );
       }
-      setModals((modals) => [...modals, modal]);
     },
     onHide(onHideCallback) {
       let prevModal = "";

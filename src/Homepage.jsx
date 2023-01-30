@@ -78,7 +78,6 @@ const Homepage = (props) => {
       <div className="top-menubar">
         <HDMenubar toggleEventModal={onHide} />
       </div>
-      {modals}
       {confirmDialogs}
 
       <div className="grid p-fluid">
@@ -97,8 +96,8 @@ const Homepage = (props) => {
       <div className="grid p-fluid" style={{ height: "90vh", width: "100%" }}>
         <div
           className={`${meta.editMode
-              ? "col-12 playground"
-              : "col-12 playground-preview m-20"
+            ? "col-12 playground"
+            : "col-12 playground-preview m-20"
             }`}
         >
           <HDPlayground />

@@ -60,6 +60,7 @@ export const MetaContextProvider = ({ children }) => {
    * @param {*} value
    */
   const updateMeta = (prevMeta) => {
+    console.log("Inside Main MetaContext...");
     const elementMap = generateElementMap(prevMeta);
     setMeta((meta) => {
       return {

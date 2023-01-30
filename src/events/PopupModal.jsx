@@ -15,6 +15,7 @@ const PopupModal = (props) => {
   );
 
   const positions = [
+    { label: "Center", value: "center" },
     { label: "Left", value: "left" },
     { label: "Right", value: "right" },
     { label: "Top", value: "top" },
@@ -68,7 +69,7 @@ const PopupModal = (props) => {
         type="source"
         position="right"
         style={{ background: "#555", height: "10px", width: "10px" }}
-        onConnect={(params) => {}}
+        onConnect={(params) => { }}
         isConnectable={true}
       />
     </Card>

@@ -7,6 +7,8 @@ import { useReportMetaContext, useReportUpdateMetaContext } from "../../context/
 import { HttpFormResourceService } from "../../http-service/HttpFormResourceService";
 import { ItemType } from "../../model/ItemType";
 import DraggableContainerElement from "../../playground/DraggableContainerElement";
+import EventExecutor from "../../service/EventExecutor";
+import { EventExecutorService } from "../../service/EventExecutorService";
 import { createElementId, generateElementMap } from "../../utils/Utils";
 import ContainerHelper from "../../_helpers/ContainerHelper";
 
@@ -206,39 +208,58 @@ const HDContainer = forwardRef(({ element, pgIndex, }, ref) => {
   }
 
   useImperativeHandle(ref, () => ({
-    loadReport(resourceId, data = {}) {
+    async loadReport(resourceId, data = {}) {
       //TODO: we need to make the server call taking the resourceId
       httpResourceService.getFormJson(resourceId).then(res => {
         const report = res.data
 
         const { json } = report
         initializeComponent(json.elements);
-        const getReportMeta = () => {
-          const reportMeta = {};
-          reportMeta.elementMap = {};
-          reportMeta.resourceId = report.resourceId;
-          reportMeta.sessionId = report.sessionId;
-          reportMeta.description = report.description;
-          reportMeta.name = report.resourceName;
-          reportMeta.elements = json.elements; //Just check what elements came into it....
-          const elements = [...reportMeta.elements];
-          addFlagReportContainer(elements);
 
-          reportMeta.configuration = json.configuration;
-          reportMeta.sqlList = json.sqlList;
-          reportMeta.apiList = json.apiList;
-          reportMeta.events = json.events;
-          reportMeta.elementMap = generateElementMap(reportMeta);
-          //reportMeta.events.forEach((e) => initialiseScripts(e));
-          reportMeta.editMode = false;
-          reportMeta.sqlVariables = json.sqlVariables;
-          meta.sqlVariables = json.sqlVariables; //Adding the sqlVariables to actual meta
-          return reportMeta;
-        };
-        updateReportMeta.updateMeta(getReportMeta()); //Let's seee what magic is going on Here..........
-        setResourceMeta(getReportMeta());
-        /* setTimeout(() => {
-        }, 10); */
+        const reportMeta = {};
+        reportMeta.elementMap = {};
+        reportMeta.resourceId = report.resourceId;
+        reportMeta.sessionId = report.sessionId;
+        reportMeta.description = report.description;
+        reportMeta.name = report.resourceName;
+        reportMeta.elements = json.elements; //Just check what elements came into it....
+        const elements = [...reportMeta.elements];
+        addFlagReportContainer(elements);
+
+        reportMeta.configuration = json.configuration;
+        reportMeta.sqlList = json.sqlList;
+        reportMeta.apiList = json.apiList;
+        reportMeta.events = json.events;
+        reportMeta.elementMap = generateElementMap(reportMeta);
+        //reportMeta.events.forEach((e) => initialiseScripts(e));
+        reportMeta.editMode = false;
+        reportMeta.sqlVariables = json.sqlVariables;
+        meta.sqlVariables = json.sqlVariables; //Adding the sqlVariables to actual meta
+
+        updateReportMeta.updateMeta(reportMeta); //Let's seee what magic is going on Here..........
+        setResourceMeta(reportMeta);
+        setTimeout(async () => {
+          if (reportMeta.configuration) {
+            if (reportMeta.configuration.beforeLoadEventId) {
+              //Do not show the container untill the event is executed
+              //element.hide(); //Hide the container 
+              await EventExecutor.execute(reportMeta, reportMeta.configuration.beforeLoadEvent, {});
+              //element.show(); //Show the container when completed
+            }
+            if (reportMeta.configuration.onLoadEventId) {
+              await EventExecutor.execute(reportMeta, reportMeta.configuration.onLoadEvent, {});
+            }
+            if (reportMeta.configuration.viewInitEventId) {
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  EventExecutor.execute(reportMeta, reportMeta.configuration.onLoadEvent, {});
+                  resolve(true);
+
+                }, 100)
+              })
+            }
+          }
+        }, 10);
       }).catch(err => {
         console.error("Failed to fetch the form data from server.", err);
       });
