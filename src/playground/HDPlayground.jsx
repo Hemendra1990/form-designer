@@ -66,7 +66,7 @@ function HDPlayground() {
       getDropResult: monitor.getDropResult(),
     }),
   }),
-    [controlElementHoveringOnIndex]
+    [controlElementHoveringOnIndex, meta]
   );
 
   function updatePgElements(newElements) {

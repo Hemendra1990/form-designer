@@ -41,11 +41,12 @@ const DraggablePGElement = React.forwardRef(
         }
 
       },
+      canDrag: meta.editMode || false,
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
         handlerId: monitor.getHandlerId(),
       }),
-    }));
+    }), [meta]);
 
     const [{ handlerId }, drop] = useDrop({
       accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],
@@ -151,7 +152,7 @@ const DraggablePGElement = React.forwardRef(
         ref={draggableRef}
         className={element?.attributes?.className
           ? element?.attributes?.className
-          : element.type === CONTROL.CONTAINER
+          : element.type === CONTROL.CONTAINER || element.type === CONTROL.FORM
             ? "col-12"
             : "col-4"}
         title={element.id}

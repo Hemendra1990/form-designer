@@ -32,8 +32,9 @@ import AttrAutoComplete from "./attr-autocomplete/AttrAutoComplete";
 import AttrAutoCompleteConfig from "./attr-autocomplete/AttrAutoCompleteConfig";
 import AttrMultiSelect from "./attr-multiselect/AttrMultiSelect";
 import AttrMultiSelectConfig from "./attr-multiselect/AttrMultiSelectConfig";
-import AttrListboxConfig from "./attr-listbox/AttrListBoxConfig";
-import AttrListBox from "./attr-listbox/AttrListBox";
+import AttrListBox from "./attr-ListBox/AttrListBox";
+import AttrListboxConfig from "./attr-ListBox/AttrListBoxConfig";
+import AttrForm from "./attr-form/AttrForm";
 
 const AttributePanel = (props) => {
   const productService = new ProductService();
@@ -453,6 +454,21 @@ const AttributePanel = (props) => {
           </>
         );
       }
+      /* Render Form attributes */
+      if (meta.currentElement.type === CONTROL.FORM) {
+        return (
+          <>
+            <AttrForm
+              meta={meta}
+              currentElement={meta.currentElement}
+              handleAttributeChange={handleAttributeChange}
+              updateClass={updateClass}
+              eventOptions={availableEvents}
+            />
+            {classDiv}
+          </>
+        );
+      }
     }
 
     return <></>;
@@ -473,7 +489,8 @@ const AttributePanel = (props) => {
         meta.currentElement.type === CONTROL.DROPDOWN ||
         meta.currentElement.type === CONTROL.RADIO ||
         meta.currentElement.type === CONTROL.AUTOCOMPLETE ||
-        meta.currentElement.type === CONTROL.MULTISELECT
+        meta.currentElement.type === CONTROL.MULTISELECT ||
+        meta.currentElement.type === CONTROL.FORM
       ) {
         return (
           <AttrDataConnector

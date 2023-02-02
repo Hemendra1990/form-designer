@@ -108,6 +108,7 @@ export class DataConnector {
         httpService.QUERY.getQueryResult(queryData).then((res) => {
           console.log("Fetching Query result", res.data);
           rows = [...res.data.rows];
+          const columnDetail = [...res.data.header];
 
           let resHeaders = res.data.header;
           resHeaders = resHeaders.map((rh) => {
@@ -128,6 +129,7 @@ export class DataConnector {
             element.ref.current.setResult({
               columns: DataConnector.columns,
               rows: rows,
+              header: columnDetail
             });
           }
         });

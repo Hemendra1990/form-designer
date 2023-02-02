@@ -43,11 +43,12 @@ const DraggableContainerElement = React.forwardRef((props, ref) => {
         monitor.getItem().initialDropLocation = element;
       }
     },
+    canDrag: meta.editMode || false,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
       handlerId: monitor.getHandlerId(),
     }),
-  }), [containerIndex]);
+  }), [containerIndex, meta]);
 
   const [{ handlerId }, drop] = useDrop({
     accept: [ItemType.HD_ELEMENT, ItemType.HD_PG_ELEMENT],

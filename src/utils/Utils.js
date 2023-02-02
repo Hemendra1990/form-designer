@@ -26,7 +26,7 @@ export const evaluateCellTemplate = new Function('row', 'template', `
  * @param {*} obj 
  * @returns 
  */
-const deepClone = (obj) => {
+export const deepClone = (obj) => {
   if(structuredClone) {
     return structuredClone(obj);
   } else {

@@ -15,6 +15,7 @@ import HDToogleButton from "../components/HDToggleButton";
 import HDAutoComplete from "../components/HDAutoComplete";
 import HDMultiSelect from "../components/HDMultiSelect";
 import HDContainer from "../components/container/HDContainer";
+import { HDForm } from "../components/HDForm";
 
 const ComponentConfig = [
   {
@@ -102,6 +103,11 @@ const ComponentConfig = [
     name: "multiselect",
     component: HDMultiSelect,
   },
+  {
+    label: "Form",
+    name: "form",
+    component: HDForm,
+  },
 ];
 export default ComponentConfig;
 
@@ -123,6 +129,7 @@ const CONTROL = {
   DROPDOWN: "dropdown",
   AUTOCOMPLETE: "autocomplete",
   MULTISELECT: "multiselect",
+  FORM: "form",
 };
 
 const CONTROL_ITEMS = () => {
